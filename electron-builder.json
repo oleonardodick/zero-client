@@ -1,0 +1,15 @@
+{
+  "appId": "com.ldbernardes.zero-client",
+  "files": ["dist-electron", "dist-react"],
+  "icon": "./react-logo.png",
+  "mac": {
+    "target": "dmg"
+  },
+  "linux": {
+    "target": "AppImage",
+    "category": "Utility"
+  },
+  "win": {
+    "target": ["portable", "msi"]
+  }
+}
