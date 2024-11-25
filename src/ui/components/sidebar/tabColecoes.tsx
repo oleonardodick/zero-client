@@ -1,10 +1,11 @@
+import Colecao from './colecao';
+
 const TabColecoes: React.FC = () => {
   return (
     <div>
       <ul>
-        <li>Colecoes 1</li>
-        <li>Colecoes 2</li>
-        <li>Colecoes 3</li>
+        <Colecao nome="SalesApp" />
+        <Colecao nome="OutraColecao" />
       </ul>
     </div>
   );

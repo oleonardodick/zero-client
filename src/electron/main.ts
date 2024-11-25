@@ -6,12 +6,13 @@ let mainWindow: BrowserWindow;
 
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    show: false,
     // webPreferences: {
     //   preload: path.join(app.getAppPath(), '/dist-electron/preload.js'),
     // },
   });
+  mainWindow.maximize();
+  mainWindow.show();
   if (isDev()) {
     mainWindow.loadURL('http://localhost:5123');
   } else {
