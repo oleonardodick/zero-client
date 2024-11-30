@@ -1,11 +1,11 @@
 import { ChevronDownIcon, ChevronRightIcon } from 'lucide-react';
+import { useState } from 'react';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '../ui/collapsible';
-import { useState } from 'react';
-import Folder from './folder';
+import Pasta from './pasta';
 
 interface ColeacaoProps {
   nome: string;
@@ -22,9 +22,9 @@ const Colecao: React.FC<ColeacaoProps> = ({ nome }) => {
         {nome}
       </CollapsibleTrigger>
       <CollapsibleContent className="ml-4">
-        <Folder nome="Usuarios" />
-        <Folder nome="Materiais" />
-        <Folder nome="Empresas" />
+        <Pasta nome="Usuarios" />
+        <Pasta nome="Materiais" />
+        <Pasta nome="Empresas" />
       </CollapsibleContent>
     </Collapsible>
   );

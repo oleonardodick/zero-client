@@ -1,4 +1,4 @@
-import Requisicao from './requisicao';
+import Requisicao from '../requisicao';
 
 const RequisicoesColecao: React.FC = () => {
   return (

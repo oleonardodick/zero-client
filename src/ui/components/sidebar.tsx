@@ -1,8 +1,8 @@
-import { Button } from '../ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import TabAtividade from './tabAtividade';
-import TabColecoes from './tabColecoes';
-import TabEnv from './tabEnv';
+import { Button } from './ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import Atividade from './atividade';
+import VariaveisAmbiente from './variaveisAmbiente';
+import Colecoes from './colecoes';
 
 const Sidebar: React.FC = () => {
   return (
@@ -21,13 +21,13 @@ const Sidebar: React.FC = () => {
           <TabSidebar value="Variáveis" />
         </TabsList>
         <TabsContent value="Atividade">
-          <TabAtividade />
+          <Atividade />
         </TabsContent>
         <TabsContent value="Coleções">
-          <TabColecoes />
+          <Colecoes />
         </TabsContent>
         <TabsContent value="Variáveis">
-          <TabEnv />
+          <VariaveisAmbiente />
         </TabsContent>
       </Tabs>
     </div>

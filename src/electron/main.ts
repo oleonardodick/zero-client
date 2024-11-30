@@ -1,15 +1,16 @@
 import { app, BrowserWindow } from 'electron';
 import path from 'path';
 import { isDev } from './util.js';
+import { getPreloadPath } from './pathResolver.js';
 
 let mainWindow: BrowserWindow;
 
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
     show: false,
-    // webPreferences: {
-    //   preload: path.join(app.getAppPath(), '/dist-electron/preload.js'),
-    // },
+    webPreferences: {
+      preload: getPreloadPath(),
+    },
   });
   mainWindow.maximize();
   mainWindow.show();

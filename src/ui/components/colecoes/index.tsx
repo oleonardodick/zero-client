@@ -1,6 +1,6 @@
 import Colecao from './colecao';
 
-const TabColecoes: React.FC = () => {
+const Colecoes: React.FC = () => {
   return (
     <div>
       <ul>
@@ -11,4 +11,4 @@ const TabColecoes: React.FC = () => {
   );
 };
 
-export default TabColecoes;
+export default Colecoes;

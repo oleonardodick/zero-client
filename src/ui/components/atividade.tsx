@@ -1,6 +1,6 @@
 import Requisicao from './requisicao';
 
-const TabAtividade: React.FC = () => {
+const Atividade: React.FC = () => {
   return (
     <div>
       <ul>
@@ -37,4 +37,4 @@ const TabAtividade: React.FC = () => {
   );
 };
 
-export default TabAtividade;
+export default Atividade;

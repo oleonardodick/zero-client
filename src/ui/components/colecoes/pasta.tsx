@@ -1,16 +1,16 @@
 import { useState } from 'react';
+import { FolderClosedIcon, FolderOpenIcon } from 'lucide-react';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '../ui/collapsible';
 import RequisicoesColecao from './requisicoesColecao';
-import { FolderClosedIcon, FolderOpenIcon } from 'lucide-react';
 
-interface FolderProps {
+interface PastaProps {
   nome: string;
 }
-const Folder: React.FC<FolderProps> = ({ nome }) => {
+const Pasta: React.FC<PastaProps> = ({ nome }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
@@ -27,4 +27,4 @@ const Folder: React.FC<FolderProps> = ({ nome }) => {
   );
 };
 
-export default Folder;
+export default Pasta;
