@@ -1,7 +1,13 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 import { isDev } from './util.js';
 import { getPreloadPath } from './pathResolver.js';
+import {
+  atualizaValorVariavelAmbiente,
+  buscaTodasVariaveisAmbiente,
+  criaVariavelAmbiente,
+  excluiVariavelAmbiente,
+} from './database/queries/variavelAmbiente.js';
 
 let mainWindow: BrowserWindow;
 
@@ -19,6 +25,22 @@ app.on('ready', () => {
   } else {
     mainWindow.loadFile(path.join(app.getAppPath(), '/dist-react/index.html'));
   }
+});
+
+ipcMain.handle('buscaTodasVariaveisAmbiente', () => {
+  return buscaTodasVariaveisAmbiente();
+});
+
+ipcMain.handle('criaVariavelAmbiente', (_, nome, valor) => {
+  return criaVariavelAmbiente(nome, valor);
+});
+
+ipcMain.handle('atualizaVariavelAmbiente', (_, nome, valor) => {
+  return atualizaValorVariavelAmbiente(nome, valor);
+});
+
+ipcMain.handle('excluiVariavelAmbiente', (_, nome) => {
+  return excluiVariavelAmbiente(nome);
 });
 
 app.on('window-all-closed', () => {

@@ -4,7 +4,7 @@ import { app } from 'electron';
 
 const dbPath: string = path.join(
   app.getAppPath(),
-  '/dist-electron/database/data.db'
+  '/dist-electron/electron/database/data.db'
 );
 
 export const db = new sqlite3.Database(dbPath, (err) => {
@@ -13,7 +13,7 @@ export const db = new sqlite3.Database(dbPath, (err) => {
     console.log('Conectado no banco de dados');
 
     db.run(
-      `CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY, name TEXT)`,
+      `CREATE TABLE IF NOT EXISTS variavelAmbiente (nome TEXT PRIMARY KEY, valor TEXT)`,
       (errCreate) => {
         if (errCreate) {
           console.error('Erro ao criar a tabela:', errCreate);

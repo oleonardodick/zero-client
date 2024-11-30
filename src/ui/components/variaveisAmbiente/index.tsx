@@ -8,28 +8,35 @@ import {
   TableHeader,
   TableRow,
 } from '../ui/table';
-import { useState } from 'react';
-import { IVariavelAmbiente } from '@/ui/interfaces/IVariaveisAmbiente';
+import { useEffect, useState } from 'react';
 import { VariavelDialog } from './variavelDialog';
-
-const variaveisIniciais: IVariavelAmbiente[] = [
-  {
-    nome: 'URL',
-    valor: 'http://localhost:3000',
-  },
-  {
-    nome: 'Teste',
-    valor: 'variavelTeste',
-  },
-];
+import { CrudResult, IVariavelAmbiente } from '@/shared/types';
 
 const VariaveisAmbiente: React.FC = () => {
-  const [variaveis, setVariaveis] =
-    useState<IVariavelAmbiente[]>(variaveisIniciais);
+  const [variaveis, setVariaveis] = useState<IVariavelAmbiente[]>([]);
+  const [refazerBusca, setRefazerBusca] = useState<boolean>(true);
 
-  const handleExcluir = (e: React.FormEvent, nome: string) => {
+  const handleExcluir = async (e: React.FormEvent, nome: string) => {
     e.preventDefault();
-    setVariaveis(variaveis.filter((variavel) => variavel.nome !== nome));
+    const resultado: CrudResult = await window.electron.excluiVariavelAmbiente(
+      nome
+    );
+    console.log(resultado);
+    setRefazerBusca(true);
+  };
+
+  useEffect(() => {
+    if (refazerBusca) {
+      const buscaVariaveis = async () => {
+        setVariaveis(await window.electron.buscaTodasVariaveisAmbiente());
+        setRefazerBusca(false);
+      };
+      buscaVariaveis();
+    }
+  }, [refazerBusca]);
+
+  const handleRefazerBusca = () => {
+    setRefazerBusca(true);
   };
 
   return (
@@ -43,7 +50,12 @@ const VariaveisAmbiente: React.FC = () => {
         </TableHeader>
         <TableBody>
           {variaveis.map((variavel) => (
-            <VariavelDialog formId="formVariavel" variavel={variavel}>
+            <VariavelDialog
+              formId="formVariavel"
+              variavel={variavel}
+              onRefazerBusca={handleRefazerBusca}
+              key={variavel.nome}
+            >
               <TableRow>
                 <TableCell>{variavel.nome}</TableCell>
                 <TableCell className="hidden lg:table-cell">
@@ -64,7 +76,10 @@ const VariaveisAmbiente: React.FC = () => {
           ))}
         </TableBody>
       </Table>
-      <VariavelDialog formId="formVariaveis">
+      <VariavelDialog
+        formId="formVariaveis"
+        onRefazerBusca={handleRefazerBusca}
+      >
         <Button variant="outline" className="text-zinc-800 w-full">
           <PlusCircleIcon /> Adicionar
         </Button>

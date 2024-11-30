@@ -1,4 +1,4 @@
-import { IVariavelAmbiente } from '../../interfaces/IVariaveisAmbiente';
+import { IVariavelAmbiente } from '@/shared/types';
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -16,12 +16,14 @@ interface VariavelDialogProps {
   variavel?: IVariavelAmbiente;
   formId: string;
   children: React.ReactNode;
+  onRefazerBusca: () => void;
 }
 
 export const VariavelDialog: React.FC<VariavelDialogProps> = ({
   variavel,
   formId,
   children,
+  onRefazerBusca,
 }) => {
   return (
     <Dialog>
@@ -33,7 +35,11 @@ export const VariavelDialog: React.FC<VariavelDialogProps> = ({
             Variáveis de ambiente para utilizar nas requisições
           </DialogDescription>
         </DialogHeader>
-        <VariavelForm formId={formId} variavel={variavel} />
+        <VariavelForm
+          formId={formId}
+          variavel={variavel}
+          onRefazerBusca={onRefazerBusca}
+        />
         <DialogFooter>
           <DialogClose asChild>
             <Button

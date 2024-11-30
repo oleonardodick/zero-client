@@ -1,5 +1,12 @@
 const electron = require('electron');
 
 electron.contextBridge.exposeInMainWorld('electron', {
-  getVariaveisAmbiente: () => console.log('buscando variaveis'),
+  buscaTodasVariaveisAmbiente: () =>
+    electron.ipcRenderer.invoke('buscaTodasVariaveisAmbiente'),
+  criaVariavelAmbiente: (nome: string, valor: string) =>
+    electron.ipcRenderer.invoke('criaVariavelAmbiente', nome, valor),
+  atualizaVariavelAmbiente: (nome: string, valor: string) =>
+    electron.ipcRenderer.invoke('atualizaVariavelAmbiente', nome, valor),
+  excluiVariavelAmbiente: (nome: string) =>
+    electron.ipcRenderer.invoke('excluiVariavelAmbiente', nome),
 });

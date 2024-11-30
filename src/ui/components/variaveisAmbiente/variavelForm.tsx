@@ -1,16 +1,18 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
-import { IVariavelAmbiente } from '../../interfaces/IVariaveisAmbiente';
+import { CrudResult, IVariavelAmbiente } from '@/shared/types';
 
 interface VariavelFormProps {
   formId: string;
   variavel?: IVariavelAmbiente;
+  onRefazerBusca: () => void;
 }
 
 export const VariavelForm: React.FC<VariavelFormProps> = ({
   formId,
   variavel,
+  onRefazerBusca,
 }) => {
   const { register, handleSubmit } = useForm<IVariavelAmbiente>({
     defaultValues: {
@@ -20,8 +22,27 @@ export const VariavelForm: React.FC<VariavelFormProps> = ({
     },
   });
 
-  const onSubmit: SubmitHandler<IVariavelAmbiente> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<IVariavelAmbiente> = async (data) => {
+    try {
+      let resultado: CrudResult;
+
+      if (variavel) {
+        resultado = await window.electron.atualizaVariavelAmbiente(
+          data.nome,
+          data.valor
+        );
+      } else {
+        resultado = await window.electron.criaVariavelAmbiente(
+          data.nome,
+          data.valor
+        );
+      }
+
+      console.log(resultado);
+      onRefazerBusca();
+    } catch (erro) {
+      console.log(erro);
+    }
   };
 
   return (
@@ -30,7 +51,11 @@ export const VariavelForm: React.FC<VariavelFormProps> = ({
         <div className="flex flex-col gap-2">
           <div>
             <Label htmlFor="nome">Nome</Label>
-            <Input {...register('nome')} placeholder="Nome" />
+            <Input
+              {...register('nome')}
+              placeholder="Nome"
+              disabled={variavel?.nome !== undefined}
+            />
           </div>
           <div>
             <Label htmlFor="valor">Valor</Label>

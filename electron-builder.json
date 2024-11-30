@@ -1,6 +1,7 @@
 {
   "appId": "com.ldbernardes.zero-client",
   "files": ["dist-electron", "dist-react"],
+  "extraResources": ["dist-electron/preload.cjs"],
   "icon": "./react-logo.png",
   "mac": {
     "target": "dmg"
