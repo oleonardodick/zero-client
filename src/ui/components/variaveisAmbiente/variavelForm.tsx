@@ -9,11 +9,11 @@ interface VariavelFormProps {
   onRefazerBusca: () => void;
 }
 
-export const VariavelForm: React.FC<VariavelFormProps> = ({
+export const VariavelForm = ({
   formId,
   variavel,
   onRefazerBusca,
-}) => {
+}: VariavelFormProps) => {
   const { register, handleSubmit } = useForm<IVariavelAmbiente>({
     defaultValues: {
       nome: '',

@@ -19,19 +19,19 @@ interface VariavelDialogProps {
   onRefazerBusca: () => void;
 }
 
-export const VariavelDialog: React.FC<VariavelDialogProps> = ({
+export const VariavelDialog = ({
   variavel,
   formId,
   children,
   onRefazerBusca,
-}) => {
+}: VariavelDialogProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="bg-zinc-800 text-zinc-300">
+      <DialogContent className="bg-stone-700 text-gray-100 border-stone-500">
         <DialogHeader>
           <DialogTitle>Variável de Ambiente</DialogTitle>
-          <DialogDescription className="text-zinc-400">
+          <DialogDescription className="text-gray-400">
             Variáveis de ambiente para utilizar nas requisições
           </DialogDescription>
         </DialogHeader>
@@ -42,12 +42,7 @@ export const VariavelDialog: React.FC<VariavelDialogProps> = ({
         />
         <DialogFooter>
           <DialogClose asChild>
-            <Button
-              variant="outline"
-              className="text-zinc-800"
-              type="submit"
-              form={formId}
-            >
+            <Button variant="secondary" size="lg" type="submit" form={formId}>
               Salvar
             </Button>
           </DialogClose>

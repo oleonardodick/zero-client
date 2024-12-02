@@ -5,14 +5,9 @@ interface RequestProps {
   dataRequisicao: string;
 }
 
-const Requisicao: React.FC<RequestProps> = ({
-  metodo,
-  nome,
-  url,
-  dataRequisicao,
-}) => {
+const Endpoint = ({ metodo, nome, url, dataRequisicao }: RequestProps) => {
   return (
-    <div className="hover:bg-zinc-600 cursor-pointer p-2">
+    <div className="hover:bg-gray-600 cursor-pointer p-2 rounded-md">
       <div className="flex flex-col lg:flex-row gap-2 mb-2">
         <span
           data-method={metodo}
@@ -34,4 +29,4 @@ const Requisicao: React.FC<RequestProps> = ({
   );
 };
 
-export default Requisicao;
+export default Endpoint;

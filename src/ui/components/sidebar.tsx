@@ -6,14 +6,14 @@ import Colecoes from './colecoes';
 import { Link } from 'react-router-dom';
 import { PlusCircleIcon } from 'lucide-react';
 
-const Sidebar: React.FC = () => {
+const Sidebar = () => {
   return (
-    <div className="flex flex-col gap-9 lg:gap-3 bg-zinc-700 w-1/6 p-3 border-r border-zinc-300 h-screen">
+    <div className="flex flex-col gap-9 lg:gap-3 bg-stone-700 w-1/6 p-3 border-r border-stone-500 h-screen">
       <Link to="/requisicao">
         <Button
           variant="secondary"
           size="lg"
-          className="w-full bg-purple-500 text-xs lg:text-base tracking-wider hover:bg-purple-600"
+          className="w-full bg-indigo-500 text-xs lg:text-base tracking-wider hover:bg-indigo-600"
         >
           <PlusCircleIcon /> <p className="hidden md:block">Nova Requisição</p>
         </Button>
@@ -38,13 +38,17 @@ const Sidebar: React.FC = () => {
   );
 };
 
-interface tabSidebarProps {
+interface TabSidebarProps {
   value: string;
 }
 
-const TabSidebar: React.FC<tabSidebarProps> = ({ value }) => {
+const TabSidebar = ({ value }: TabSidebarProps) => {
   return (
-    <TabsTrigger value={value} className="lg:flex-1">
+    <TabsTrigger
+      value={value}
+      className="lg:flex-1 data-[state=active]:bg-transparent data-[state=active]:text-gray-100 
+      data-[state=active]:shadow-none data-[state=active]:border-b-4 border-indigo-400 rounded-none"
+    >
       {value}
     </TabsTrigger>
   );

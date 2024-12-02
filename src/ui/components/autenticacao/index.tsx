@@ -15,7 +15,7 @@ export const Autenticacao = () => {
   const [autenticacao, setAutenticacao] = useState('none');
 
   return (
-    <div className="flex flex-col gap-3 p-4">
+    <div className="grid gap-5 p-4">
       <div className="flex items-center gap-4">
         <Label htmlFor="auth">Tipo</Label>
         <Select defaultValue={autenticacao} onValueChange={setAutenticacao}>

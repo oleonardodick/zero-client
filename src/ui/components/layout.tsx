@@ -1,20 +1,11 @@
 import { Outlet } from 'react-router-dom';
 import Sidebar from './sidebar';
 
-// const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
-//   return (
-//     <div className="flex text-zinc-300 h-screen">
-//       <Sidebar />
-//       <main className="flex-1 bg-zinc-800">{children}</main>
-//     </div>
-//   );
-// };
-
-const Layout: React.FC = () => {
+const Layout = () => {
   return (
-    <div className="flex text-zinc-300 h-screen">
+    <div className="flex text-stone-200 h-screen">
       <Sidebar />
-      <main className="flex-1 bg-zinc-800">
+      <main className="flex-1 bg-stone-800">
         <Outlet />
       </main>
     </div>

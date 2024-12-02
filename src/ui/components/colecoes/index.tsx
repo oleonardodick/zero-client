@@ -1,6 +1,6 @@
 import Colecao from './colecao';
 
-const Colecoes: React.FC = () => {
+const Colecoes = () => {
   return (
     <div>
       <ul>
