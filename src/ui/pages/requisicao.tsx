@@ -18,6 +18,8 @@ import {
   TabsTrigger,
 } from '../components/ui/tabs';
 import { Autenticacao } from '../components/autenticacao';
+import QueryParams from '../components/queryParams';
+import Headers from '../components/headers';
 
 export const Requisicao = () => {
   const jsonEnvio = useRef<HTMLTextAreaElement>(null);
@@ -67,10 +69,10 @@ export const Requisicao = () => {
             <Autenticacao />
           </TabsContent>
           <TabsContent value="Params">
-            <main>Params</main>
+            <QueryParams />
           </TabsContent>
           <TabsContent value="Headers">
-            <main>Headers</main>
+            <Headers />
           </TabsContent>
         </Tabs>
 

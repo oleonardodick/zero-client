@@ -35,7 +35,7 @@ const EditorJson = ({ textAreaRef, readOnly = false }: EditorJsonProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-1 w-full h-full">
+    <div className="flex flex-col gap-1 p-4 w-full h-full">
       <div className="flex justify-between">
         <h1 className="flex items-center justify-center h-9">Conteúdo JSON</h1>
         {!readOnly && (
