@@ -1,4 +1,4 @@
-import { QueryParam, Requisicao } from '@/shared/types';
+import { Header, QueryParam, Requisicao } from '@/shared/types';
 import { create } from 'zustand';
 
 type RequisicaoStore = {
@@ -8,6 +8,9 @@ type RequisicaoStore = {
   addQueryParam: (queryParam: QueryParam) => void;
   updateQueryParam: (id: string, updatedValues: QueryParam) => void;
   deleteQueryParam: (id: string) => void;
+  addHeader: (header: Header) => void;
+  updateHeader: (id: string, updatedValues: Header) => void;
+  deleteHeader: (id: string) => void;
 };
 
 const useRequisicaoStore = create<RequisicaoStore>((set) => ({
@@ -54,6 +57,29 @@ const useRequisicaoStore = create<RequisicaoStore>((set) => ({
         queryParams: state.requisicao.queryParams.filter(
           (param) => param.id !== id
         ),
+      },
+    })),
+  addHeader: (header) =>
+    set((state) => ({
+      requisicao: {
+        ...state.requisicao,
+        header: [...state.requisicao.header, header],
+      },
+    })),
+  updateHeader: (id, updatedValues) =>
+    set((state) => ({
+      requisicao: {
+        ...state.requisicao,
+        header: state.requisicao.header.map((param) =>
+          param.id === id ? { ...param, ...updatedValues } : param
+        ),
+      },
+    })),
+  deleteHeader: (id) =>
+    set((state) => ({
+      requisicao: {
+        ...state.requisicao,
+        header: state.requisicao.header.filter((param) => param.id !== id),
       },
     })),
 }));
