@@ -9,7 +9,7 @@ import { PlusCircleIcon } from 'lucide-react';
 const Sidebar = () => {
   return (
     <div className="flex flex-col gap-9 lg:gap-3 bg-stone-700 w-1/6 p-3 border-r border-stone-500 h-screen">
-      <Link to="/requisicao">
+      <Link to="/requisicao/cadastrar">
         <Button
           variant="secondary"
           size="lg"

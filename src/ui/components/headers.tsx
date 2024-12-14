@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableRow } from './ui/table';
-import { IHeaders } from '@/shared/types';
+import { Header } from '@/shared/types';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Trash2Icon } from 'lucide-react';
 
 const Headers = () => {
-  const [headers, setHeaders] = useState<IHeaders[]>();
+  const [headers, setHeaders] = useState<Header[]>();
 
   useEffect(() => {
     setHeaders([]);
@@ -16,6 +16,7 @@ const Headers = () => {
     setHeaders((prevHeaders) => [
       ...(prevHeaders || []),
       {
+        id: 0,
         selecionado: false,
         header: '',
         valor: '',

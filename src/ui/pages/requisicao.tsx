@@ -20,10 +20,24 @@ import {
 import { Autenticacao } from '../components/autenticacao';
 import QueryParams from '../components/queryParams';
 import Headers from '../components/headers';
+import useRequisicaoStore from '../store/requisicaoStore';
 
-export const Requisicao = () => {
+export const PaginaRequisicao = () => {
   const jsonEnvio = useRef<HTMLTextAreaElement>(null);
   const jsonResposta = useRef<HTMLTextAreaElement>(null);
+  const url = useRequisicaoStore((state) => state.requisicao.url);
+  const setUrl = useRequisicaoStore((state) => state.setUrl);
+
+  console.log('carregou');
+
+  const handleAtualizaUrl = (url: string) => {
+    setUrl(url);
+  };
+
+  const handleEnviar = () => {
+    const requisicao = useRequisicaoStore.getState().requisicao;
+    console.log(requisicao);
+  };
 
   return (
     <div className="h-screen flex flex-col">
@@ -43,8 +57,14 @@ export const Requisicao = () => {
               </SelectGroup>
             </SelectContent>
           </Select>
-          <Input placeholder="URL" />
-          <Button variant="secondary">Enviar</Button>
+          <Input
+            placeholder="URL"
+            onBlur={(e) => handleAtualizaUrl(e.target.value)}
+            defaultValue={url}
+          />
+          <Button variant="secondary" onClick={handleEnviar}>
+            Enviar
+          </Button>
         </div>
         <Separator orientation="vertical" className="bg-stone-500" />
         <div className="flex gap-3 justify-end py-4 px-2">

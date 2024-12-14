@@ -8,14 +8,26 @@ export type CrudResult = {
   erro?: string;
 };
 
-export type IQueryParams = {
+export type QueryParam = {
+  id: string;
   selecionado: boolean;
   query: string;
   valor: string;
 };
 
-export type IHeaders = {
+export type Header = {
+  id: string;
   selecionado: boolean;
   header: string;
   valor: string;
+};
+
+export type Requisicao = {
+  id: string;
+  url: string;
+  jsonEnvio: string;
+  jsonRetorno: string;
+  data: string;
+  queryParams: QueryParam[] | [];
+  header: Header[] | [];
 };
