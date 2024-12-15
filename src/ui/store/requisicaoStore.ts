@@ -5,6 +5,8 @@ type RequisicaoStore = {
   requisicao: Requisicao;
   inicializaRequisicao: (novaRequisicao: Requisicao) => void;
   setUrl: (url: string) => void;
+  setJsonEnvio: (json: string) => void;
+  setJsonRetorno: (json: string) => void;
   addQueryParam: (queryParam: QueryParam) => void;
   updateQueryParam: (id: string, updatedValues: QueryParam) => void;
   deleteQueryParam: (id: string) => void;
@@ -32,6 +34,20 @@ const useRequisicaoStore = create<RequisicaoStore>((set) => ({
       requisicao: {
         ...state.requisicao,
         url,
+      },
+    })),
+  setJsonEnvio: (json) =>
+    set((state) => ({
+      requisicao: {
+        ...state.requisicao,
+        jsonEnvio: json,
+      },
+    })),
+  setJsonRetorno: (json) =>
+    set((state) => ({
+      requisicao: {
+        ...state.requisicao,
+        jsonRetorno: json,
       },
     })),
   addQueryParam: (queryParam) =>

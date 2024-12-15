@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import EditorJson from '../components/editorJson';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -23,8 +22,6 @@ import Headers from '../components/headers';
 import useRequisicaoStore from '../store/requisicaoStore';
 
 export const PaginaRequisicao = () => {
-  const jsonEnvio = useRef<HTMLTextAreaElement>(null);
-  const jsonResposta = useRef<HTMLTextAreaElement>(null);
   const url = useRequisicaoStore((state) => state.requisicao.url);
   const setUrl = useRequisicaoStore((state) => state.setUrl);
 
@@ -83,7 +80,7 @@ export const PaginaRequisicao = () => {
             <TabOpcoes value="Headers" />
           </TabsList>
           <TabsContent value="JSON" className="h-full">
-            <EditorJson textAreaRef={jsonEnvio} />
+            <EditorJson tipo="requisicao" />
           </TabsContent>
           <TabsContent value="Auth">
             <Autenticacao />
@@ -105,7 +102,7 @@ export const PaginaRequisicao = () => {
             <TabOpcoes value="Headers" />
           </TabsList>
           <TabsContent value="Source" className="flex h-full">
-            <EditorJson readOnly textAreaRef={jsonResposta} />
+            <EditorJson readOnly tipo="resposta" />
           </TabsContent>
           <TabsContent value="Cookies">
             <main>Cookies</main>
