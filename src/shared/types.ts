@@ -22,6 +22,22 @@ export type Header = {
   valor: string;
 };
 
+export type Autenticacao = {
+  tipo: 'none' | 'basic' | 'bearer';
+  bearer?: Bearer;
+  basic?: Basic;
+};
+
+export type Bearer = {
+  token?: string;
+  prefix?: string;
+};
+
+export type Basic = {
+  usuario?: string;
+  senha?: string;
+};
+
 export type Requisicao = {
   id: string;
   url: string;
@@ -30,4 +46,5 @@ export type Requisicao = {
   data: string;
   queryParams: QueryParam[] | [];
   header: Header[] | [];
+  autenticacao?: Autenticacao;
 };

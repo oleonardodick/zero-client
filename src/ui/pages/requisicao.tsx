@@ -58,6 +58,7 @@ export const PaginaRequisicao = () => {
             placeholder="URL"
             onBlur={(e) => handleAtualizaUrl(e.target.value)}
             defaultValue={url}
+            id="urlInput"
           />
           <Button variant="secondary" onClick={handleEnviar}>
             Enviar

@@ -1,4 +1,4 @@
-import { Header, QueryParam, Requisicao } from '@/shared/types';
+import { Autenticacao, Header, QueryParam, Requisicao } from '@/shared/types';
 import { create } from 'zustand';
 
 type RequisicaoStore = {
@@ -13,6 +13,8 @@ type RequisicaoStore = {
   addHeader: (header: Header) => void;
   updateHeader: (id: string, updatedValues: Header) => void;
   deleteHeader: (id: string) => void;
+  setTipoAutenticacao: (tipo: 'none' | 'bearer' | 'basic') => void;
+  setAutenticacao: (dados: Autenticacao) => void;
 };
 
 const useRequisicaoStore = create<RequisicaoStore>((set) => ({
@@ -24,6 +26,7 @@ const useRequisicaoStore = create<RequisicaoStore>((set) => ({
     data: '',
     queryParams: [],
     header: [],
+    autenticacao: { tipo: 'none' },
   },
   inicializaRequisicao: (novaRequisicao) =>
     set(() => ({
@@ -96,6 +99,22 @@ const useRequisicaoStore = create<RequisicaoStore>((set) => ({
       requisicao: {
         ...state.requisicao,
         header: state.requisicao.header.filter((param) => param.id !== id),
+      },
+    })),
+  setTipoAutenticacao: (tipo) =>
+    set((state) => ({
+      requisicao: {
+        ...state.requisicao,
+        autenticacao: { ...state.requisicao.autenticacao, tipo },
+      },
+    })),
+  setAutenticacao: (dados) =>
+    set((state) => ({
+      requisicao: {
+        ...state.requisicao,
+        autenticacao: {
+          ...dados,
+        },
       },
     })),
 }));

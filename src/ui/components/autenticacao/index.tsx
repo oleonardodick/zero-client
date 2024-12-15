@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Label } from '../ui/label';
 import {
   Select,
@@ -8,17 +7,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { Bearer } from './bearer';
-import { Basic } from './basic';
+import { BearerAuthentication } from './bearer';
+import { BasicAuthentication } from './basic';
+import useRequisicaoStore from '@/ui/store/requisicaoStore';
 
 export const Autenticacao = () => {
-  const [autenticacao, setAutenticacao] = useState('none');
+  const tipoAutenticacao = useRequisicaoStore(
+    (state) => state.requisicao.autenticacao?.tipo
+  );
+  const setTipoAutenticacao = useRequisicaoStore(
+    (state) => state.setTipoAutenticacao
+  );
 
   return (
     <div className="grid gap-5 p-4">
       <div className="flex items-center gap-4">
-        <Label htmlFor="auth">Tipo</Label>
-        <Select defaultValue={autenticacao} onValueChange={setAutenticacao}>
+        <Label>Tipo</Label>
+        <Select
+          defaultValue={tipoAutenticacao}
+          onValueChange={setTipoAutenticacao}
+        >
           <SelectTrigger className="w-28">
             <SelectValue />
           </SelectTrigger>
@@ -32,9 +40,11 @@ export const Autenticacao = () => {
         </Select>
       </div>
       <div>
-        {autenticacao === 'none' && <h1>Nenhuma autenticação selecionada</h1>}
-        {autenticacao === 'basic' && <Basic />}
-        {autenticacao === 'bearer' && <Bearer />}
+        {tipoAutenticacao === 'none' && (
+          <h1>Nenhuma autenticação selecionada</h1>
+        )}
+        {tipoAutenticacao === 'basic' && <BasicAuthentication />}
+        {tipoAutenticacao === 'bearer' && <BearerAuthentication />}
       </div>
     </div>
   );

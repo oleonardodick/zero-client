@@ -102,6 +102,7 @@ const EditorJson = ({ tipo, readOnly = false }: EditorJsonProps) => {
         onBlur={(e) => handleSetValue(e.target.value)}
         defaultValue={tipo === 'requisicao' ? jsonEnvio : jsonRetorno}
         onChange={handleChange}
+        id={tipo}
       />
     </div>
   );
