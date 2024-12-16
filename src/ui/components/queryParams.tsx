@@ -18,6 +18,7 @@ const QueryParams = () => {
   const deleteQueryParam = useRequisicaoStore(
     (state) => state.deleteQueryParam
   );
+  const setUrl = useRequisicaoStore((state) => state.setUrl);
 
   const handleNovoQueryParam = useCallback(() => {
     const novoQueryParam: QueryParam = {
@@ -29,6 +30,26 @@ const QueryParams = () => {
 
     addQueryParam(novoQueryParam);
   }, [addQueryParam]);
+
+  const atualizaUrl = useCallback(() => {
+    const url = useRequisicaoStore.getState().requisicao.url;
+    let novaUrl = url;
+    const inicioParams = url.indexOf('?');
+    const queryParamsAtualizados =
+      useRequisicaoStore.getState().requisicao.queryParams;
+    const selectedParams = queryParamsAtualizados.filter(
+      (param) => param.selecionado
+    );
+    if (inicioParams > 0) novaUrl = novaUrl.substring(0, inicioParams);
+    if (selectedParams) {
+      selectedParams.forEach((param) => {
+        novaUrl += novaUrl.includes('?')
+          ? `&${param.query}=${param.valor}`
+          : `?${param.query}=${param.valor}`;
+      });
+      setUrl(novaUrl);
+    }
+  }, [setUrl]);
 
   const handleUpdateQueryParam = useCallback(
     (
@@ -44,16 +65,19 @@ const QueryParams = () => {
           ...queryParamOriginal,
           [field]: value,
         });
+
+        atualizaUrl();
       }
     },
-    [updateQueryParam, queryParams]
+    [updateQueryParam, queryParams, atualizaUrl]
   );
 
   const handleDeleteQueryParam = useCallback(
     (queryParamId: string) => {
       deleteQueryParam(queryParamId);
+      atualizaUrl();
     },
-    [deleteQueryParam]
+    [deleteQueryParam, atualizaUrl]
   );
 
   return (
@@ -64,7 +88,7 @@ const QueryParams = () => {
           <TableBody>
             {queryParams.map((queryParam) => (
               <TableRow
-                className="hover:bg-transparent border-none"
+                className="hover:bg-stone-700 border-none"
                 key={queryParam.id}
               >
                 <TableCell>
@@ -83,8 +107,9 @@ const QueryParams = () => {
                 </TableCell>
                 <TableCell>
                   <Input
+                    className="border-0 border-b rounded-none focus-visible:ring-0"
                     defaultValue={queryParam.query}
-                    onBlur={(e) =>
+                    onChange={(e) =>
                       handleUpdateQueryParam(
                         queryParam.id,
                         'query',
@@ -95,8 +120,9 @@ const QueryParams = () => {
                 </TableCell>
                 <TableCell>
                   <Input
+                    className="border-0 border-b rounded-none focus-visible:ring-0"
                     defaultValue={queryParam.valor}
-                    onBlur={(e) =>
+                    onChange={(e) =>
                       handleUpdateQueryParam(
                         queryParam.id,
                         'valor',

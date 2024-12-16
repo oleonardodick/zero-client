@@ -1,14 +1,4 @@
 import EditorJson from '../components/editorJson';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '../components/ui/select';
 import { Separator } from '../components/ui/separator';
 import {
   Tabs,
@@ -19,57 +9,16 @@ import {
 import { Autenticacao } from '../components/autenticacao';
 import QueryParams from '../components/queryParams';
 import Headers from '../components/headers';
-import useRequisicaoStore from '../store/requisicaoStore';
+import CabecalhoRequisicao from '../components/cabecalhoRequisicao';
+import CabecalhoResposta from '../components/cabecalhoResposta';
 
 export const PaginaRequisicao = () => {
-  const url = useRequisicaoStore((state) => state.requisicao.url);
-  const setUrl = useRequisicaoStore((state) => state.setUrl);
-
-  console.log('carregou');
-
-  const handleAtualizaUrl = (url: string) => {
-    setUrl(url);
-  };
-
-  const handleEnviar = () => {
-    const requisicao = useRequisicaoStore.getState().requisicao;
-    console.log(requisicao);
-  };
-
   return (
     <div className="h-screen flex flex-col">
       <header className="grid grid-cols-[1fr_auto_1fr] gap-2 bg-stone-700">
-        <div className="flex gap-1 py-4 px-2">
-          <Select defaultValue="get">
-            <SelectTrigger className="w-28">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="get">GET</SelectItem>
-                <SelectItem value="post">POST</SelectItem>
-                <SelectItem value="put">PUT</SelectItem>
-                <SelectItem value="patch">PATCH</SelectItem>
-                <SelectItem value="delete">DELETE</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <Input
-            placeholder="URL"
-            onBlur={(e) => handleAtualizaUrl(e.target.value)}
-            defaultValue={url}
-            id="urlInput"
-          />
-          <Button variant="secondary" onClick={handleEnviar}>
-            Enviar
-          </Button>
-        </div>
+        <CabecalhoRequisicao />
         <Separator orientation="vertical" className="bg-stone-500" />
-        <div className="flex gap-3 justify-end py-4 px-2">
-          <span className="bg-green-700 rounded-xl p-2">200 OK</span>
-          <span className="bg-gray-500 rounded-xl p-2">TIME 538 ms</span>
-          <span className="bg-gray-500 rounded-xl p-2">SIZE 358 B</span>
-        </div>
+        <CabecalhoResposta />
       </header>
 
       <main className="grid grid-cols-[1fr_auto_1fr] flex-grow gap-2">

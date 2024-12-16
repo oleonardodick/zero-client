@@ -48,7 +48,7 @@ const Headers = () => {
           <TableBody>
             {headers?.map((header) => (
               <TableRow
-                className="hover:bg-transparent border-none"
+                className="hover:bg-stone-700 border-none"
                 key={header.id}
               >
                 <TableCell>
@@ -67,6 +67,7 @@ const Headers = () => {
                 </TableCell>
                 <TableCell>
                   <Input
+                    className="border-0 border-b rounded-none focus-visible:ring-0"
                     defaultValue={header.header}
                     onBlur={(e) =>
                       handleUpdateHeader(header.id, 'header', e.target.value)
@@ -75,6 +76,7 @@ const Headers = () => {
                 </TableCell>
                 <TableCell>
                   <Input
+                    className="border-0 border-b rounded-none focus-visible:ring-0"
                     defaultValue={header.valor}
                     onBlur={(e) =>
                       handleUpdateHeader(header.id, 'valor', e.target.value)

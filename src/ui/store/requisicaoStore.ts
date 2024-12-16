@@ -5,6 +5,7 @@ type RequisicaoStore = {
   requisicao: Requisicao;
   inicializaRequisicao: (novaRequisicao: Requisicao) => void;
   setUrl: (url: string) => void;
+  setTipo: (tipo: string) => void;
   setJsonEnvio: (json: string) => void;
   setJsonRetorno: (json: string) => void;
   addQueryParam: (queryParam: QueryParam) => void;
@@ -21,6 +22,7 @@ const useRequisicaoStore = create<RequisicaoStore>((set) => ({
   requisicao: {
     id: '',
     url: '',
+    tipo: 'get',
     jsonEnvio: '',
     jsonRetorno: '',
     data: '',
@@ -37,6 +39,13 @@ const useRequisicaoStore = create<RequisicaoStore>((set) => ({
       requisicao: {
         ...state.requisicao,
         url,
+      },
+    })),
+  setTipo: (tipo) =>
+    set((state) => ({
+      requisicao: {
+        ...state.requisicao,
+        tipo: tipo,
       },
     })),
   setJsonEnvio: (json) =>

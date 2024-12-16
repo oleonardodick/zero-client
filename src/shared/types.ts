@@ -23,7 +23,7 @@ export type Header = {
 };
 
 export type Autenticacao = {
-  tipo: 'none' | 'basic' | 'bearer';
+  tipo: string;
   bearer?: Bearer;
   basic?: Basic;
 };
@@ -41,6 +41,7 @@ export type Basic = {
 export type Requisicao = {
   id: string;
   url: string;
+  tipo: string;
   jsonEnvio: string;
   jsonRetorno: string;
   data: string;
