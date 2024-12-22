@@ -2,6 +2,7 @@ import { Textarea } from './ui/textarea';
 import { Button } from './ui/button';
 import { useCallback, useRef } from 'react';
 import useRequisicaoStore from '../store/requisicaoStore';
+import useRespostaStore from '../store/respostaStore';
 
 type Tipo = 'requisicao' | 'resposta';
 
@@ -14,9 +15,7 @@ const EditorJson = ({ tipo, readOnly = false }: EditorJsonProps) => {
   const textAreaJsonRef = useRef<HTMLTextAreaElement>(null);
   const setJsonEnvio = useRequisicaoStore((state) => state.setJsonEnvio);
   const jsonEnvio = useRequisicaoStore((state) => state.requisicao.jsonEnvio);
-  const jsonRetorno = useRequisicaoStore(
-    (state) => state.requisicao.jsonRetorno
-  );
+  const jsonRetorno = useRespostaStore((state) => state.resposta.jsonRetorno);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Tab') {

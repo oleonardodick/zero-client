@@ -43,9 +43,17 @@ export type Requisicao = {
   url: string;
   tipo: string;
   jsonEnvio: string;
-  jsonRetorno: string;
   data: string;
   queryParams: QueryParam[] | [];
   header: Header[] | [];
   autenticacao?: Autenticacao;
+};
+
+export type Resposta = {
+  idRequisicao: string;
+  jsonRetorno: string;
+  status: number;
+  statusText: string;
+  size: number;
+  time: number;
 };
