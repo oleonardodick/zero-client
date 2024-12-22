@@ -1,7 +1,8 @@
-import { enviarRequisicao } from '../communication/requisicao';
-import useRequisicaoStore from '../store/requisicaoStore';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
+import { Resposta } from '@/shared/types';
+import { enviarRequisicao } from '@/ui/communication/requisicao';
+import { IRepostaCustomizada } from '@/ui/interface/IRespostaCustomizada';
+import useRequisicaoStore from '@/ui/store/requisicaoStore';
+import useRespostaStore from '@/ui/store/respostaStore';
 import {
   Select,
   SelectContent,
@@ -9,10 +10,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from './ui/select';
-import useRespostaStore from '../store/respostaStore';
-import { Resposta } from '@/shared/types';
-import { IRepostaCustomizada } from '../interface/IRespostaCustomizada';
+} from '../ui/select';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
 
 const CabecalhoRequisicao = () => {
   const url = useRequisicaoStore((state) => state.requisicao.url);
@@ -29,7 +29,6 @@ const CabecalhoRequisicao = () => {
     const requisicao = useRequisicaoStore.getState().requisicao;
     // const data = new Date().toLocaleDateString('pt-BR');
     const retorno: IRepostaCustomizada = await enviarRequisicao(requisicao);
-    console.log(retorno);
     const resposta: Resposta = {
       idRequisicao: requisicao.id,
       jsonRetorno: JSON.stringify(retorno.axiosResponse.data, null, 2),

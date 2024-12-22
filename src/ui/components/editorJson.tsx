@@ -1,54 +1,43 @@
 import { Textarea } from './ui/textarea';
 import { Button } from './ui/button';
-import { useCallback, useRef } from 'react';
-import useRequisicaoStore from '../store/requisicaoStore';
-import useRespostaStore from '../store/respostaStore';
-
-type Tipo = 'requisicao' | 'resposta';
+import { useRef } from 'react';
 
 interface EditorJsonProps {
-  tipo: Tipo;
   readOnly?: boolean;
+  json?: string;
+  setJson?: (json: string) => void;
 }
 
-const EditorJson = ({ tipo, readOnly = false }: EditorJsonProps) => {
+const EditorJson = ({ readOnly = false, setJson, json }: EditorJsonProps) => {
   const textAreaJsonRef = useRef<HTMLTextAreaElement>(null);
-  const setJsonEnvio = useRequisicaoStore((state) => state.setJsonEnvio);
-  const jsonEnvio = useRequisicaoStore((state) => state.requisicao.jsonEnvio);
-  const jsonRetorno = useRespostaStore((state) => state.resposta.jsonRetorno);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === 'Tab') {
-      event.preventDefault();
+    const caracteresAbertura = ['{', '"', '['];
+    if (!caracteresAbertura.includes(event.key) && event.key !== 'Tab') return;
 
-      const textArea = textAreaJsonRef.current;
-      if (textArea) {
+    event.preventDefault();
+    const textArea = textAreaJsonRef.current;
+    if (textArea) {
+      if (event.key === 'Tab') {
         const start = textArea.selectionStart;
         const end = textArea.selectionEnd;
 
         textArea.setRangeText('\t', start, end, 'select');
         textArea.setSelectionRange(start + 1, start + 1);
-      }
-    }
-  };
-
-  const handleChange = () => {
-    const textArea = textAreaJsonRef.current;
-    const caracteresAbertura = ['{', '"', '['];
-    const caracteresFechamento = ['}', '"', ']'];
-    if (textArea) {
-      const textoAtual = textArea.value;
-      const posicaoCursor = textArea.selectionStart;
-      const letraDigitada = textoAtual.slice(posicaoCursor - 1, posicaoCursor);
-      if (caracteresAbertura.includes(letraDigitada)) {
-        const textoAntes = textoAtual.slice(0, posicaoCursor);
-        const textoDepois = textoAtual.slice(posicaoCursor);
+      } else {
+        const caracteresFechamento = ['}', '"', ']'];
+        const textoAtual = textArea.value;
         const novaLetra =
-          caracteresFechamento[caracteresAbertura.indexOf(letraDigitada)];
-
-        textArea.value = textoAntes + novaLetra + textoDepois;
-        textArea.selectionStart = posicaoCursor;
-        textArea.selectionEnd = posicaoCursor;
+          caracteresFechamento[caracteresAbertura.indexOf(event.key)];
+        const posicaoCursor = textArea.selectionStart;
+        const novoTexto =
+          textoAtual.slice(0, posicaoCursor) +
+          event.key +
+          novaLetra +
+          textoAtual.slice(posicaoCursor);
+        textArea.value = novoTexto;
+        textArea.selectionStart = posicaoCursor + 1;
+        textArea.selectionEnd = posicaoCursor + 1;
       }
     }
   };
@@ -64,20 +53,6 @@ const EditorJson = ({ tipo, readOnly = false }: EditorJsonProps) => {
       }
     }
   };
-
-  const handleSetValue = useCallback(
-    (json: string) => {
-      if (json) {
-        const parsedValue = JSON.parse(json);
-        json = JSON.stringify(parsedValue, null, 2);
-      }
-      console.log(json);
-      if (tipo === 'requisicao') {
-        setJsonEnvio(json);
-      }
-    },
-    [setJsonEnvio, tipo]
-  );
 
   return (
     <div className="flex flex-col gap-1 p-4 w-full h-full">
@@ -98,10 +73,8 @@ const EditorJson = ({ tipo, readOnly = false }: EditorJsonProps) => {
         ref={textAreaJsonRef}
         onKeyDown={handleKeyDown}
         readOnly={readOnly}
-        onBlur={(e) => handleSetValue(e.target.value)}
-        defaultValue={tipo === 'requisicao' ? jsonEnvio : jsonRetorno}
-        onChange={handleChange}
-        id={tipo}
+        onBlur={(e) => setJson?.(e.target.value)}
+        defaultValue={json}
       />
     </div>
   );

@@ -1,9 +1,9 @@
-import useRespostaStore from '../store/respostaStore';
+import useRespostaStore from '@/ui/store/respostaStore';
 
 const CabecalhoResposta = () => {
   const resposta = useRespostaStore((state) => state.resposta);
   return (
-    <div className="flex gap-3 justify-end py-4 px-2">
+    <div className="flex gap-3 justify-end py-4 px-2 h-[68px]">
       {resposta.status > 0 && (
         <span
           className={`${
