@@ -1,6 +1,6 @@
 import { Textarea } from './ui/textarea';
 import { Button } from './ui/button';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 interface EditorJsonProps {
   readOnly?: boolean;
@@ -10,6 +10,7 @@ interface EditorJsonProps {
 
 const EditorJson = ({ readOnly = false, setJson, json }: EditorJsonProps) => {
   const textAreaJsonRef = useRef<HTMLTextAreaElement>(null);
+  const [textoCopiado, setTextoCopiado] = useState<boolean>(false);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const caracteresAbertura = ['{', '"', '['];
@@ -54,22 +55,39 @@ const EditorJson = ({ readOnly = false, setJson, json }: EditorJsonProps) => {
     }
   };
 
+  const handleCopiar = () => {
+    navigator.clipboard.writeText(json || '');
+    setTextoCopiado(true);
+    setTimeout(() => {
+      setTextoCopiado(false);
+    }, 1500);
+  };
+
   return (
-    <div className="flex flex-col gap-1 p-4 w-full h-full">
-      <div className="flex justify-between">
-        <h1 className="flex items-center justify-center h-9">Conteúdo JSON</h1>
-        {!readOnly && (
+    <div className="flex flex-col gap-1 px-2 w-full h-full">
+      {!readOnly && (
+        <div className="flex justify-end">
           <Button
             variant="link"
-            className="text-zinc-300"
+            className="text-zinc-300 w-fit"
             onClick={handleFormatar}
           >
             Formatar
           </Button>
-        )}
+        </div>
+      )}
+      <div className="relative flex right-4 justify-end">
+        <Button
+          variant="link"
+          className="text-zinc-300 w-fit absolute top-3"
+          onClick={textoCopiado ? undefined : handleCopiar}
+          id="btnCopiar"
+        >
+          {textoCopiado ? 'Copiado!' : 'Copiar'}
+        </Button>
       </div>
       <Textarea
-        className="resize-none flex-grow md:text-lg border-stone-600"
+        className="resize-none flex-grow md:text-lg border-stone-600 scrollbar-custom"
         ref={textAreaJsonRef}
         onKeyDown={handleKeyDown}
         readOnly={readOnly}

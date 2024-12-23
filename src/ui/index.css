@@ -6,3 +6,20 @@
     --radius: 0.5rem;
   }
 }
+@layer utilities {
+  /* Estilos personalizados para o scrollbar */
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 12px; /* Largura do scrollbar */
+    height: 12px; /* Altura do scrollbar horizontal */
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background-color: #44403c; /* Cor do thumb */
+    border-radius: 10px; /*Cantos arredondados*/
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background-color: transparent; /* Cor do track */
+    margin: 2px;
+  }
+}

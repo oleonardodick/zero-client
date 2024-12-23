@@ -14,7 +14,7 @@ const Requisicao = () => {
         <CabecalhoRequisicao />
       </header>
       <main>
-        <Tabs defaultValue="JSON" className="flex flex-col gap-3 px-1 h-full">
+        <Tabs defaultValue="JSON" className="flex flex-col gap-3 h-full">
           <TabsList className="bg-transparent flex flex-col lg:flex-row">
             <TabOpcoes value="JSON" />
             <TabOpcoes value="Auth" />
