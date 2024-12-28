@@ -9,7 +9,7 @@ import TabOpcoes from './tabOpcoes';
 
 const Sidebar = () => {
   return (
-    <div className="flex flex-col gap-9 lg:gap-3 bg-stone-700 w-1/6 p-3 border-r border-stone-500 h-screen">
+    <div className="flex flex-col gap-9 xl:gap-3 bg-stone-700 w-1/6 p-3 border-r border-stone-500 h-screen">
       <Link to="/comunicacao/cadastrar">
         <Button
           variant="secondary"
@@ -20,7 +20,7 @@ const Sidebar = () => {
         </Button>
       </Link>
       <Tabs defaultValue="Atividade" className="flex flex-col gap-3">
-        <TabsList className="bg-transparent flex flex-col lg:flex-row">
+        <TabsList className="bg-transparent flex flex-col xl:flex-row">
           <TabOpcoes value="Atividade" />
           <TabOpcoes value="Coleções" />
           <TabOpcoes value="Variáveis" />

@@ -4,7 +4,7 @@ import CabecalhoResposta from './cabecalho';
 
 const Resposta = () => {
   return (
-    <div className="grid grid-rows-[auto_1fr] gap-2">
+    <div className="grid grid-rows-[auto_1fr] gap-2 h-full">
       <header>
         <CabecalhoResposta />
       </header>

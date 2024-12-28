@@ -81,10 +81,10 @@ const QueryParams = () => {
   );
 
   return (
-    <div className="flex flex-col gap-5 p-4">
+    <div className="flex flex-col h-full gap-5 p-4">
       <h1>Query Params</h1>
-      <div>
-        <Table className="table-auto">
+      <div className="flex-1 overflow-auto scrollbar-custom">
+        <Table>
           <TableBody>
             {queryParams.map((queryParam) => (
               <TableRow

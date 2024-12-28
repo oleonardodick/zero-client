@@ -33,7 +33,7 @@ export const BearerAuthentication = () => {
     <div className="grid gap-3">
       <h1>Bearer Token</h1>
       <Textarea
-        rows={10}
+        rows={7}
         className="resize-none"
         defaultValue={bearer?.token}
         id="bearerToken"

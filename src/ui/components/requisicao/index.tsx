@@ -9,11 +9,11 @@ import useRequisicaoStore from '@/ui/store/requisicaoStore';
 
 const Requisicao = () => {
   return (
-    <div className="grid grid-rows-[auto_1fr]">
+    <div className="flex flex-col h-full">
       <header>
         <CabecalhoRequisicao />
       </header>
-      <main>
+      <main className="flex-1 overflow-hidden">
         <Tabs defaultValue="JSON" className="flex flex-col gap-3 h-full">
           <TabsList className="bg-transparent flex flex-col lg:flex-row">
             <TabOpcoes value="JSON" />
@@ -27,10 +27,10 @@ const Requisicao = () => {
           <TabsContent value="Auth">
             <Autenticacao />
           </TabsContent>
-          <TabsContent value="Params">
+          <TabsContent value="Params" className="overflow-hidden">
             <QueryParams />
           </TabsContent>
-          <TabsContent value="Headers">
+          <TabsContent value="Headers" className="overflow-hidden">
             <Headers />
           </TabsContent>
         </Tabs>

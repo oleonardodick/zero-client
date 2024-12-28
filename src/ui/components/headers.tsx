@@ -41,9 +41,9 @@ const Headers = () => {
   );
 
   return (
-    <div className="flex flex-col gap-5 p-4">
+    <div className="flex flex-col h-full gap-5 p-4">
       <h1>Headers</h1>
-      <div>
+      <div className="flex-1 overflow-auto scrollbar-custom">
         <Table>
           <TableBody>
             {headers?.map((header) => (
