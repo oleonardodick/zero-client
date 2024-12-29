@@ -23,8 +23,6 @@ const useRequisicaoStore = create<RequisicaoStore>((set) => ({
     url: '',
     tipo: 'get',
     jsonEnvio: '',
-    jsonRetorno: '',
-    data: '',
     queryParams: [],
     header: [],
     autenticacao: { tipo: 'none' },

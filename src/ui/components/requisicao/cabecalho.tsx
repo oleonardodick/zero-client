@@ -1,4 +1,4 @@
-import { Resposta } from '@/shared/types';
+import { CrudResult, Resposta } from '@/shared/types';
 import { enviarRequisicao } from '@/ui/communication/requisicao';
 import { IRepostaCustomizada } from '@/ui/interface/IRespostaCustomizada';
 import useRequisicaoStore from '@/ui/store/requisicaoStore';
@@ -27,6 +27,16 @@ const CabecalhoRequisicao = () => {
 
   const handleEnviar = async () => {
     const requisicao = useRequisicaoStore.getState().requisicao;
+    try {
+      let resultado: CrudResult;
+
+      if (requisicao) {
+        resultado = await window.electron.criaRequisicao(requisicao);
+        console.log(resultado);
+      }
+    } catch (erro) {
+      console.log(erro);
+    }
     // const data = new Date().toLocaleDateString('pt-BR');
     const retorno: IRepostaCustomizada = await enviarRequisicao(requisicao);
     const resposta: Resposta = {

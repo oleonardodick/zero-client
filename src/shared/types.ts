@@ -9,17 +9,17 @@ export type CrudResult = {
 };
 
 export type QueryParam = {
-  id: string;
   selecionado: boolean;
   query: string;
   valor: string;
+  id: string;
 };
 
 export type Header = {
-  id: string;
   selecionado: boolean;
   header: string;
   valor: string;
+  id: string;
 };
 
 export type Autenticacao = {
@@ -43,7 +43,6 @@ export type Requisicao = {
   url: string;
   tipo: string;
   jsonEnvio: string;
-  data: string;
   queryParams: QueryParam[] | [];
   header: Header[] | [];
   autenticacao?: Autenticacao;

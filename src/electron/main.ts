@@ -8,7 +8,7 @@ import {
   criaVariavelAmbiente,
   excluiVariavelAmbiente,
 } from './queries/variavelAmbiente.js';
-// import { CriaRequisicao } from './queries/requisicao.js';
+import { CriaRequisicao } from './queries/requisicao.js';
 
 let mainWindow: BrowserWindow;
 
@@ -44,9 +44,9 @@ ipcMain.handle('excluiVariavelAmbiente', (_, nome) => {
   return excluiVariavelAmbiente(nome);
 });
 
-// ipcMain.handle('criaRequisicao', (_, requisicao) => {
-//   return CriaRequisicao(requisicao);
-// });
+ipcMain.handle('criaRequisicao', (_, requisicao) => {
+  return CriaRequisicao(requisicao);
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();

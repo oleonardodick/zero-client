@@ -1,10 +1,11 @@
 import { CrudResult } from '@shared/types.js';
-import { Prisma, PrismaClient, VariavelAmbiente } from '@prisma/client';
+import { Prisma, VariavelAmbiente } from '@prisma/client';
+import { prisma } from './prisma.js';
 
-const prisma = new PrismaClient();
-
-export const buscaTodasVariaveisAmbiente = (): Promise<VariavelAmbiente[]> => {
-  return prisma.variavelAmbiente.findMany();
+export const buscaTodasVariaveisAmbiente = async (): Promise<
+  VariavelAmbiente[]
+> => {
+  return await prisma.variavelAmbiente.findMany();
 };
 
 export const criaVariavelAmbiente = async (
@@ -12,6 +13,17 @@ export const criaVariavelAmbiente = async (
   valor: string
 ): Promise<CrudResult> => {
   try {
+    const registroExistente = await prisma.variavelAmbiente.findUnique({
+      where: {
+        nome: nome,
+      },
+    });
+    if (registroExistente)
+      return {
+        sucesso: false,
+        erro: 'Já existe uma variável de ambiente com este nome.',
+      };
+
     await prisma.variavelAmbiente.create({
       data: {
         nome: nome,

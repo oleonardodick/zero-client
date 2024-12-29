@@ -16,3 +16,69 @@ model VariavelAmbiente {
 
   @@map("variaveis_ambiente")
 }
+
+model Requisicao {
+  id           String        @id @default(uuid())
+  url          String
+  tipo         String
+  jsonEnvio    String
+  data         DateTime      @default(now())
+  query_params QueryParam[]
+  headers      Header[]
+  autenticacao Autenticacao?
+
+  @@map("requisicoes")
+}
+
+model QueryParam {
+  id            String     @id @default(uuid())
+  selecionado   Boolean
+  query         String
+  valor         String
+  requisicao_id String
+  requisicao    Requisicao @relation(fields: [requisicao_id], references: [id], onDelete: Cascade)
+
+  @@map("query_params")
+}
+
+model Header {
+  id            String     @id @default(uuid())
+  selecionado   Boolean
+  header        String
+  valor         String
+  requisicao_id String
+  requisicao    Requisicao @relation(fields: [requisicao_id], references: [id], onDelete: Cascade)
+
+  @@map("headers")
+}
+
+model Autenticacao {
+  id            String     @id @default(uuid())
+  tipo          String     @default("NENHUM")
+  bearer        Bearer?
+  Basic         Basic?
+  requisicao_id String     @unique
+  requisicao    Requisicao @relation(fields: [requisicao_id], references: [id], onDelete: Cascade)
+
+  @@map("autenticacao")
+}
+
+model Bearer {
+  id              String       @id @default(uuid())
+  prefix          String
+  token           String
+  autenticacao_id String       @unique
+  autenticacao    Autenticacao @relation(fields: [autenticacao_id], references: [id], onDelete: Cascade)
+
+  @@map("autenticacao_bearer")
+}
+
+model Basic {
+  id              String       @id @default(uuid())
+  usuario         String
+  senha           String
+  autenticacao_id String       @unique
+  autenticacao    Autenticacao @relation(fields: [autenticacao_id], references: [id], onDelete: Cascade)
+
+  @@map("autenticacao_basic")
+}
