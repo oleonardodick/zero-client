@@ -1,6 +1,7 @@
 import { CrudResult } from '@shared/types.js';
-import { Prisma, VariavelAmbiente } from '@prisma/client';
+import { VariavelAmbiente } from '@prisma/client';
 import { prisma } from './prisma.js';
+import { trataMensagemErro } from '../util.js';
 
 export const buscaTodasVariaveisAmbiente = async (): Promise<
   VariavelAmbiente[]
@@ -32,9 +33,7 @@ export const criaVariavelAmbiente = async (
     });
     return { sucesso: true };
   } catch (erro) {
-    const mensagemErro =
-      erro instanceof Error ? erro.message : 'Erro inesperado';
-    return { sucesso: false, erro: mensagemErro };
+    return { sucesso: false, erro: trataMensagemErro(erro) };
   }
 };
 
@@ -52,13 +51,8 @@ export const atualizaValorVariavelAmbiente = async (
       },
     });
     return { sucesso: true };
-  } catch (error) {
-    const mensagemErro =
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === 'P2025'
-        ? 'Nenhum registro encontrado.'
-        : 'Erro inesperado.';
-    return { sucesso: false, erro: mensagemErro };
+  } catch (erro) {
+    return { sucesso: false, erro: trataMensagemErro(erro) };
   }
 };
 
@@ -72,12 +66,7 @@ export const excluiVariavelAmbiente = async (
       },
     });
     return { sucesso: true };
-  } catch (error) {
-    const mensagemErro =
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === 'P2025'
-        ? 'Nenhum registro encontrado.'
-        : 'Erro inesperado.';
-    return { sucesso: false, erro: mensagemErro };
+  } catch (erro) {
+    return { sucesso: false, erro: trataMensagemErro(erro) };
   }
 };

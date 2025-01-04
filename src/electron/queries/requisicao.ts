@@ -1,6 +1,9 @@
 import { CrudResult, Requisicao } from '@shared/types.js';
 import { prisma } from './prisma.js';
 import { CriaQueryParam } from './queryParam.js';
+import { CriaHeader } from './header.js';
+import { CriaAutenticacao } from './autenticacao.js';
+import { trataMensagemErro } from '../util.js';
 
 export const CriaRequisicao = async (
   requisicao: Requisicao
@@ -15,11 +18,12 @@ export const CriaRequisicao = async (
     });
     if (requisicao.queryParams)
       CriaQueryParam(requisicao.queryParams, registroCriado.id);
+    if (requisicao.header) CriaHeader(requisicao.header, registroCriado.id);
+    if (requisicao.autenticacao && requisicao.autenticacao.tipo !== 'none')
+      CriaAutenticacao(requisicao.autenticacao, registroCriado.id);
     return { sucesso: true };
   } catch (erro) {
-    const mensagemErro =
-      erro instanceof Error ? erro.message : 'Erro inesperado';
-    return { sucesso: false, erro: mensagemErro };
+    return { sucesso: false, erro: trataMensagemErro(erro) };
   }
 };
 
@@ -54,8 +58,6 @@ export const AtualizaRequisicao = async (
       return { sucesso: false, erro: 'Requisição não encontrada.' };
     }
   } catch (erro) {
-    const mensagemErro =
-      erro instanceof Error ? erro.message : 'Erro inesperado';
-    return { sucesso: false, erro: mensagemErro };
+    return { sucesso: false, erro: trataMensagemErro(erro) };
   }
 };
