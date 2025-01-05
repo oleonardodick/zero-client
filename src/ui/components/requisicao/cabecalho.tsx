@@ -1,8 +1,7 @@
-import { CrudResult, Resposta } from '@/shared/types';
-import { enviarRequisicao } from '@/ui/communication/requisicao';
-import { IRepostaCustomizada } from '@/ui/interface/IRespostaCustomizada';
+// import { CrudResult, Resposta } from '@/shared/types';
+// import { enviarRequisicao } from '@/ui/communication/requisicao';
+// import { IRepostaCustomizada } from '@/ui/interface/IRespostaCustomizada';
 import useRequisicaoStore from '@/ui/store/requisicaoStore';
-import useRespostaStore from '@/ui/store/respostaStore';
 import {
   Select,
   SelectContent,
@@ -13,13 +12,15 @@ import {
 } from '../ui/select';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
+import { RequisicaoDTO } from '@/dtos/requisicao.dto';
+import { CrudResult } from '@/shared/types';
 
 const CabecalhoRequisicao = () => {
   const url = useRequisicaoStore((state) => state.requisicao.url);
-  const setUrl = useRequisicaoStore((state) => state.setUrl);
   const tipo = useRequisicaoStore((state) => state.requisicao.tipo);
+  const setUrl = useRequisicaoStore((state) => state.setUrl);
   const setTipo = useRequisicaoStore((state) => state.setTipo);
-  const setResposta = useRespostaStore((state) => state.setResposta);
+  // const setResposta = useRespostaStore((state) => state.setResposta);
 
   const handleAtualizaUrl = (url: string) => {
     setUrl(url);
@@ -27,27 +28,39 @@ const CabecalhoRequisicao = () => {
 
   const handleEnviar = async () => {
     const requisicao = useRequisicaoStore.getState().requisicao;
+    const queryParams = useRequisicaoStore.getState().queryParams;
+    const headers = useRequisicaoStore.getState().headers;
+    const autenticacao = useRequisicaoStore.getState().autenticacao;
+    const requisicaoEnviar = new RequisicaoDTO(
+      requisicao.url,
+      requisicao.tipo,
+      requisicao.jsonEnvio,
+      undefined,
+      queryParams,
+      headers,
+      autenticacao
+    );
     try {
       let resultado: CrudResult;
 
       if (requisicao) {
-        resultado = await window.electron.criaRequisicao(requisicao);
+        resultado = await window.electron.criaRequisicao(requisicaoEnviar);
         console.log(resultado);
       }
     } catch (erro) {
       console.log(erro);
     }
-    // const data = new Date().toLocaleDateString('pt-BR');
-    const retorno: IRepostaCustomizada = await enviarRequisicao(requisicao);
-    const resposta: Resposta = {
-      idRequisicao: requisicao.id,
-      jsonRetorno: JSON.stringify(retorno.axiosResponse.data, null, 2),
-      status: retorno.axiosResponse.status,
-      statusText: retorno.axiosResponse.statusText,
-      size: retorno.size,
-      time: retorno.time,
-    };
-    setResposta(resposta);
+    // // const data = new Date().toLocaleDateString('pt-BR');
+    // const retorno: IRepostaCustomizada = await enviarRequisicao(requisicao);
+    // const resposta: Resposta = {
+    //   idRequisicao: requisicao.id,
+    //   jsonRetorno: JSON.stringify(retorno.axiosResponse.data, null, 2),
+    //   status: retorno.axiosResponse.status,
+    //   statusText: retorno.axiosResponse.statusText,
+    //   size: retorno.size,
+    //   time: retorno.time,
+    // };
+    // setResposta(resposta);
   };
 
   return (

@@ -1,4 +1,5 @@
-import { CrudResult, IVariavelAmbiente, Requisicao } from './shared/types';
+import { RequisicaoDTO } from './dtos/requisicao.dto.ts';
+import { CrudResult, IVariavelAmbiente } from './shared/types';
 
 declare global {
   interface Window {
@@ -13,7 +14,8 @@ declare global {
         valor: string
       ) => Promise<CrudResult>;
       excluiVariavelAmbiente: (nome: string) => Promise<CrudResult>;
-      criaRequisicao: (requisicao: Requisicao) => Promise<CrudResult>;
+      criaRequisicao: (requisicao: RequisicaoDTO) => Promise<CrudResult>;
+      buscaUltimasRequisicoes: () => Promise<RequisicaoDTO[]>;
     };
   }
 }

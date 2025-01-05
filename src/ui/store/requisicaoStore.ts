@@ -1,119 +1,102 @@
-import { Autenticacao, Header, QueryParam, Requisicao } from '@/shared/types';
+import { AutenticacaoDTO } from '@/dtos/autenticacao.dto';
+import { HeaderDTO } from '@/dtos/header.dto';
+import { QueryParamDTO } from '@/dtos/queryParam.dto';
+import { RequisicaoDTO } from '@/dtos/requisicao.dto';
+// import { Autenticacao, Header, QueryParam, Requisicao } from '@/shared/types';
 import { create } from 'zustand';
 
 type RequisicaoStore = {
-  requisicao: Requisicao;
-  inicializaRequisicao: (novaRequisicao: Requisicao) => void;
+  requisicao: RequisicaoDTO;
+  inicializaRequisicao: (novaRequisicao: RequisicaoDTO) => void;
   setUrl: (url: string) => void;
   setTipo: (tipo: string) => void;
   setJsonEnvio: (json: string) => void;
-  addQueryParam: (queryParam: QueryParam) => void;
-  updateQueryParam: (id: string, updatedValues: QueryParam) => void;
+  queryParams: QueryParamDTO[];
+  addQueryParam: (queryParam: QueryParamDTO) => void;
+  updateQueryParam: (id: string, updatedValues: QueryParamDTO) => void;
   deleteQueryParam: (id: string) => void;
-  addHeader: (header: Header) => void;
-  updateHeader: (id: string, updatedValues: Header) => void;
+  headers: HeaderDTO[];
+  addHeader: (header: HeaderDTO) => void;
+  updateHeader: (id: string, updatedValues: HeaderDTO) => void;
   deleteHeader: (id: string) => void;
+  autenticacao: AutenticacaoDTO;
   setTipoAutenticacao: (tipo: 'none' | 'bearer' | 'basic') => void;
-  setAutenticacao: (dados: Autenticacao) => void;
+  setAutenticacao: (dados: AutenticacaoDTO) => void;
 };
 
 const useRequisicaoStore = create<RequisicaoStore>((set) => ({
   requisicao: {
-    id: '',
     url: '',
     tipo: 'get',
     jsonEnvio: '',
-    queryParams: [],
-    header: [],
-    autenticacao: { tipo: 'none' },
   },
-  inicializaRequisicao: (novaRequisicao) =>
+  queryParams: [],
+  headers: [],
+  autenticacao: { tipo: 'none' },
+  inicializaRequisicao: (novaRequisicao: RequisicaoDTO) =>
     set(() => ({
       requisicao: novaRequisicao,
+      queryParams: novaRequisicao.queryParams,
+      autenticacao: novaRequisicao.autenticacao,
     })),
-  setUrl: (url) =>
+  setUrl: (url: string) =>
     set((state) => ({
       requisicao: {
         ...state.requisicao,
-        url,
+        url: url,
       },
     })),
-  setTipo: (tipo) =>
+  setTipo: (tipo: string) =>
     set((state) => ({
       requisicao: {
         ...state.requisicao,
         tipo: tipo,
       },
     })),
-  setJsonEnvio: (json) =>
+  setJsonEnvio: (json: string) =>
     set((state) => ({
       requisicao: {
         ...state.requisicao,
         jsonEnvio: json,
       },
     })),
-  addQueryParam: (queryParam) =>
+  addQueryParam: (queryParam: QueryParamDTO) =>
     set((state) => ({
-      requisicao: {
-        ...state.requisicao,
-        queryParams: [...state.requisicao.queryParams, queryParam],
-      },
+      queryParams: [...state.queryParams, queryParam],
     })),
-  updateQueryParam: (id, updatedValues) =>
+  updateQueryParam: (id, updatedValues: QueryParamDTO) =>
     set((state) => ({
-      requisicao: {
-        ...state.requisicao,
-        queryParams: state.requisicao.queryParams.map((param) =>
-          param.id === id ? { ...param, ...updatedValues } : param
-        ),
-      },
+      queryParams: state.queryParams.map((param) =>
+        param.id === id ? updatedValues : param
+      ),
     })),
-  deleteQueryParam: (id) =>
+  deleteQueryParam: (id: string) =>
     set((state) => ({
-      requisicao: {
-        ...state.requisicao,
-        queryParams: state.requisicao.queryParams.filter(
-          (param) => param.id !== id
-        ),
-      },
+      queryParams: state.queryParams.filter((param) => param.id !== id),
     })),
-  addHeader: (header) =>
+  addHeader: (header: HeaderDTO) =>
     set((state) => ({
-      requisicao: {
-        ...state.requisicao,
-        header: [...state.requisicao.header, header],
-      },
+      headers: [...state.headers, header],
     })),
-  updateHeader: (id, updatedValues) =>
+  updateHeader: (id, updatedValues: HeaderDTO) =>
     set((state) => ({
-      requisicao: {
-        ...state.requisicao,
-        header: state.requisicao.header.map((param) =>
-          param.id === id ? { ...param, ...updatedValues } : param
-        ),
-      },
+      headers: state.headers.map((header) =>
+        header.id === id ? { ...header, ...updatedValues } : header
+      ),
     })),
-  deleteHeader: (id) =>
+  deleteHeader: (id: string) =>
     set((state) => ({
-      requisicao: {
-        ...state.requisicao,
-        header: state.requisicao.header.filter((param) => param.id !== id),
-      },
+      headers: state.headers.filter((header) => header.id !== id),
     })),
   setTipoAutenticacao: (tipo) =>
     set((state) => ({
-      requisicao: {
-        ...state.requisicao,
-        autenticacao: { ...state.requisicao.autenticacao, tipo },
-      },
+      autenticacao: { ...state.autenticacao, tipo },
     })),
-  setAutenticacao: (dados) =>
+  setAutenticacao: (dados: AutenticacaoDTO) =>
     set((state) => ({
-      requisicao: {
-        ...state.requisicao,
-        autenticacao: {
-          ...dados,
-        },
+      autenticacao: {
+        ...state.autenticacao,
+        ...dados,
       },
     })),
 }));

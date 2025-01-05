@@ -11,4 +11,6 @@ electron.contextBridge.exposeInMainWorld('electron', {
     electron.ipcRenderer.invoke('excluiVariavelAmbiente', nome),
   criaRequisicao: (requisicao: any) =>
     electron.ipcRenderer.invoke('criaRequisicao', requisicao),
+  buscaUltimasRequisicoes: () =>
+    electron.ipcRenderer.invoke('buscaUltimasRequisicoes'),
 });

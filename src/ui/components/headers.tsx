@@ -1,30 +1,25 @@
 import { useCallback } from 'react';
 import { Table, TableBody, TableCell, TableRow } from './ui/table';
-import { Header } from '@/shared/types';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Trash2Icon } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 import useRequisicaoStore from '../store/requisicaoStore';
+import { HeaderDTO } from '@/dtos/header.dto';
 
 const Headers = () => {
-  const headers = useRequisicaoStore((state) => state.requisicao.header);
+  const headers = useRequisicaoStore((state) => state.headers);
   const addHeader = useRequisicaoStore((state) => state.addHeader);
   const updateHeader = useRequisicaoStore((state) => state.updateHeader);
   const deleteHeader = useRequisicaoStore((state) => state.deleteHeader);
 
   const handleNovoHeader = useCallback(() => {
-    const novoHeader: Header = {
-      id: uuidv4(),
-      header: '',
-      valor: '',
-      selecionado: false,
-    };
+    const novoHeader = new HeaderDTO(uuidv4(), '', '', false);
     addHeader(novoHeader);
   }, [addHeader]);
 
   const handleUpdateHeader = useCallback(
-    (headerId: string, field: keyof Header, value: string | boolean) => {
+    (headerId: string, field: keyof HeaderDTO, value: string | boolean) => {
       const headerOriginal = headers.find((header) => header.id === headerId);
       if (headerOriginal && headerOriginal[field] !== value) {
         updateHeader(headerId, { ...headerOriginal, [field]: value });

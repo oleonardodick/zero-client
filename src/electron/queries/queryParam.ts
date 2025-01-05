@@ -1,9 +1,9 @@
-import { QueryParam } from '@shared/types.js';
 import { prisma } from './prisma.js';
 import { trataMensagemErro } from '../util.js';
+import { QueryParamDTO } from '../../dtos/queryParam.dto.js';
 
 export const CriaQueryParam = async (
-  queryParams: QueryParam[],
+  queryParams: QueryParamDTO[],
   requisicao_id: string
 ) => {
   try {
@@ -16,6 +16,18 @@ export const CriaQueryParam = async (
           requisicao_id: requisicao_id,
         },
       });
+    });
+  } catch (erro) {
+    throw new Error(trataMensagemErro(erro));
+  }
+};
+
+export const ExcluiQueryParamsDaRequisicao = async (requisicao_id: string) => {
+  try {
+    await prisma.queryParam.deleteMany({
+      where: {
+        requisicao_id: requisicao_id,
+      },
     });
   } catch (erro) {
     throw new Error(trataMensagemErro(erro));

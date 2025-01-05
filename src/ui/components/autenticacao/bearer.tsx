@@ -3,30 +3,29 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 import { useCallback, useRef } from 'react';
+import { AutenticacaoDTO, Bearer } from '@/dtos/autenticacao.dto';
 
 export const BearerAuthentication = () => {
   const inputTokenRef = useRef<HTMLTextAreaElement | null>(null);
   const inputTokenPrefixRef = useRef<HTMLInputElement | null>(null);
 
-  const autenticacao = useRequisicaoStore(
-    (state) => state.requisicao.autenticacao
-  );
+  const autenticacao = useRequisicaoStore((state) => state.autenticacao);
 
-  const bearer = useRequisicaoStore(
-    (state) => state.requisicao.autenticacao?.bearer
-  );
+  const bearer = useRequisicaoStore((state) => state.autenticacao.bearer);
 
   const setAutenticacao = useRequisicaoStore((state) => state.setAutenticacao);
 
   const handleUpdateValues = useCallback(() => {
-    setAutenticacao({
-      ...autenticacao,
-      tipo: 'bearer',
-      bearer: {
-        token: inputTokenRef.current?.value,
-        prefix: inputTokenPrefixRef.current?.value,
-      },
-    });
+    const bearer = new Bearer(
+      inputTokenPrefixRef.current?.value || '',
+      inputTokenRef.current?.value || ''
+    );
+    const autenticacaoDto = new AutenticacaoDTO(
+      'bearer',
+      bearer,
+      autenticacao.basic
+    );
+    setAutenticacao(autenticacaoDto);
   }, [setAutenticacao, autenticacao]);
 
   return (

@@ -2,9 +2,10 @@
   "compilerOptions": {
     "strict": true,
     "target": "ESNext",
-    "module": "NodeNext",
+    "module": "ESNext",
     "outDir": "../../dist-electron",
     "skipLibCheck": true,
+    "moduleResolution": "bundler",
     "paths": {
       "@shared/*": ["../shared/*"]
     }

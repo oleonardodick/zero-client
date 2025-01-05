@@ -8,7 +8,10 @@ import {
   criaVariavelAmbiente,
   excluiVariavelAmbiente,
 } from './queries/variavelAmbiente.js';
-import { CriaRequisicao } from './queries/requisicao.js';
+import {
+  BuscaUltimasRequisicoes,
+  CriaRequisicao,
+} from './queries/requisicao.js';
 
 let mainWindow: BrowserWindow;
 
@@ -46,6 +49,11 @@ ipcMain.handle('excluiVariavelAmbiente', (_, nome) => {
 
 ipcMain.handle('criaRequisicao', (_, requisicao) => {
   return CriaRequisicao(requisicao);
+});
+
+ipcMain.handle('buscaUltimasRequisicoes', () => {
+  console.log('chegou aqui');
+  return BuscaUltimasRequisicoes();
 });
 
 app.on('window-all-closed', () => {

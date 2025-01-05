@@ -1,16 +1,14 @@
 import { Table, TableBody, TableCell, TableRow } from './ui/table';
-import { QueryParam } from '@/shared/types';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Trash2Icon } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 import useRequisicaoStore from '../store/requisicaoStore';
 import { useCallback } from 'react';
+import { QueryParamDTO } from '@/dtos/queryParam.dto';
 
 const QueryParams = () => {
-  const queryParams = useRequisicaoStore(
-    (state) => state.requisicao.queryParams
-  );
+  const queryParams = useRequisicaoStore((state) => state.queryParams);
   const addQueryParam = useRequisicaoStore((state) => state.addQueryParam);
   const updateQueryParam = useRequisicaoStore(
     (state) => state.updateQueryParam
@@ -21,12 +19,7 @@ const QueryParams = () => {
   const setUrl = useRequisicaoStore((state) => state.setUrl);
 
   const handleNovoQueryParam = useCallback(() => {
-    const novoQueryParam: QueryParam = {
-      id: uuidv4(),
-      query: '',
-      valor: '',
-      selecionado: false,
-    };
+    const novoQueryParam = new QueryParamDTO(uuidv4(), '', '', false);
 
     addQueryParam(novoQueryParam);
   }, [addQueryParam]);
@@ -35,8 +28,7 @@ const QueryParams = () => {
     const url = useRequisicaoStore.getState().requisicao.url;
     let novaUrl = url;
     const inicioParams = url.indexOf('?');
-    const queryParamsAtualizados =
-      useRequisicaoStore.getState().requisicao.queryParams;
+    const queryParamsAtualizados = useRequisicaoStore.getState().queryParams;
     const selectedParams = queryParamsAtualizados.filter(
       (param) => param.selecionado
     );
@@ -54,7 +46,7 @@ const QueryParams = () => {
   const handleUpdateQueryParam = useCallback(
     (
       queryParamId: string,
-      field: keyof QueryParam,
+      field: keyof QueryParamDTO,
       value: string | boolean
     ) => {
       const queryParamOriginal = queryParams.find(

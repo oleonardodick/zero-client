@@ -1,9 +1,9 @@
-import { Autenticacao } from '@shared/types.js';
 import { prisma } from './prisma.js';
 import { trataMensagemErro } from '../util.js';
+import { AutenticacaoDTO } from '../../dtos/autenticacao.dto.js';
 
 export const CriaAutenticacao = async (
-  autenticacao: Autenticacao,
+  autenticacao: AutenticacaoDTO,
   requisicao_id: string
 ) => {
   try {
@@ -30,6 +30,18 @@ export const CriaAutenticacao = async (
         },
       });
     }
+  } catch (erro) {
+    throw new Error(trataMensagemErro(erro));
+  }
+};
+
+export const ExcluiAutenticacaoDaRequisicao = async (requisicao_id: string) => {
+  try {
+    await prisma.autenticacao.deleteMany({
+      where: {
+        requisicao_id: requisicao_id,
+      },
+    });
   } catch (erro) {
     throw new Error(trataMensagemErro(erro));
   }

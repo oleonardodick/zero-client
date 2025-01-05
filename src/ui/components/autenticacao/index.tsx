@@ -13,7 +13,7 @@ import useRequisicaoStore from '@/ui/store/requisicaoStore';
 
 export const Autenticacao = () => {
   const tipoAutenticacao = useRequisicaoStore(
-    (state) => state.requisicao.autenticacao?.tipo
+    (state) => state.autenticacao.tipo
   );
   const setTipoAutenticacao = useRequisicaoStore(
     (state) => state.setTipoAutenticacao

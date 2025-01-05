@@ -1,8 +1,11 @@
-import { Header } from '@shared/types.js';
 import { prisma } from './prisma.js';
 import { trataMensagemErro } from '../util.js';
+import { HeaderDTO } from '../../dtos/header.dto.js';
 
-export const CriaHeader = async (headers: Header[], requisicao_id: string) => {
+export const CriaHeader = async (
+  headers: HeaderDTO[],
+  requisicao_id: string
+) => {
   try {
     headers.forEach(async (header) => {
       await prisma.header.create({
@@ -13,6 +16,18 @@ export const CriaHeader = async (headers: Header[], requisicao_id: string) => {
           requisicao_id: requisicao_id,
         },
       });
+    });
+  } catch (erro) {
+    throw new Error(trataMensagemErro(erro));
+  }
+};
+
+export const ExcluiHeadersDaRequisicao = async (requisicao_id: string) => {
+  try {
+    await prisma.header.deleteMany({
+      where: {
+        requisicao_id: requisicao_id,
+      },
     });
   } catch (erro) {
     throw new Error(trataMensagemErro(erro));
