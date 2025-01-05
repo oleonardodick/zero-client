@@ -8,35 +8,33 @@ import {
   TableHeader,
   TableRow,
 } from '../ui/table';
-import { useEffect, useState } from 'react';
 import { VariavelDialog } from './variavelDialog';
-import { CrudResult, IVariavelAmbiente } from '@/shared/types';
+import { IVariavelAmbiente } from '@/shared/types';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { excluiVariavelAmbiente } from '@/ui/services/variavelAmbiente.service';
 
 const VariaveisAmbiente = () => {
-  const [variaveis, setVariaveis] = useState<IVariavelAmbiente[]>([]);
-  const [refazerBusca, setRefazerBusca] = useState<boolean>(true);
+  const queryClient = useQueryClient();
+
+  const buscaVariaveis = async (): Promise<IVariavelAmbiente[]> => {
+    return await window.electron.buscaTodasVariaveisAmbiente();
+  };
+
+  const variaveis = useQuery({
+    queryKey: ['variaveisAmbiente'],
+    queryFn: buscaVariaveis,
+  });
+
+  const mutation = useMutation({
+    mutationFn: excluiVariavelAmbiente,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['variaveisAmbiente'] });
+    },
+  });
 
   const handleExcluir = async (e: React.FormEvent, nome: string) => {
     e.preventDefault();
-    const resultado: CrudResult = await window.electron.excluiVariavelAmbiente(
-      nome
-    );
-    console.log(resultado);
-    setRefazerBusca(true);
-  };
-
-  useEffect(() => {
-    if (refazerBusca) {
-      const buscaVariaveis = async () => {
-        setVariaveis(await window.electron.buscaTodasVariaveisAmbiente());
-        setRefazerBusca(false);
-      };
-      buscaVariaveis();
-    }
-  }, [refazerBusca]);
-
-  const handleRefazerBusca = () => {
-    setRefazerBusca(true);
+    mutation.mutate(nome);
   };
 
   return (
@@ -49,11 +47,10 @@ const VariaveisAmbiente = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {variaveis.map((variavel) => (
+          {variaveis.data?.map((variavel) => (
             <VariavelDialog
               formId="formVariavel"
               variavel={variavel}
-              onRefazerBusca={handleRefazerBusca}
               key={variavel.nome}
             >
               <TableRow className="[&>td]:text-gray-100 [&>td]:hover:bg-gray-600 border-gray-400">
@@ -76,10 +73,7 @@ const VariaveisAmbiente = () => {
           ))}
         </TableBody>
       </Table>
-      <VariavelDialog
-        formId="formVariaveis"
-        onRefazerBusca={handleRefazerBusca}
-      >
+      <VariavelDialog formId="formVariaveis">
         <Button
           variant="link"
           className="text-indigo-500 tracking-wider text-lg w-full"

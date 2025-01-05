@@ -2,18 +2,15 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { CrudResult, IVariavelAmbiente } from '@/shared/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { atualizaVariavelAmbiente } from '@/ui/services/variavelAmbiente.service';
 
 interface VariavelFormProps {
   formId: string;
   variavel?: IVariavelAmbiente;
-  onRefazerBusca: () => void;
 }
 
-export const VariavelForm = ({
-  formId,
-  variavel,
-  onRefazerBusca,
-}: VariavelFormProps) => {
+export const VariavelForm = ({ formId, variavel }: VariavelFormProps) => {
   const { register, handleSubmit } = useForm<IVariavelAmbiente>({
     defaultValues: {
       nome: '',
@@ -22,7 +19,9 @@ export const VariavelForm = ({
     },
   });
 
-  const onSubmit: SubmitHandler<IVariavelAmbiente> = async (data) => {
+  const queryClient = useQueryClient();
+
+  const criaVariavelAmbiente = async (data: IVariavelAmbiente) => {
     try {
       let resultado: CrudResult;
 
@@ -37,11 +36,31 @@ export const VariavelForm = ({
           data.valor
         );
       }
-
       console.log(resultado);
-      onRefazerBusca();
     } catch (erro) {
       console.log(erro);
+    }
+  };
+
+  const createMutation = useMutation({
+    mutationFn: criaVariavelAmbiente,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['variaveisAmbiente'] });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: atualizaVariavelAmbiente,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['variaveisAmbiente'] });
+    },
+  });
+
+  const onSubmit: SubmitHandler<IVariavelAmbiente> = (data) => {
+    if (variavel) {
+      updateMutation.mutate(data);
+    } else {
+      createMutation.mutate(data);
     }
   };
 

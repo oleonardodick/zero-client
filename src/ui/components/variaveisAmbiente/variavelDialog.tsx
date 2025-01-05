@@ -16,14 +16,12 @@ interface VariavelDialogProps {
   variavel?: IVariavelAmbiente;
   formId: string;
   children: React.ReactNode;
-  onRefazerBusca: () => void;
 }
 
 export const VariavelDialog = ({
   variavel,
   formId,
   children,
-  onRefazerBusca,
 }: VariavelDialogProps) => {
   return (
     <Dialog>
@@ -35,11 +33,7 @@ export const VariavelDialog = ({
             Variáveis de ambiente para utilizar nas requisições
           </DialogDescription>
         </DialogHeader>
-        <VariavelForm
-          formId={formId}
-          variavel={variavel}
-          onRefazerBusca={onRefazerBusca}
-        />
+        <VariavelForm formId={formId} variavel={variavel} />
         <DialogFooter>
           <DialogClose asChild>
             <Button variant="secondary" size="lg" type="submit" form={formId}>
