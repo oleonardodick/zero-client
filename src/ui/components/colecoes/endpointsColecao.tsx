@@ -1,13 +1,9 @@
+import { RequisicaoDTO } from '@/dtos/requisicao.dto';
 import Endpoint from '../endpoint';
 
 const EndpointsColecao = () => {
-  return (
-    <Endpoint
-      metodo="GET"
-      nome="Busca Usuarios"
-      dataRequisicao="9 dias atrás"
-    />
-  );
+  const requisicao = new RequisicaoDTO('teste', 'get', 'teste');
+  return <Endpoint requisicao={requisicao} />;
 };
 
 export default EndpointsColecao;

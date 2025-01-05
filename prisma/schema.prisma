@@ -26,6 +26,7 @@ model Requisicao {
   query_params QueryParam[]
   headers      Header[]
   autenticacao Autenticacao?
+  nome         String?
 
   @@map("requisicoes")
 }

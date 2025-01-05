@@ -1,7 +1,7 @@
 export class AutenticacaoDTO {
   tipo: string;
-  bearer?: Bearer;
-  basic?: Basic;
+  bearer?: Bearer | null;
+  basic?: Basic | null;
 
   constructor(tipo: string, bearer?: Bearer, basic?: Basic) {
     this.tipo = tipo;

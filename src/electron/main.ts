@@ -9,6 +9,8 @@ import {
   excluiVariavelAmbiente,
 } from './queries/variavelAmbiente.js';
 import {
+  AtualizaRequisicao,
+  BuscaRequisicaoPorId,
   BuscaUltimasRequisicoes,
   CriaRequisicao,
 } from './queries/requisicao.js';
@@ -51,9 +53,16 @@ ipcMain.handle('criaRequisicao', (_, requisicao) => {
   return CriaRequisicao(requisicao);
 });
 
+ipcMain.handle('atualizaRequisicao', (_, requisicao) => {
+  return AtualizaRequisicao(requisicao);
+});
+
 ipcMain.handle('buscaUltimasRequisicoes', () => {
-  console.log('chegou aqui');
   return BuscaUltimasRequisicoes();
+});
+
+ipcMain.handle('buscaRequisicaoPorId', (_, id) => {
+  return BuscaRequisicaoPorId(id);
 });
 
 app.on('window-all-closed', () => {

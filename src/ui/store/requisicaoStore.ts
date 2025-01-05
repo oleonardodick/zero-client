@@ -2,7 +2,6 @@ import { AutenticacaoDTO } from '@/dtos/autenticacao.dto';
 import { HeaderDTO } from '@/dtos/header.dto';
 import { QueryParamDTO } from '@/dtos/queryParam.dto';
 import { RequisicaoDTO } from '@/dtos/requisicao.dto';
-// import { Autenticacao, Header, QueryParam, Requisicao } from '@/shared/types';
 import { create } from 'zustand';
 
 type RequisicaoStore = {
@@ -36,8 +35,9 @@ const useRequisicaoStore = create<RequisicaoStore>((set) => ({
   inicializaRequisicao: (novaRequisicao: RequisicaoDTO) =>
     set(() => ({
       requisicao: novaRequisicao,
-      queryParams: novaRequisicao.queryParams,
-      autenticacao: novaRequisicao.autenticacao,
+      queryParams: novaRequisicao.query_params || [],
+      headers: novaRequisicao.headers || [],
+      autenticacao: novaRequisicao.autenticacao || { tipo: 'none' },
     })),
   setUrl: (url: string) =>
     set((state) => ({

@@ -15,7 +15,9 @@ declare global {
       ) => Promise<CrudResult>;
       excluiVariavelAmbiente: (nome: string) => Promise<CrudResult>;
       criaRequisicao: (requisicao: RequisicaoDTO) => Promise<CrudResult>;
+      atualizaRequisicao: (requisicao: RequisicaoDTO) => Promise<CrudResult>;
       buscaUltimasRequisicoes: () => Promise<RequisicaoDTO[]>;
+      buscaRequisicaoPorId: (id: string) => Promise<RequisicaoDTO | null>;
     };
   }
 }

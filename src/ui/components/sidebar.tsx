@@ -10,7 +10,7 @@ import TabOpcoes from './tabOpcoes';
 const Sidebar = () => {
   return (
     <div className="flex flex-col gap-9 xl:gap-3 bg-stone-700 w-1/6 p-3 border-r border-stone-500 h-screen">
-      <Link to="/comunicacao/cadastrar">
+      <Link to="/requisicao/cadastrar">
         <Button
           variant="secondary"
           size="lg"

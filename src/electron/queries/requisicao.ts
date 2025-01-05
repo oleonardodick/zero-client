@@ -20,12 +20,12 @@ export const CriaRequisicao = async (
         jsonEnvio: requisicao.jsonEnvio,
       },
     });
-    if (requisicao.queryParams)
-      CriaQueryParam(requisicao.queryParams, registroCriado.id);
+    if (requisicao.query_params)
+      CriaQueryParam(requisicao.query_params, registroCriado.id);
     if (requisicao.headers) CriaHeader(requisicao.headers, registroCriado.id);
     if (requisicao.autenticacao && requisicao.autenticacao.tipo !== 'none')
       CriaAutenticacao(requisicao.autenticacao, registroCriado.id);
-    return { sucesso: true };
+    return { sucesso: true, idCriado: registroCriado.id };
   } catch (erro) {
     return { sucesso: false, erro: trataMensagemErro(erro) };
   }
@@ -52,8 +52,8 @@ export const AtualizaRequisicao = async (
         },
       });
       ExcluiQueryParamsDaRequisicao(registroExistente.id);
-      if (requisicao.queryParams)
-        CriaQueryParam(requisicao.queryParams, registroExistente.id);
+      if (requisicao.query_params)
+        CriaQueryParam(requisicao.query_params, registroExistente.id);
       ExcluiHeadersDaRequisicao(registroExistente.id);
       if (requisicao.headers)
         CriaHeader(requisicao.headers, registroExistente.id);
@@ -77,4 +77,25 @@ export const BuscaUltimasRequisicoes = async (): Promise<RequisicaoDTO[]> => {
       data: 'desc',
     },
   });
+};
+
+export const BuscaRequisicaoPorId = async (
+  id: string
+): Promise<RequisicaoDTO | null> => {
+  const requisicao = await prisma.requisicao.findUnique({
+    where: {
+      id: id,
+    },
+    include: {
+      query_params: true,
+      headers: true,
+      autenticacao: {
+        include: {
+          bearer: true,
+          Basic: true,
+        },
+      },
+    },
+  });
+  return requisicao;
 };

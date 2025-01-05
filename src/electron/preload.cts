@@ -1,3 +1,5 @@
+import { RequisicaoDTO } from '../dtos/requisicao.dto';
+
 const electron = require('electron');
 
 electron.contextBridge.exposeInMainWorld('electron', {
@@ -9,8 +11,12 @@ electron.contextBridge.exposeInMainWorld('electron', {
     electron.ipcRenderer.invoke('atualizaVariavelAmbiente', nome, valor),
   excluiVariavelAmbiente: (nome: string) =>
     electron.ipcRenderer.invoke('excluiVariavelAmbiente', nome),
-  criaRequisicao: (requisicao: any) =>
+  criaRequisicao: (requisicao: RequisicaoDTO) =>
     electron.ipcRenderer.invoke('criaRequisicao', requisicao),
+  atualizaRequisicao: (requisicao: RequisicaoDTO) =>
+    electron.ipcRenderer.invoke('atualizaRequisicao', requisicao),
   buscaUltimasRequisicoes: () =>
     electron.ipcRenderer.invoke('buscaUltimasRequisicoes'),
+  buscaRequisicaoPorId: (id: string) =>
+    electron.ipcRenderer.invoke('buscaRequisicaoPorId', id),
 });

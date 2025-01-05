@@ -23,10 +23,7 @@ export const Autenticacao = () => {
     <div className="grid gap-5 p-4">
       <div className="flex items-center gap-4">
         <Label>Tipo</Label>
-        <Select
-          defaultValue={tipoAutenticacao}
-          onValueChange={setTipoAutenticacao}
-        >
+        <Select value={tipoAutenticacao} onValueChange={setTipoAutenticacao}>
           <SelectTrigger className="w-28">
             <SelectValue />
           </SelectTrigger>

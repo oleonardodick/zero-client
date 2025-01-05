@@ -8,27 +8,30 @@ export class RequisicaoDTO {
   tipo: string;
   jsonEnvio: string;
   data?: Date;
-  queryParams?: QueryParamDTO[];
+  query_params?: QueryParamDTO[];
   headers?: HeaderDTO[];
-  autenticacao?: AutenticacaoDTO;
+  autenticacao?: AutenticacaoDTO | null;
+  nome?: string | null;
 
   constructor(
     url: string,
     tipo: string,
     jsonEnvio: string,
     data?: Date,
-    queryParams?: QueryParamDTO[],
+    query_params?: QueryParamDTO[],
     headers?: HeaderDTO[],
-    autenticacao?: AutenticacaoDTO,
-    id?: string
+    autenticacao?: AutenticacaoDTO | null,
+    id?: string,
+    nome?: string
   ) {
     this.id = id;
     this.url = url;
     this.tipo = tipo;
     this.jsonEnvio = jsonEnvio;
     this.data = data;
-    this.queryParams = queryParams;
+    this.query_params = query_params;
     this.headers = headers;
     this.autenticacao = autenticacao;
+    this.nome = nome;
   }
 }

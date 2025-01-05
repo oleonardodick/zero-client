@@ -15,42 +15,10 @@ const Atividade = () => {
     <div>
       <ul>
         {requisicoes.map((requisicao) => (
-          <li>
-            <Endpoint
-              metodo={requisicao.tipo.toUpperCase()}
-              url={requisicao.url}
-              dataRequisicao="9 dias atrás"
-            />
+          <li key={requisicao.id}>
+            <Endpoint requisicao={requisicao} />
           </li>
         ))}
-        <li>
-          <Endpoint
-            metodo="GET"
-            url="http://localhost:3000/users"
-            dataRequisicao="9 dias atrás"
-          />
-        </li>
-        <li>
-          <Endpoint
-            metodo="POST"
-            url="http://localhost:3000/users"
-            dataRequisicao="9 dias atrás"
-          />
-        </li>
-        <li>
-          <Endpoint
-            metodo="PUT"
-            url="http://localhost:3000/users/1"
-            dataRequisicao="9 dias atrás"
-          />
-        </li>
-        <li>
-          <Endpoint
-            metodo="DELETE"
-            url="http://localhost:3000/users/1"
-            dataRequisicao="9 dias atrás"
-          />
-        </li>
       </ul>
     </div>
   );

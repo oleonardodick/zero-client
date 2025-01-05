@@ -14,12 +14,14 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { RequisicaoDTO } from '@/dtos/requisicao.dto';
 import { CrudResult } from '@/shared/types';
+import { useNavigate } from 'react-router-dom';
 
 const CabecalhoRequisicao = () => {
   const url = useRequisicaoStore((state) => state.requisicao.url);
   const tipo = useRequisicaoStore((state) => state.requisicao.tipo);
   const setUrl = useRequisicaoStore((state) => state.setUrl);
   const setTipo = useRequisicaoStore((state) => state.setTipo);
+  const navigate = useNavigate();
   // const setResposta = useRespostaStore((state) => state.setResposta);
 
   const handleAtualizaUrl = (url: string) => {
@@ -38,19 +40,22 @@ const CabecalhoRequisicao = () => {
       undefined,
       queryParams,
       headers,
-      autenticacao
+      autenticacao,
+      requisicao.id
     );
     try {
       let resultado: CrudResult;
 
       if (requisicao) {
-        resultado = await window.electron.criaRequisicao(requisicaoEnviar);
-        console.log(resultado);
+        resultado = requisicao.id
+          ? await window.electron.atualizaRequisicao(requisicaoEnviar)
+          : await window.electron.criaRequisicao(requisicaoEnviar);
+        if (resultado.sucesso)
+          navigate(`/requisicao/modificar/${resultado.idCriado}`);
       }
     } catch (erro) {
       console.log(erro);
     }
-    // // const data = new Date().toLocaleDateString('pt-BR');
     // const retorno: IRepostaCustomizada = await enviarRequisicao(requisicao);
     // const resposta: Resposta = {
     //   idRequisicao: requisicao.id,
