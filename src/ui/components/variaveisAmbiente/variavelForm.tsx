@@ -1,17 +1,18 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
-import { CrudResult, IVariavelAmbiente } from '@/shared/types';
+import { CrudResult } from '@/shared/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { atualizaVariavelAmbiente } from '@/ui/services/variavelAmbiente.service';
+import { VariavelAmbienteDTO } from '@/dtos/variavelAmbiente.dto';
 
 interface VariavelFormProps {
   formId: string;
-  variavel?: IVariavelAmbiente;
+  variavel?: VariavelAmbienteDTO;
 }
 
 export const VariavelForm = ({ formId, variavel }: VariavelFormProps) => {
-  const { register, handleSubmit } = useForm<IVariavelAmbiente>({
+  const { register, handleSubmit } = useForm<VariavelAmbienteDTO>({
     defaultValues: {
       nome: '',
       valor: '',
@@ -21,7 +22,7 @@ export const VariavelForm = ({ formId, variavel }: VariavelFormProps) => {
 
   const queryClient = useQueryClient();
 
-  const criaVariavelAmbiente = async (data: IVariavelAmbiente) => {
+  const criaVariavelAmbiente = async (data: VariavelAmbienteDTO) => {
     try {
       let resultado: CrudResult;
 
@@ -56,7 +57,7 @@ export const VariavelForm = ({ formId, variavel }: VariavelFormProps) => {
     },
   });
 
-  const onSubmit: SubmitHandler<IVariavelAmbiente> = (data) => {
+  const onSubmit: SubmitHandler<VariavelAmbienteDTO> = (data) => {
     if (variavel) {
       updateMutation.mutate(data);
     } else {

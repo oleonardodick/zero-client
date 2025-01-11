@@ -16,7 +16,7 @@ const Resposta = () => {
 };
 
 const JsonResposta = () => {
-  const jsonRetorno = useRespostaStore((state) => state.resposta.jsonRetorno);
+  const jsonRetorno = useRespostaStore((state) => state.resposta.json_retorno);
   return <EditorJson json={jsonRetorno} readOnly />;
 };
 

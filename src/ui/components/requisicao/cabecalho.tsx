@@ -15,14 +15,20 @@ import { Button } from '../ui/button';
 import { RequisicaoDTO } from '@/dtos/requisicao.dto';
 import { CrudResult } from '@/shared/types';
 import { useNavigate } from 'react-router-dom';
+import { enviarRequisicao } from '@/ui/communication/requisicao';
+import useRespostaStore from '@/ui/store/respostaStore';
+import { useQueryClient } from '@tanstack/react-query';
 
 const CabecalhoRequisicao = () => {
+  const queryClient = useQueryClient();
   const url = useRequisicaoStore((state) => state.requisicao.url);
   const tipo = useRequisicaoStore((state) => state.requisicao.tipo);
   const setUrl = useRequisicaoStore((state) => state.setUrl);
   const setTipo = useRequisicaoStore((state) => state.setTipo);
+  const inicializaResposta = useRespostaStore(
+    (state) => state.inicializaResposta
+  );
   const navigate = useNavigate();
-  // const setResposta = useRespostaStore((state) => state.setResposta);
 
   const handleAtualizaUrl = (url: string) => {
     setUrl(url);
@@ -43,6 +49,7 @@ const CabecalhoRequisicao = () => {
       autenticacao,
       requisicao.id
     );
+    const resposta = await enviarRequisicao(requisicaoEnviar);
     try {
       let resultado: CrudResult;
 
@@ -50,22 +57,20 @@ const CabecalhoRequisicao = () => {
         resultado = requisicao.id
           ? await window.electron.atualizaRequisicao(requisicaoEnviar)
           : await window.electron.criaRequisicao(requisicaoEnviar);
-        if (resultado.sucesso)
+        if (resultado.sucesso && resultado.idCriado) {
+          const result = await window.electron.criaResposta(
+            resposta,
+            resultado.idCriado
+          );
+          console.log(resposta, resultado, result);
+          inicializaResposta(resposta);
+          queryClient.invalidateQueries({ queryKey: ['ultimasRequisicoes'] });
           navigate(`/requisicao/modificar/${resultado.idCriado}`);
+        }
       }
     } catch (erro) {
       console.log(erro);
     }
-    // const retorno: IRepostaCustomizada = await enviarRequisicao(requisicao);
-    // const resposta: Resposta = {
-    //   idRequisicao: requisicao.id,
-    //   jsonRetorno: JSON.stringify(retorno.axiosResponse.data, null, 2),
-    //   status: retorno.axiosResponse.status,
-    //   statusText: retorno.axiosResponse.statusText,
-    //   size: retorno.size,
-    //   time: retorno.time,
-    // };
-    // setResposta(resposta);
   };
 
   return (

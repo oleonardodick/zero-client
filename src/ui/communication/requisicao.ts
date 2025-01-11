@@ -1,11 +1,12 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { Requisicao } from '@/shared/types';
-import { IRepostaCustomizada } from '../interface/IRespostaCustomizada';
+import { RequisicaoDTO } from '@/dtos/requisicao.dto';
+import { RespostaDTO } from '@/dtos/resposta.dto';
 
 export const enviarRequisicao = async (
-  requisicao: Requisicao
-): Promise<IRepostaCustomizada> => {
+  requisicao: RequisicaoDTO
+): Promise<RespostaDTO> => {
   const inicio: number = Date.now();
+
   try {
     const response = await axios({
       method: requisicao.tipo,
@@ -42,21 +43,28 @@ export const enviarRequisicao = async (
 };
 
 const calculaTamanhoResposta = (json: string): number => {
-  return new TextEncoder().encode(JSON.stringify(json, null, 2)).length;
+  return new TextEncoder().encode(formataJson(json)).length;
 };
 
 const calculaTempoRequisicao = (inicio: number, fim: number): number => {
   return fim - inicio;
 };
 
+const formataJson = (json: string): string => {
+  return JSON.stringify(json, null, 2);
+};
+
 const montaRetorno = (
   response: AxiosResponse,
   inicio: number,
   fim: number
-): IRepostaCustomizada => {
-  return {
-    axiosResponse: response,
-    size: calculaTamanhoResposta(response.data),
-    time: calculaTempoRequisicao(inicio, fim),
-  };
+): RespostaDTO => {
+  const resposta = new RespostaDTO(
+    formataJson(response.data),
+    response.status,
+    response.statusText,
+    calculaTamanhoResposta(response.data),
+    calculaTempoRequisicao(inicio, fim)
+  );
+  return resposta;
 };

@@ -1,4 +1,4 @@
-import { IVariavelAmbiente } from '@/shared/types';
+import { VariavelAmbienteDTO } from '@/dtos/variavelAmbiente.dto';
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -13,7 +13,7 @@ import {
 import { VariavelForm } from './variavelForm';
 
 interface VariavelDialogProps {
-  variavel?: IVariavelAmbiente;
+  variavel?: VariavelAmbienteDTO;
   formId: string;
   children: React.ReactNode;
 }

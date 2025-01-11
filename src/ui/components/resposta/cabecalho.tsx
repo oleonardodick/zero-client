@@ -14,7 +14,7 @@ const CabecalhoResposta = () => {
                 : 'bg-red-700'
             } rounded-xl p-2`}
           >
-            {resposta.status} {resposta.statusText}
+            {resposta.status} {resposta.status_text}
           </span>
         )}
         {resposta.time > 0 && (

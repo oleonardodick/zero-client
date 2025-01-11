@@ -1,10 +1,12 @@
 import { RequisicaoDTO } from './dtos/requisicao.dto.ts';
-import { CrudResult, IVariavelAmbiente } from './shared/types';
+import { RespostaDTO } from './dtos/resposta.dto.ts';
+import { VariavelAmbienteDTO } from './dtos/variavelAmbiente.dto.ts';
+import { CrudResult } from './shared/types';
 
 declare global {
   interface Window {
     electron: {
-      buscaTodasVariaveisAmbiente: () => Promise<IVariavelAmbiente[]>;
+      buscaTodasVariaveisAmbiente: () => Promise<VariavelAmbienteDTO[]>;
       criaVariavelAmbiente: (
         nome: string,
         valor: string
@@ -18,6 +20,10 @@ declare global {
       atualizaRequisicao: (requisicao: RequisicaoDTO) => Promise<CrudResult>;
       buscaUltimasRequisicoes: () => Promise<RequisicaoDTO[]>;
       buscaRequisicaoPorId: (id: string) => Promise<RequisicaoDTO | null>;
+      criaResposta: (
+        resposta: RespostaDTO,
+        requisicao_id: string
+      ) => Promise<CrudResult>;
     };
   }
 }

@@ -1,20 +1,21 @@
-import { useEffect, useState } from 'react';
 import Endpoint from './endpoint';
 import { RequisicaoDTO } from '@/dtos/requisicao.dto';
+import { useQuery } from '@tanstack/react-query';
 
 const Atividade = () => {
-  const [requisicoes, setRequisicoes] = useState<RequisicaoDTO[]>([]);
+  const buscaRequisicoes = async (): Promise<RequisicaoDTO[]> => {
+    return await window.electron.buscaUltimasRequisicoes();
+  };
 
-  useEffect(() => {
-    const buscaRequisicoes = async () => {
-      setRequisicoes(await window.electron.buscaUltimasRequisicoes());
-    };
-    buscaRequisicoes();
-  }, []);
+  const requisicoes = useQuery({
+    queryKey: ['ultimasRequisicoes'],
+    queryFn: buscaRequisicoes,
+  });
+
   return (
     <div>
       <ul>
-        {requisicoes.map((requisicao) => (
+        {requisicoes.data?.map((requisicao) => (
           <li key={requisicao.id}>
             <Endpoint requisicao={requisicao} />
           </li>

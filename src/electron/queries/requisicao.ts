@@ -8,6 +8,7 @@ import {
 } from './autenticacao.js';
 import { trataMensagemErro } from '../util.js';
 import { RequisicaoDTO } from '../../dtos/requisicao.dto.js';
+import { ExcluiResposta } from './resposta.js';
 
 export const CriaRequisicao = async (
   requisicao: RequisicaoDTO
@@ -51,17 +52,18 @@ export const AtualizaRequisicao = async (
           jsonEnvio: requisicao.jsonEnvio,
         },
       });
-      ExcluiQueryParamsDaRequisicao(registroExistente.id);
+      await ExcluiResposta(registroExistente.id);
+      await ExcluiQueryParamsDaRequisicao(registroExistente.id);
       if (requisicao.query_params)
-        CriaQueryParam(requisicao.query_params, registroExistente.id);
-      ExcluiHeadersDaRequisicao(registroExistente.id);
+        await CriaQueryParam(requisicao.query_params, registroExistente.id);
+      await ExcluiHeadersDaRequisicao(registroExistente.id);
       if (requisicao.headers)
-        CriaHeader(requisicao.headers, registroExistente.id);
-      ExcluiAutenticacaoDaRequisicao(registroExistente.id);
+        await CriaHeader(requisicao.headers, registroExistente.id);
+      await ExcluiAutenticacaoDaRequisicao(registroExistente.id);
       if (requisicao.autenticacao && requisicao.autenticacao.tipo !== 'none')
-        CriaAutenticacao(requisicao.autenticacao, registroExistente.id);
+        await CriaAutenticacao(requisicao.autenticacao, registroExistente.id);
 
-      return { sucesso: true };
+      return { sucesso: true, idCriado: registroExistente.id };
     } else {
       return { sucesso: false, erro: 'Requisição não encontrada.' };
     }
@@ -95,6 +97,7 @@ export const BuscaRequisicaoPorId = async (
           Basic: true,
         },
       },
+      resposta: true,
     },
   });
   return requisicao;

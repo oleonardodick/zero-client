@@ -1,6 +1,7 @@
 import { AutenticacaoDTO } from './autenticacao.dto';
 import { HeaderDTO } from './header.dto';
 import { QueryParamDTO } from './queryParam.dto';
+import { RespostaDTO } from './resposta.dto';
 
 export class RequisicaoDTO {
   id?: string;
@@ -12,6 +13,7 @@ export class RequisicaoDTO {
   headers?: HeaderDTO[];
   autenticacao?: AutenticacaoDTO | null;
   nome?: string | null;
+  resposta?: RespostaDTO | null;
 
   constructor(
     url: string,
@@ -22,7 +24,8 @@ export class RequisicaoDTO {
     headers?: HeaderDTO[],
     autenticacao?: AutenticacaoDTO | null,
     id?: string,
-    nome?: string
+    nome?: string,
+    resposta?: RespostaDTO | null
   ) {
     this.id = id;
     this.url = url;
@@ -33,5 +36,6 @@ export class RequisicaoDTO {
     this.headers = headers;
     this.autenticacao = autenticacao;
     this.nome = nome;
+    this.resposta = resposta;
   }
 }

@@ -27,6 +27,7 @@ model Requisicao {
   headers      Header[]
   autenticacao Autenticacao?
   nome         String?
+  resposta     Resposta?
 
   @@map("requisicoes")
 }
@@ -82,4 +83,17 @@ model Basic {
   autenticacao    Autenticacao @relation(fields: [autenticacao_id], references: [id], onDelete: Cascade)
 
   @@map("autenticacao_basic")
+}
+
+model Resposta {
+  id            String     @id @default(uuid())
+  requisicao_id String     @unique
+  requisicao    Requisicao @relation(fields: [requisicao_id], references: [id], onDelete: Cascade)
+  json_retorno  String
+  status        Int
+  status_text   String
+  size          Float
+  time          Float
+
+  @@map("resposta")
 }

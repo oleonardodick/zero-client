@@ -9,14 +9,14 @@ import {
   TableRow,
 } from '../ui/table';
 import { VariavelDialog } from './variavelDialog';
-import { IVariavelAmbiente } from '@/shared/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { excluiVariavelAmbiente } from '@/ui/services/variavelAmbiente.service';
+import { VariavelAmbienteDTO } from '@/dtos/variavelAmbiente.dto';
 
 const VariaveisAmbiente = () => {
   const queryClient = useQueryClient();
 
-  const buscaVariaveis = async (): Promise<IVariavelAmbiente[]> => {
+  const buscaVariaveis = async (): Promise<VariavelAmbienteDTO[]> => {
     return await window.electron.buscaTodasVariaveisAmbiente();
   };
 

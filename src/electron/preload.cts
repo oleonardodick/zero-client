@@ -1,4 +1,5 @@
 import { RequisicaoDTO } from '../dtos/requisicao.dto';
+import { RespostaDTO } from '../dtos/resposta.dto';
 
 const electron = require('electron');
 
@@ -19,4 +20,6 @@ electron.contextBridge.exposeInMainWorld('electron', {
     electron.ipcRenderer.invoke('buscaUltimasRequisicoes'),
   buscaRequisicaoPorId: (id: string) =>
     electron.ipcRenderer.invoke('buscaRequisicaoPorId', id),
+  criaResposta: (resposta: RespostaDTO, requisicao_id: string) =>
+    electron.ipcRenderer.invoke('criaResposta', resposta, requisicao_id),
 });

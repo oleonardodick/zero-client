@@ -1,10 +1,10 @@
 import { CrudResult } from '@shared/types.js';
-import { VariavelAmbiente } from '@prisma/client';
 import { prisma } from './prisma.js';
 import { trataMensagemErro } from '../util.js';
+import { VariavelAmbienteDTO } from '../../dtos/variavelAmbiente.dto.js';
 
 export const buscaTodasVariaveisAmbiente = async (): Promise<
-  VariavelAmbiente[]
+  VariavelAmbienteDTO[]
 > => {
   return await prisma.variavelAmbiente.findMany();
 };

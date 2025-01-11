@@ -14,6 +14,7 @@ import {
   BuscaUltimasRequisicoes,
   CriaRequisicao,
 } from './queries/requisicao.js';
+import { CriaResposta } from './queries/resposta.js';
 
 let mainWindow: BrowserWindow;
 
@@ -63,6 +64,10 @@ ipcMain.handle('buscaUltimasRequisicoes', () => {
 
 ipcMain.handle('buscaRequisicaoPorId', (_, id) => {
   return BuscaRequisicaoPorId(id);
+});
+
+ipcMain.handle('criaResposta', (_, resposta, requisicao_id) => {
+  return CriaResposta(resposta, requisicao_id);
 });
 
 app.on('window-all-closed', () => {

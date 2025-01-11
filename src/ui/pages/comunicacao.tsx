@@ -5,14 +5,20 @@ import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { RequisicaoDTO } from '@/dtos/requisicao.dto';
 import useRequisicaoStore from '../store/requisicaoStore';
+import useRespostaStore from '../store/respostaStore';
 
 export const Comunicacao = () => {
   const { id } = useParams();
   const inicializaRequisicao = useRequisicaoStore(
     (state) => state.inicializaRequisicao
   );
+  const inicializaResposta = useRespostaStore(
+    (state) => state.inicializaResposta
+  );
+  const limpaResposta = useRespostaStore((state) => state.limpaReposta);
 
   useEffect(() => {
+    limpaResposta();
     if (!id) {
       inicializaRequisicao(new RequisicaoDTO('', 'get', ''));
       return;
@@ -25,10 +31,12 @@ export const Comunicacao = () => {
         inicializaRequisicao(
           requisicaoBuscada || new RequisicaoDTO('', 'get', '')
         );
+        if (requisicaoBuscada?.resposta)
+          inicializaResposta(requisicaoBuscada?.resposta);
       }
     };
     buscaRequisicao();
-  }, [id, inicializaRequisicao]);
+  }, [id, inicializaRequisicao, inicializaResposta, limpaResposta]);
   return (
     <div className="h-screen flex xl:flex-col gap-3">
       <div className="flex-1 overflow-hidden">
