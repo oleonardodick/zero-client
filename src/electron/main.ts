@@ -13,6 +13,7 @@ import {
   BuscaRequisicaoPorId,
   BuscaUltimasRequisicoes,
   CriaRequisicao,
+  ExcluiRequisicao,
 } from './queries/requisicao.js';
 import { CriaResposta } from './queries/resposta.js';
 
@@ -64,6 +65,10 @@ ipcMain.handle('buscaUltimasRequisicoes', () => {
 
 ipcMain.handle('buscaRequisicaoPorId', (_, id) => {
   return BuscaRequisicaoPorId(id);
+});
+
+ipcMain.handle('excluiRequisicao', (_, id) => {
+  return ExcluiRequisicao(id);
 });
 
 ipcMain.handle('criaResposta', (_, resposta, requisicao_id) => {

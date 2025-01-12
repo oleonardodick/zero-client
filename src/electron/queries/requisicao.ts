@@ -19,6 +19,7 @@ export const CriaRequisicao = async (
         url: requisicao.url,
         tipo: requisicao.tipo,
         jsonEnvio: requisicao.jsonEnvio,
+        nome: requisicao.nome,
       },
     });
     if (requisicao.query_params)
@@ -50,6 +51,7 @@ export const AtualizaRequisicao = async (
           url: requisicao.url,
           tipo: requisicao.tipo,
           jsonEnvio: requisicao.jsonEnvio,
+          nome: requisicao.nome,
         },
       });
       await ExcluiResposta(registroExistente.id);
@@ -101,4 +103,15 @@ export const BuscaRequisicaoPorId = async (
     },
   });
   return requisicao;
+};
+
+export const ExcluiRequisicao = async (id: string): Promise<CrudResult> => {
+  try {
+    await prisma.requisicao.delete({
+      where: { id: id },
+    });
+    return { sucesso: true };
+  } catch (erro) {
+    return { sucesso: false, erro: trataMensagemErro(erro) };
+  }
 };

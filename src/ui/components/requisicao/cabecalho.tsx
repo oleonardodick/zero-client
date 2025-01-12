@@ -43,6 +43,7 @@ const CabecalhoRequisicao = () => {
       requisicao.url,
       requisicao.tipo,
       requisicao.jsonEnvio,
+      requisicao.nome || requisicao.url,
       undefined,
       queryParams,
       headers,

@@ -20,6 +20,8 @@ electron.contextBridge.exposeInMainWorld('electron', {
     electron.ipcRenderer.invoke('buscaUltimasRequisicoes'),
   buscaRequisicaoPorId: (id: string) =>
     electron.ipcRenderer.invoke('buscaRequisicaoPorId', id),
+  excluiRequisicao: (id: string) =>
+    electron.ipcRenderer.invoke('excluiRequisicao', id),
   criaResposta: (resposta: RespostaDTO, requisicao_id: string) =>
     electron.ipcRenderer.invoke('criaResposta', resposta, requisicao_id),
 });

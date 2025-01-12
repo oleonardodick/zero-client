@@ -28,6 +28,7 @@ const useRequisicaoStore = create<RequisicaoStore>((set) => ({
     url: '',
     tipo: 'get',
     jsonEnvio: '',
+    nome: '',
   },
   queryParams: [],
   headers: [],

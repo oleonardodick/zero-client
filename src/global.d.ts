@@ -20,6 +20,7 @@ declare global {
       atualizaRequisicao: (requisicao: RequisicaoDTO) => Promise<CrudResult>;
       buscaUltimasRequisicoes: () => Promise<RequisicaoDTO[]>;
       buscaRequisicaoPorId: (id: string) => Promise<RequisicaoDTO | null>;
+      excluiRequisicao: (id: string) => Promise<CrudResult>;
       criaResposta: (
         resposta: RespostaDTO,
         requisicao_id: string
