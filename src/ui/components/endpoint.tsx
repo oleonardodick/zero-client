@@ -17,31 +17,41 @@ import {
 } from './ui/dropdown-menu';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from './ui/alert-dialog';
 import useRequisicaoStore from '../store/requisicaoStore';
+import { DeleteDialog } from './deleteDialog';
+import { RenameDialog } from './renameDialog';
 
 interface EndpointProps {
   requisicao: RequisicaoDTO;
 }
 
 const Endpoint = ({ requisicao }: EndpointProps) => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [renameDialogOpen, setRenameDialogOpen] = useState(false);
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const handleExcluirRequisicao = async () => {
+    const requisicaoAberta = useRequisicaoStore.getState().requisicao;
+    if (requisicao.id) {
+      const retorno = await window.electron.excluiRequisicao(requisicao.id);
+      if (retorno.sucesso) {
+        queryClient.invalidateQueries({ queryKey: ['ultimasRequisicoes'] });
+        if (requisicaoAberta.id === requisicao.id)
+          navigate('/requisicao/cadastrar');
+      }
+    }
+  };
+
+  const handleRenomear = (novoNome: string) => {
+    console.log(novoNome);
+  };
 
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className="hover:bg-gray-600 cursor-pointer p-2 rounded-md group/endpoint">
+          <div className="hover:bg-gray-600 cursor-pointer p-2 rounded-md group/endpoint relative">
             <Link to={`/requisicao/modificar/${requisicao.id}`}>
               <div className="flex flex-col lg:flex-row gap-2 mb-2">
                 <span
@@ -67,83 +77,42 @@ const Endpoint = ({ requisicao }: EndpointProps) => {
                     })}
                   </p>
                 )}
-                <DropdownMenu onOpenChange={setDropdownOpen}>
-                  <DropdownMenuTrigger asChild>
-                    <EllipsisIcon
-                      className={`group-hover/endpoint:visible ${
-                        dropdownOpen ? 'visible' : 'invisible'
-                      }`}
-                    />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="bg-stone-600 text-stone-200 hover:*:bg-stone-500 hover:*:cursor-pointer">
-                    <DropdownMenuItem>Executar</DropdownMenuItem>
-                    <DropdownMenuItem>Salvar na Coleção</DropdownMenuItem>
-                    <DropdownMenuItem>Renomear</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setDeleteDialogOpen(true)}>
-                      Excluir
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                <DeleteDialog
-                  requisicao={requisicao}
-                  open={deleteDialogOpen}
-                  setOpen={setDeleteDialogOpen}
-                />
               </div>
             </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <EllipsisIcon className="invisible group-hover/endpoint:visible absolute bottom-0 right-3" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-stone-600 text-stone-200 hover:*:bg-stone-500 hover:*:cursor-pointer">
+                <DropdownMenuItem>Executar</DropdownMenuItem>
+                <DropdownMenuItem>Salvar na Coleção</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setRenameDialogOpen(true)}>
+                  Renomear
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setDeleteDialogOpen(true)}>
+                  Excluir
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DeleteDialog
+              mensagem={`Deseja realmente excluir a requisição ${requisicao.nome}?`}
+              handleDelete={handleExcluirRequisicao}
+              open={deleteDialogOpen}
+              setOpen={setDeleteDialogOpen}
+            />
+            <RenameDialog
+              nome={requisicao.nome}
+              open={renameDialogOpen}
+              setOpen={setRenameDialogOpen}
+              handleAtualizar={handleRenomear}
+            />
           </div>
         </TooltipTrigger>
-        <TooltipContent
-          className={`bg-stone-800 ${dropdownOpen ? 'invisible' : ''}`}
-        >
+        <TooltipContent className="bg-stone-800">
           <p>{requisicao.url}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  );
-};
-
-interface DeleteDialogProps {
-  requisicao: RequisicaoDTO;
-  open: boolean;
-  setOpen: (open: boolean) => void;
-}
-
-const DeleteDialog = ({ requisicao, open, setOpen }: DeleteDialogProps) => {
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
-
-  const handleExcluir = async () => {
-    const requisicaoAberta = useRequisicaoStore.getState().requisicao;
-    if (requisicao.id) {
-      const retorno = await window.electron.excluiRequisicao(requisicao.id);
-      if (retorno.sucesso) {
-        queryClient.invalidateQueries({ queryKey: ['ultimasRequisicoes'] });
-        if (requisicaoAberta.id === requisicao.id)
-          navigate('/requisicao/cadastrar');
-      }
-    }
-  };
-
-  return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent className="bg-stone-700 text-stone-200">
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            Deletar a requisição {requisicao.nome}?
-          </AlertDialogTitle>
-          <AlertDialogDescription className="text-stone-400">
-            Esta ação não poderá ser desfeita.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={handleExcluir}>
-            Continuar
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
   );
 };
 
