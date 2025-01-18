@@ -80,6 +80,17 @@ export const BuscaUltimasRequisicoes = async (): Promise<RequisicaoDTO[]> => {
     orderBy: {
       data: 'desc',
     },
+    include: {
+      query_params: true,
+      headers: true,
+      autenticacao: {
+        include: {
+          bearer: true,
+          Basic: true,
+        },
+      },
+      resposta: true,
+    },
   });
 };
 

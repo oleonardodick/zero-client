@@ -25,6 +25,10 @@ declare global {
         resposta: RespostaDTO,
         requisicao_id: string
       ) => Promise<CrudResult>;
+      atualizaResposta: (
+        resposta: RespostaDTO,
+        requisicao_id: string
+      ) => Promise<CrudResult>;
     };
   }
 }

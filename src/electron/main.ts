@@ -15,7 +15,7 @@ import {
   CriaRequisicao,
   ExcluiRequisicao,
 } from './queries/requisicao.js';
-import { CriaResposta } from './queries/resposta.js';
+import { AtualizaResposta, CriaResposta } from './queries/resposta.js';
 
 let mainWindow: BrowserWindow;
 
@@ -73,6 +73,10 @@ ipcMain.handle('excluiRequisicao', (_, id) => {
 
 ipcMain.handle('criaResposta', (_, resposta, requisicao_id) => {
   return CriaResposta(resposta, requisicao_id);
+});
+
+ipcMain.handle('atualizaResposta', (_, resposta, requisicao_id) => {
+  return AtualizaResposta(resposta, requisicao_id);
 });
 
 app.on('window-all-closed', () => {

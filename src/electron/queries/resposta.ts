@@ -24,6 +24,36 @@ export const CriaResposta = async (
   }
 };
 
+export const AtualizaResposta = async (
+  resposta: RespostaDTO,
+  requisicao_id: string
+): Promise<CrudResult> => {
+  try {
+    const registroExistente = await prisma.resposta.findUnique({
+      where: { requisicao_id: requisicao_id },
+    });
+    if (registroExistente) {
+      await prisma.resposta.update({
+        where: {
+          id: registroExistente.id,
+        },
+        data: {
+          json_retorno: resposta.json_retorno,
+          size: resposta.size,
+          status: resposta.status,
+          status_text: resposta.status_text,
+          time: resposta.time,
+        },
+      });
+      return { sucesso: true, idCriado: registroExistente.id };
+    } else {
+      return CriaResposta(resposta, requisicao_id);
+    }
+  } catch (erro) {
+    return { sucesso: false, erro: trataMensagemErro(erro) };
+  }
+};
+
 export const ExcluiResposta = async (requisicao_id: string) => {
   try {
     await prisma.resposta.deleteMany({

@@ -20,6 +20,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import useRequisicaoStore from '../store/requisicaoStore';
 import { DeleteDialog } from './deleteDialog';
 import { RenameDialog } from './renameDialog';
+import { enviarRequisicao } from '../communication/requisicao';
+// import useRespostaStore from '../store/respostaStore';
 
 interface EndpointProps {
   requisicao: RequisicaoDTO;
@@ -30,6 +32,9 @@ const Endpoint = ({ requisicao }: EndpointProps) => {
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  // const inicializaResposta = useRespostaStore(
+  //   (state) => state.inicializaResposta
+  // );
 
   const handleExcluirRequisicao = async () => {
     const requisicaoAberta = useRequisicaoStore.getState().requisicao;
@@ -43,8 +48,25 @@ const Endpoint = ({ requisicao }: EndpointProps) => {
     }
   };
 
-  const handleRenomear = (novoNome: string) => {
-    console.log(novoNome);
+  const handleRenomear = async (novoNome: string) => {
+    const novaRequisicao = requisicao;
+    novaRequisicao.nome = novoNome;
+    const retorno = await window.electron.atualizaRequisicao(novaRequisicao);
+    if (retorno.sucesso) {
+      queryClient.invalidateQueries({ queryKey: ['ultimasRequisicoes'] });
+    }
+  };
+
+  const handleExecutar = async () => {
+    const resposta = await enviarRequisicao(requisicao);
+    if (requisicao.id) {
+      const result = await window.electron.atualizaResposta(
+        resposta,
+        requisicao.id
+      );
+      console.log(resposta, result);
+      navigate(`/requisicao/modificar/${requisicao.id}`);
+    }
   };
 
   return (
@@ -84,7 +106,9 @@ const Endpoint = ({ requisicao }: EndpointProps) => {
                 <EllipsisIcon className="invisible group-hover/endpoint:visible absolute bottom-0 right-3" />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-stone-600 text-stone-200 hover:*:bg-stone-500 hover:*:cursor-pointer">
-                <DropdownMenuItem>Executar</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleExecutar}>
+                  Executar
+                </DropdownMenuItem>
                 <DropdownMenuItem>Salvar na Coleção</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setRenameDialogOpen(true)}>
                   Renomear
