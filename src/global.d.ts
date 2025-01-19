@@ -1,3 +1,4 @@
+import { ColecaoDTO } from './dtos/colecao.dto.ts';
 import { RequisicaoDTO } from './dtos/requisicao.dto.ts';
 import { RespostaDTO } from './dtos/resposta.dto.ts';
 import { VariavelAmbienteDTO } from './dtos/variavelAmbiente.dto.ts';
@@ -29,6 +30,8 @@ declare global {
         resposta: RespostaDTO,
         requisicao_id: string
       ) => Promise<CrudResult>;
+      buscaColecoes: () => Promise<ColecaoDTO[]>;
+      criaColecao: (colecao: ColecaoDTO) => Promise<CrudResult>;
     };
   }
 }

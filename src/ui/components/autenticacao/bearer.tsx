@@ -23,7 +23,7 @@ export const BearerAuthentication = () => {
     const autenticacaoDto = new AutenticacaoDTO(
       'bearer',
       bearer,
-      autenticacao.basic
+      autenticacao.basic || undefined
     );
     setAutenticacao(autenticacaoDto);
   }, [setAutenticacao, autenticacao]);
@@ -32,7 +32,7 @@ export const BearerAuthentication = () => {
     <div className="grid gap-3">
       <h1>Bearer Token</h1>
       <Textarea
-        rows={7}
+        rows={5}
         className="resize-none"
         defaultValue={bearer?.token}
         id="bearerToken"

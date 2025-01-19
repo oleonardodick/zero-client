@@ -87,7 +87,7 @@ const EditorJson = ({ readOnly = false, setJson, json }: EditorJsonProps) => {
         </Button>
       </div>
       <Textarea
-        className="resize-none flex-grow md:text-lg border-stone-600 scrollbar-custom"
+        className="resize-none flex-grow"
         ref={textAreaJsonRef}
         onKeyDown={handleKeyDown}
         readOnly={readOnly}

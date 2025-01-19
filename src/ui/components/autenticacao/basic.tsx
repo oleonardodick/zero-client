@@ -21,7 +21,7 @@ export const BasicAuthentication = () => {
     );
     const autenticacaoDto = new AutenticacaoDTO(
       'basic',
-      autenticacao.bearer,
+      autenticacao.bearer || undefined,
       basic
     );
     setAutenticacao(autenticacaoDto);

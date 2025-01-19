@@ -28,6 +28,8 @@ model Requisicao {
   autenticacao Autenticacao?
   nome         String
   resposta     Resposta?
+  colecao_id   String?
+  colecao      Colecao?      @relation(fields: [colecao_id], references: [id], onDelete: Cascade)
 
   @@map("requisicoes")
 }
@@ -96,4 +98,22 @@ model Resposta {
   time          Float
 
   @@map("resposta")
+}
+
+model Colecao {
+  id          String         @id @default(uuid())
+  nome        String
+  pastas      PastaColecao[]
+  requisicoes Requisicao[]
+
+  @@map("colecoes")
+}
+
+model PastaColecao {
+  id         String  @id @default(uuid())
+  nome       String
+  colecao_id String
+  colecao    Colecao @relation(fields: [colecao_id], references: [id], onDelete: Cascade)
+
+  @@map("pastas_colecao")
 }

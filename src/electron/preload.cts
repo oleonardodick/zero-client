@@ -1,3 +1,4 @@
+import { ColecaoDTO } from '../dtos/colecao.dto';
 import { RequisicaoDTO } from '../dtos/requisicao.dto';
 import { RespostaDTO } from '../dtos/resposta.dto';
 
@@ -26,4 +27,7 @@ electron.contextBridge.exposeInMainWorld('electron', {
     electron.ipcRenderer.invoke('criaResposta', resposta, requisicao_id),
   atualizaResposta: (resposta: RespostaDTO, requisicao_id: string) =>
     electron.ipcRenderer.invoke('atualizaResposta', resposta, requisicao_id),
+  buscaColecoes: () => electron.ipcRenderer.invoke('buscaColecoes'),
+  criaColecao: (colecao: ColecaoDTO) =>
+    electron.ipcRenderer.invoke('criaColecao', colecao),
 });

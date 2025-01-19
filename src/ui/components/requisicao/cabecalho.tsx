@@ -77,10 +77,10 @@ const CabecalhoRequisicao = () => {
   return (
     <div className="flex py-4 px-2">
       <Select defaultValue={tipo} onValueChange={setTipo}>
-        <SelectTrigger className="w-32 rounded-none border-stone-500">
+        <SelectTrigger className="w-32 rounded-none">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="bg-stone-700 text-stone-300 border-stone-500">
+        <SelectContent>
           <SelectGroup>
             <SelectItem value="get">GET</SelectItem>
             <SelectItem value="post">POST</SelectItem>
@@ -95,12 +95,12 @@ const CabecalhoRequisicao = () => {
         onChange={(e) => handleAtualizaUrl(e.target.value)}
         value={url}
         id="urlInput"
-        className="rounded-none border-stone-500"
+        className="rounded-none"
       />
       <Button
-        variant="secondary"
+        variant="default"
         onClick={handleEnviar}
-        className="rounded-none w-32 bg-indigo-500 hover:bg-indigo-600"
+        className="rounded-none w-32"
       >
         Enviar
       </Button>

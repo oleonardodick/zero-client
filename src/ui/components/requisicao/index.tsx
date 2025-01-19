@@ -2,8 +2,7 @@ import { Autenticacao } from '../autenticacao';
 import EditorJson from '../editorJson';
 import Headers from '../headers';
 import QueryParams from '../queryParams';
-import TabOpcoes from '../tabOpcoes';
-import { Tabs, TabsList, TabsContent } from '../ui/tabs';
+import { Tabs, TabsList, TabsContent, TabsTrigger } from '../ui/tabs';
 import CabecalhoRequisicao from './cabecalho';
 import useRequisicaoStore from '@/ui/store/requisicaoStore';
 
@@ -16,10 +15,10 @@ const Requisicao = () => {
       <main className="flex-1 overflow-hidden">
         <Tabs defaultValue="JSON" className="flex flex-col gap-3 h-full">
           <TabsList className="bg-transparent flex flex-col lg:flex-row">
-            <TabOpcoes value="JSON" />
-            <TabOpcoes value="Auth" />
-            <TabOpcoes value="Params" />
-            <TabOpcoes value="Headers" />
+            <TabsTrigger value="JSON">JSON</TabsTrigger>
+            <TabsTrigger value="Auth">Auth</TabsTrigger>
+            <TabsTrigger value="Params">Params</TabsTrigger>
+            <TabsTrigger value="Headers">Headers</TabsTrigger>
           </TabsList>
           <TabsContent value="JSON" className="h-full">
             <JsonEnvio />
