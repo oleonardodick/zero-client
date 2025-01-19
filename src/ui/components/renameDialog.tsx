@@ -31,10 +31,10 @@ export const RenameDialog = ({
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="bg-stone-700 text-gray-100 border-stone-500">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Renomear requisição</DialogTitle>
-          <DialogDescription className="text-gray-400">
+          <DialogDescription>
             Informe o novo nome para a requisição
           </DialogDescription>
         </DialogHeader>
@@ -50,12 +50,7 @@ export const RenameDialog = ({
         </form>
         <DialogFooter>
           <DialogClose asChild>
-            <Button
-              variant="secondary"
-              size="lg"
-              type="submit"
-              form="formRename"
-            >
+            <Button variant="default" size="lg" type="submit" form="formRename">
               Salvar
             </Button>
           </DialogClose>

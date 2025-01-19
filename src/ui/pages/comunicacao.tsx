@@ -20,7 +20,7 @@ export const Comunicacao = () => {
   useEffect(() => {
     limpaResposta();
     if (!id) {
-      inicializaRequisicao(new RequisicaoDTO('', 'get', ''));
+      inicializaRequisicao(new RequisicaoDTO('', 'get', '', ''));
       return;
     }
     const buscaRequisicao = async () => {
@@ -29,7 +29,7 @@ export const Comunicacao = () => {
           id
         );
         inicializaRequisicao(
-          requisicaoBuscada || new RequisicaoDTO('', 'get', '')
+          requisicaoBuscada || new RequisicaoDTO('', 'get', '', '')
         );
         if (requisicaoBuscada?.resposta)
           inicializaResposta(requisicaoBuscada?.resposta);
@@ -42,14 +42,8 @@ export const Comunicacao = () => {
       <div className="flex-1 overflow-hidden">
         <Requisicao />
       </div>
-      <Separator
-        orientation="horizontal"
-        className="hidden xl:block bg-stone-500"
-      />
-      <Separator
-        orientation="vertical"
-        className="block xl:hidden bg-stone-500"
-      />
+      <Separator orientation="horizontal" className="hidden xl:block" />
+      <Separator orientation="vertical" className="block xl:hidden" />
       <div className="flex-1">
         <Resposta />
       </div>

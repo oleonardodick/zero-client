@@ -46,7 +46,7 @@ const Atividade = () => {
             <TooltipTrigger>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <MenuIcon className="hover:cursor-pointer text-zinc-700 dark:text-stone-200" />
+                  <MenuIcon className="hover:cursor-pointer text-stone-600 dark:text-stone-200" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem>Importar</DropdownMenuItem>

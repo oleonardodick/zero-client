@@ -1,6 +1,3 @@
-// import { CrudResult, Resposta } from '@/shared/types';
-// import { enviarRequisicao } from '@/ui/communication/requisicao';
-// import { IRepostaCustomizada } from '@/ui/interface/IRespostaCustomizada';
 import useRequisicaoStore from '@/ui/store/requisicaoStore';
 import {
   Select,

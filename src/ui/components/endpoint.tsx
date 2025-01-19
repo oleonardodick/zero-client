@@ -63,7 +63,7 @@ const Endpoint = ({ requisicao }: EndpointProps) => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <div className="hover:bg-gray-600 cursor-pointer p-2 rounded-md group/endpoint relative">
+        <div className="hover:bg-stone-400/40 cursor-pointer p-2 rounded-md group/endpoint relative dark:hover:bg-stone-800/30">
           <Link to={`/requisicao/modificar/${requisicao.id}`}>
             <div className="flex flex-col lg:flex-row gap-2 mb-2">
               <span
@@ -95,7 +95,7 @@ const Endpoint = ({ requisicao }: EndpointProps) => {
             <DropdownMenuTrigger asChild>
               <EllipsisIcon className="invisible group-hover/endpoint:visible absolute bottom-0 right-3" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-stone-600 text-stone-200 hover:*:bg-stone-500 hover:*:cursor-pointer">
+            <DropdownMenuContent>
               <DropdownMenuItem onClick={handleExecutar}>
                 Executar
               </DropdownMenuItem>
@@ -122,7 +122,7 @@ const Endpoint = ({ requisicao }: EndpointProps) => {
           />
         </div>
       </TooltipTrigger>
-      <TooltipContent className="bg-stone-800">
+      <TooltipContent>
         <p>{requisicao.url}</p>
       </TooltipContent>
     </Tooltip>

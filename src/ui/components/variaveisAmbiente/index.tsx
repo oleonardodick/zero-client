@@ -41,7 +41,7 @@ const VariaveisAmbiente = () => {
     <div className="flex flex-col gap-2">
       <Table>
         <TableHeader>
-          <TableRow className="hover:bg-transparent border-gray-400 [&>th]:text-gray-400">
+          <TableRow className="hover:bg-transparent border-stone-700 dark:border-stone-400">
             <TableHead>Nome</TableHead>
             <TableHead className="hidden lg:table-cell">Valor</TableHead>
           </TableRow>
@@ -53,7 +53,7 @@ const VariaveisAmbiente = () => {
               variavel={variavel}
               key={variavel.nome}
             >
-              <TableRow className="[&>td]:text-gray-100 [&>td]:hover:bg-gray-600 border-gray-400">
+              <TableRow className=" border-gray-400">
                 <TableCell>{variavel.nome}</TableCell>
                 <TableCell className="hidden lg:table-cell">
                   {variavel.valor}
@@ -62,7 +62,6 @@ const VariaveisAmbiente = () => {
                   <Button
                     variant="link"
                     size="icon"
-                    className="text-zinc-300"
                     onClick={(e) => handleExcluir(e, variavel.nome)}
                   >
                     <XIcon />
@@ -74,10 +73,7 @@ const VariaveisAmbiente = () => {
         </TableBody>
       </Table>
       <VariavelDialog formId="formVariaveis">
-        <Button
-          variant="link"
-          className="text-indigo-500 tracking-wider text-lg w-full"
-        >
+        <Button variant="link" className="tracking-wider text-lg w-full">
           + Adicionar
         </Button>
       </VariavelDialog>

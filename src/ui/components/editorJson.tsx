@@ -67,11 +67,7 @@ const EditorJson = ({ readOnly = false, setJson, json }: EditorJsonProps) => {
     <div className="flex flex-col gap-1 px-2 w-full h-full">
       {!readOnly && (
         <div className="flex justify-end">
-          <Button
-            variant="link"
-            className="text-zinc-300 w-fit"
-            onClick={handleFormatar}
-          >
+          <Button variant="link" onClick={handleFormatar}>
             Formatar
           </Button>
         </div>
@@ -79,7 +75,7 @@ const EditorJson = ({ readOnly = false, setJson, json }: EditorJsonProps) => {
       <div className="relative flex right-4 justify-end">
         <Button
           variant="link"
-          className="text-zinc-300 w-fit absolute top-3"
+          className="absolute top-3"
           onClick={textoCopiado ? undefined : handleCopiar}
           id="btnCopiar"
         >

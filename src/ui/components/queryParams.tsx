@@ -80,12 +80,12 @@ const QueryParams = () => {
           <TableBody>
             {queryParams.map((queryParam) => (
               <TableRow
-                className="hover:bg-stone-700 border-none"
+                className="hover:bg-stone-400/20 dark:hover:bg-stone-700/50 border-none"
                 key={queryParam.id}
               >
                 <TableCell>
                   <Input
-                    className="h-6"
+                    className="h-6 shadow-none"
                     type="checkbox"
                     defaultChecked={queryParam.selecionado}
                     onChange={(e) =>
@@ -99,7 +99,7 @@ const QueryParams = () => {
                 </TableCell>
                 <TableCell>
                   <Input
-                    className="border-0 border-b rounded-none focus-visible:ring-0"
+                    className="border-0 border-b rounded-none focus-visible:ring-0 shadow-none"
                     defaultValue={queryParam.query}
                     onChange={(e) =>
                       handleUpdateQueryParam(
@@ -108,11 +108,12 @@ const QueryParams = () => {
                         e.target.value
                       )
                     }
+                    placeholder="param"
                   />
                 </TableCell>
                 <TableCell>
                   <Input
-                    className="border-0 border-b rounded-none focus-visible:ring-0"
+                    className="border-0 border-b rounded-none focus-visible:ring-0 shadow-none"
                     defaultValue={queryParam.valor}
                     onChange={(e) =>
                       handleUpdateQueryParam(
@@ -121,6 +122,7 @@ const QueryParams = () => {
                         e.target.value
                       )
                     }
+                    placeholder="valor"
                   />
                 </TableCell>
                 <TableCell>

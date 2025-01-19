@@ -23,10 +23,10 @@ export const DeleteDialog = ({
 }: DeleteDialogProps) => {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent className="bg-stone-700 text-stone-200">
+      <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{mensagem}</AlertDialogTitle>
-          <AlertDialogDescription className="text-stone-400">
+          <AlertDialogDescription>
             Esta ação não poderá ser desfeita.
           </AlertDialogDescription>
         </AlertDialogHeader>

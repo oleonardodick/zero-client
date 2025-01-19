@@ -10,22 +10,22 @@ const CabecalhoResposta = () => {
           <span
             className={`${
               resposta.status.toString().startsWith('2')
-                ? 'bg-green-700'
-                : 'bg-red-700'
+                ? 'bg-green-600'
+                : 'bg-red-600'
             } rounded-xl p-2`}
           >
-            {resposta.status} {resposta.status_text}
+            Status: {resposta.status} {resposta.status_text}
           </span>
         )}
         {resposta.time > 0 && (
-          <span className="bg-gray-500 rounded-xl p-2">
-            Time {resposta.time} ms
+          <span className="bg-gray-400 rounded-xl p-2">
+            Time: {resposta.time} ms
           </span>
         )}
 
         {resposta.size > 0 && (
-          <span className="bg-gray-500 rounded-xl p-2">
-            Size {resposta.size} Bytes
+          <span className="bg-gray-400 rounded-xl p-2">
+            Size: {resposta.size} Bytes
           </span>
         )}
       </div>

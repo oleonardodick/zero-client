@@ -26,17 +26,17 @@ export const VariavelDialog = ({
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="bg-stone-700 text-gray-100 border-stone-500">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Variável de Ambiente</DialogTitle>
-          <DialogDescription className="text-gray-400">
+          <DialogDescription>
             Variáveis de ambiente para utilizar nas requisições
           </DialogDescription>
         </DialogHeader>
         <VariavelForm formId={formId} variavel={variavel} />
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="secondary" size="lg" type="submit" form={formId}>
+            <Button variant="default" size="lg" type="submit" form={formId}>
               Salvar
             </Button>
           </DialogClose>

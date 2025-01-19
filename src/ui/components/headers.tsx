@@ -43,12 +43,12 @@ const Headers = () => {
           <TableBody>
             {headers?.map((header) => (
               <TableRow
-                className="hover:bg-stone-700 border-none"
+                className="hover:bg-stone-400/20 dark:hover:bg-stone-700/50 border-none"
                 key={header.id}
               >
                 <TableCell>
                   <Input
-                    className="h-6"
+                    className="h-6 shadow-none"
                     type="checkbox"
                     defaultChecked={header.selecionado}
                     onChange={(e) =>
@@ -62,20 +62,22 @@ const Headers = () => {
                 </TableCell>
                 <TableCell>
                   <Input
-                    className="border-0 border-b rounded-none focus-visible:ring-0"
+                    className="border-0 border-b rounded-none focus-visible:ring-0 shadow-none"
                     defaultValue={header.header}
                     onBlur={(e) =>
                       handleUpdateHeader(header.id, 'header', e.target.value)
                     }
+                    placeholder="header"
                   />
                 </TableCell>
                 <TableCell>
                   <Input
-                    className="border-0 border-b rounded-none focus-visible:ring-0"
+                    className="border-0 border-b rounded-none focus-visible:ring-0 shadow-none"
                     defaultValue={header.valor}
                     onBlur={(e) =>
                       handleUpdateHeader(header.id, 'valor', e.target.value)
                     }
+                    placeholder="valor"
                   />
                 </TableCell>
                 <TableCell>
