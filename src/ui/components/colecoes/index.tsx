@@ -14,19 +14,17 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { MenuIcon } from 'lucide-react';
-import { ColecaoDTO } from '@/dtos/colecao.dto';
 import { useQuery } from '@tanstack/react-query';
+import { ColecaoDialog } from './colecaoDialog';
+import { buscarColecoes } from '@/ui/services/colecoes.service';
 
 const Colecoes = () => {
   const [filtro, setFiltro] = useState('');
-
-  const buscaColecoes = async (): Promise<ColecaoDTO[]> => {
-    return await window.electron.buscaColecoes();
-  };
+  const [openDialog, setOpenDialog] = useState(false);
 
   const colecoes = useQuery({
     queryKey: ['listaColecoes'],
-    queryFn: buscaColecoes,
+    queryFn: buscarColecoes,
   });
 
   const colecoesFiltradas = colecoes.data?.filter((c) =>
@@ -35,7 +33,7 @@ const Colecoes = () => {
 
   return (
     <TooltipProvider>
-      <div>
+      <div className="flex flex-col gap-2">
         <div className="flex items-center gap-1">
           <Input
             placeholder="Filtrar coleções"
@@ -51,7 +49,9 @@ const Colecoes = () => {
                   <MenuIcon className="hover:cursor-pointer" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem>Nova coleção</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setOpenDialog(!openDialog)}>
+                    Nova coleção
+                  </DropdownMenuItem>
                   <DropdownMenuItem>Importar</DropdownMenuItem>
                   <DropdownMenuItem>Exportar coleções</DropdownMenuItem>
                 </DropdownMenuContent>
@@ -61,11 +61,16 @@ const Colecoes = () => {
               <p>Menu</p>
             </TooltipContent>
           </Tooltip>
+          <ColecaoDialog
+            formId="colecaoForm"
+            open={openDialog}
+            setOpen={setOpenDialog}
+          />
         </div>
         <ul>
           {colecoesFiltradas?.map((colecao) => (
             <li key={colecao.id}>
-              <Colecao nome={colecao.nome} />
+              <Colecao colecao={colecao} />
             </li>
           ))}
         </ul>

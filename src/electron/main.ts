@@ -16,7 +16,12 @@ import {
   ExcluiRequisicao,
 } from './queries/requisicao.js';
 import { AtualizaResposta, CriaResposta } from './queries/resposta.js';
-import { BuscaColecoes, CriaColecao } from './queries/colecao.js';
+import {
+  AtualizaColecao,
+  BuscaColecoes,
+  CriaColecao,
+  ExcluiColecao,
+} from './queries/colecao.js';
 
 let mainWindow: BrowserWindow;
 
@@ -86,6 +91,14 @@ ipcMain.handle('buscaColecoes', () => {
 
 ipcMain.handle('criaColecao', (_, colecao) => {
   return CriaColecao(colecao);
+});
+
+ipcMain.handle('atualizaColecao', (_, colecao) => {
+  return AtualizaColecao(colecao);
+});
+
+ipcMain.handle('excluiColecao', (_, id) => {
+  return ExcluiColecao(id);
 });
 
 app.on('window-all-closed', () => {

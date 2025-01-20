@@ -32,6 +32,8 @@ declare global {
       ) => Promise<CrudResult>;
       buscaColecoes: () => Promise<ColecaoDTO[]>;
       criaColecao: (colecao: ColecaoDTO) => Promise<CrudResult>;
+      atualizaColecao: (colecao: ColecaoDTO) => Promise<CrudResult>;
+      excluiColecao: (id: string) => Promise<CrudResult>;
     };
   }
 }

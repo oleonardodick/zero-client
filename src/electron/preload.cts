@@ -30,4 +30,8 @@ electron.contextBridge.exposeInMainWorld('electron', {
   buscaColecoes: () => electron.ipcRenderer.invoke('buscaColecoes'),
   criaColecao: (colecao: ColecaoDTO) =>
     electron.ipcRenderer.invoke('criaColecao', colecao),
+  atualizaColecao: (colecao: ColecaoDTO) =>
+    electron.ipcRenderer.invoke('atualizaColecao', colecao),
+  excluiColecao: (id: string) =>
+    electron.ipcRenderer.invoke('excluiColecao', id),
 });
