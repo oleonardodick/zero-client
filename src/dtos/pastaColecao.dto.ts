@@ -1,9 +1,9 @@
-export class PastaColecaoDTO {
+export interface PastaColecaoDTO {
   id?: string;
   nome: string;
+  colecao_id: string;
+}
 
-  constructor(id: string, nome: string) {
-    this.id = id;
-    this.nome = nome;
-  }
+export interface ExportPastaColecaoDTO {
+  nome: string;
 }

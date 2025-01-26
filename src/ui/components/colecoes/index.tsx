@@ -11,16 +11,18 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { MenuIcon } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ColecaoDialog } from './colecaoDialog';
 import { buscarColecoes } from '@/ui/services/colecoes.service';
 
 const Colecoes = () => {
   const [filtro, setFiltro] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
+  const queryClient = useQueryClient();
 
   const colecoes = useQuery({
     queryKey: ['listaColecoes'],
@@ -30,6 +32,15 @@ const Colecoes = () => {
   const colecoesFiltradas = colecoes.data?.filter((c) =>
     c.nome.toLowerCase().includes(filtro.toLowerCase())
   );
+
+  const handleImportarColecao = async () => {
+    const resultado = await window.electron.importarJson();
+    if (resultado.success) {
+      queryClient.invalidateQueries({ queryKey: ['listaColecoes'] });
+    } else {
+      alert(resultado.error);
+    }
+  };
 
   return (
     <TooltipProvider>
@@ -52,8 +63,10 @@ const Colecoes = () => {
                   <DropdownMenuItem onClick={() => setOpenDialog(!openDialog)}>
                     Nova coleção
                   </DropdownMenuItem>
-                  <DropdownMenuItem>Importar</DropdownMenuItem>
-                  <DropdownMenuItem>Exportar coleções</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleImportarColecao}>
+                    Importar coleção
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </TooltipTrigger>

@@ -5,7 +5,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '../ui/collapsible';
-import Pasta from './pasta';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,11 +12,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
+import { PastasColecao } from './pastasColecao';
 import { ColecaoDialog } from './colecaoDialog';
-import { ColecaoDTO } from '@/dtos/colecao.dto';
 import { DeleteDialog } from '../deleteDialog';
-import { excluirColecao } from '@/ui/services/colecoes.service';
+import { criarColecao, excluirColecao } from '@/ui/services/colecoes.service';
 import { useQueryClient } from '@tanstack/react-query';
+import { ColecaoDTO } from '@/dtos/colecao.dto';
+import { mapColecaoDTOParaExportaColecaoDTO } from '@/ui/mappers/colecao.mapper';
+import { PastaColecaoDialog } from './pastasColecao/pastaColecaoDialog';
+import { CriaPastasColecao } from '@/ui/services/pastasColecao.service';
 
 interface ColeacaoProps {
   colecao: ColecaoDTO;
@@ -27,13 +30,42 @@ const Colecao = ({ colecao }: ColeacaoProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openCadastraPastaColecao, setOpenCadastraPastaColecao] =
+    useState(false);
   const queryClient = useQueryClient();
+
+  if (!colecao.id) {
+    return <p>Erro na busca da coleção</p>;
+  }
 
   const handleDelete = async () => {
     if (colecao.id) {
       const resultado = await excluirColecao(colecao.id);
       if (resultado.sucesso)
         queryClient.invalidateQueries({ queryKey: ['listaColecoes'] });
+    }
+  };
+
+  const handleExportaColecao = () => {
+    const colecaoExportar = mapColecaoDTOParaExportaColecaoDTO(colecao);
+    window.electron.salvarJson(colecaoExportar, colecaoExportar.nome);
+  };
+
+  const handleDuplicarColecao = async () => {
+    const novaColecao: ColecaoDTO = {
+      ...colecao,
+      nome: `${colecao.nome} Copy`,
+    };
+    const resultado = await criarColecao(novaColecao);
+    if (resultado.sucesso && resultado.idCriado) {
+      const idColecao: string = resultado.idCriado;
+      novaColecao.pastas.forEach((pasta) => {
+        CriaPastasColecao({
+          ...pasta,
+          colecao_id: idColecao,
+        });
+      });
+      queryClient.invalidateQueries({ queryKey: ['listaColecoes'] });
     }
   };
 
@@ -54,13 +86,21 @@ const Colecao = ({ colecao }: ColeacaoProps) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem>Nova Requisição</DropdownMenuItem>
-              <DropdownMenuItem>Nova Pasta</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setOpenCadastraPastaColecao(true)}
+              >
+                Nova Pasta
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => setOpenEdit(!openEdit)}>
                 Renomear
               </DropdownMenuItem>
-              <DropdownMenuItem>Duplicar</DropdownMenuItem>
-              <DropdownMenuItem>Exportar</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDuplicarColecao}>
+                Duplicar
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleExportaColecao}>
+                Exportar
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => setOpenDelete(!openDelete)}>
                 Excluir
@@ -69,9 +109,7 @@ const Colecao = ({ colecao }: ColeacaoProps) => {
           </DropdownMenu>
         </CollapsibleTrigger>
         <CollapsibleContent className="ml-4">
-          <Pasta nome="Usuarios" />
-          <Pasta nome="Materiais" />
-          <Pasta nome="Empresas" />
+          <PastasColecao colecao_id={colecao.id} />
         </CollapsibleContent>
       </Collapsible>
       <ColecaoDialog
@@ -85,6 +123,12 @@ const Colecao = ({ colecao }: ColeacaoProps) => {
         open={openDelete}
         setOpen={setOpenDelete}
         handleDelete={handleDelete}
+      />
+      <PastaColecaoDialog
+        formId="formPastaColecao"
+        open={openCadastraPastaColecao}
+        setOpen={setOpenCadastraPastaColecao}
+        colecao_id={colecao.id}
       />
     </>
   );

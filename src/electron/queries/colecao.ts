@@ -1,13 +1,27 @@
 import { CrudResult } from '@shared/types.js';
-import { ColecaoDTO } from '../../dtos/colecao.dto.js';
 import { prisma } from './prisma.js';
 import { trataMensagemErro } from '../util.js';
+import { Colecao } from '@prisma/client';
 
-export const BuscaColecoes = async (): Promise<ColecaoDTO[]> => {
-  return await prisma.colecao.findMany();
+export const BuscaColecoes = async (): Promise<Colecao[]> => {
+  return await prisma.colecao.findMany({
+    include: {
+      pastas: true,
+    },
+  });
 };
 
-export const CriaColecao = async (colecao: ColecaoDTO): Promise<CrudResult> => {
+export const BuscaColecaoPorId = async (
+  id: string
+): Promise<Colecao | null> => {
+  return await prisma.colecao.findUnique({
+    where: {
+      id: id,
+    },
+  });
+};
+
+export const CriaColecao = async (colecao: Colecao): Promise<CrudResult> => {
   try {
     const registroCriado = await prisma.colecao.create({
       data: {
@@ -21,7 +35,7 @@ export const CriaColecao = async (colecao: ColecaoDTO): Promise<CrudResult> => {
 };
 
 export const AtualizaColecao = async (
-  colecao: ColecaoDTO
+  colecao: Colecao
 ): Promise<CrudResult> => {
   try {
     await prisma.colecao.update({
