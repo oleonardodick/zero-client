@@ -2,7 +2,7 @@ import { Separator } from '../components/ui/separator';
 import Requisicao from '../components/requisicao';
 import Resposta from '../components/resposta';
 import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { RequisicaoDTO } from '@/dtos/requisicao.dto';
 import useRequisicaoStore from '../store/requisicaoStore';
 import useRespostaStore from '../store/respostaStore';
@@ -16,27 +16,41 @@ export const Comunicacao = () => {
     (state) => state.inicializaResposta
   );
   const limpaResposta = useRespostaStore((state) => state.limpaReposta);
+  const requisicaoBranca: RequisicaoDTO = useMemo(
+    () => ({
+      url: '',
+      tipo: 'get',
+      jsonEnvio: '',
+      nome: '',
+    }),
+    []
+  );
 
   useEffect(() => {
     limpaResposta();
     if (!id) {
-      inicializaRequisicao(new RequisicaoDTO('', 'get', '', ''));
+      inicializaRequisicao(requisicaoBranca);
       return;
     }
+
     const buscaRequisicao = async () => {
       if (id) {
         const requisicaoBuscada = await window.electron.buscaRequisicaoPorId(
           id
         );
-        inicializaRequisicao(
-          requisicaoBuscada || new RequisicaoDTO('', 'get', '', '')
-        );
+        inicializaRequisicao(requisicaoBuscada || requisicaoBranca);
         if (requisicaoBuscada?.resposta)
           inicializaResposta(requisicaoBuscada?.resposta);
       }
     };
     buscaRequisicao();
-  }, [id, inicializaRequisicao, inicializaResposta, limpaResposta]);
+  }, [
+    id,
+    inicializaRequisicao,
+    inicializaResposta,
+    limpaResposta,
+    requisicaoBranca,
+  ]);
   return (
     <div className="h-screen flex xl:flex-col gap-3">
       <div className="flex-1 overflow-hidden">

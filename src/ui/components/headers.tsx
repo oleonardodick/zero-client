@@ -14,7 +14,12 @@ const Headers = () => {
   const deleteHeader = useRequisicaoStore((state) => state.deleteHeader);
 
   const handleNovoHeader = useCallback(() => {
-    const novoHeader = new HeaderDTO(uuidv4(), '', '', false);
+    const novoHeader: HeaderDTO = {
+      id: uuidv4(),
+      header: '',
+      selecionado: false,
+      valor: '',
+    };
     addHeader(novoHeader);
   }, [addHeader]);
 

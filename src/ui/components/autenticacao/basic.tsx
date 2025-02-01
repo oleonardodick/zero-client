@@ -8,24 +8,23 @@ export const BasicAuthentication = () => {
   const inputUsuarioRef = useRef<HTMLInputElement | null>(null);
   const inputSenhaRef = useRef<HTMLInputElement | null>(null);
 
-  const autenticacao = useRequisicaoStore((state) => state.autenticacao);
-
   const basic = useRequisicaoStore((state) => state.autenticacao.basic);
 
   const setAutenticacao = useRequisicaoStore((state) => state.setAutenticacao);
 
   const handleUpdateValues = useCallback(() => {
-    const basic = new Basic(
-      inputUsuarioRef.current?.value || '',
-      inputSenhaRef.current?.value || ''
-    );
-    const autenticacaoDto = new AutenticacaoDTO(
-      'basic',
-      autenticacao.bearer || undefined,
-      basic
-    );
-    setAutenticacao(autenticacaoDto);
-  }, [setAutenticacao, autenticacao]);
+    const basic: Basic = {
+      usuario: inputUsuarioRef.current?.value || '',
+      senha: inputSenhaRef.current?.value || '',
+    };
+
+    const autenticacaoDTO: AutenticacaoDTO = {
+      tipo: 'basic',
+      basic: basic,
+    };
+
+    setAutenticacao(autenticacaoDTO);
+  }, [setAutenticacao]);
   return (
     <div className="grid gap-3">
       <h1>Basic Authentication</h1>

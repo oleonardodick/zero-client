@@ -59,12 +59,12 @@ const montaRetorno = (
   inicio: number,
   fim: number
 ): RespostaDTO => {
-  const resposta = new RespostaDTO(
-    formataJson(response.data),
-    response.status,
-    response.statusText,
-    calculaTamanhoResposta(response.data),
-    calculaTempoRequisicao(inicio, fim)
-  );
+  const resposta: RespostaDTO = {
+    json_retorno: formataJson(response.data),
+    status: response.status,
+    status_text: response.statusText,
+    size: calculaTamanhoResposta(response.data),
+    time: calculaTempoRequisicao(inicio, fim),
+  };
   return resposta;
 };

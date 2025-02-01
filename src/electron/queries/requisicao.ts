@@ -1,32 +1,21 @@
 import { CrudResult } from '@shared/types.js';
 import { prisma } from './prisma.js';
-import { CriaQueryParam, ExcluiQueryParamsDaRequisicao } from './queryParam.js';
-import { CriaHeader, ExcluiHeadersDaRequisicao } from './header.js';
-import {
-  CriaAutenticacao,
-  ExcluiAutenticacaoDaRequisicao,
-} from './autenticacao.js';
 import { trataMensagemErro } from '../util.js';
-import { RequisicaoDTO } from '../../dtos/requisicao.dto.js';
-import { ExcluiResposta } from './resposta.js';
+import { Requisicao } from '@prisma/client';
+import { ExcluiAutenticacaoRequisicao } from './autenticacao.js';
+import { ExcluiHeadersDaRequisicao } from './header.js';
+import { ExcluiQueryParamsDaRequisicao } from './queryParam.js';
+import { ExcluiRespostaRequisicao } from './resposta.js';
 
 export const CriaRequisicao = async (
-  requisicao: RequisicaoDTO
+  requisicao: Requisicao
 ): Promise<CrudResult> => {
   try {
     const registroCriado = await prisma.requisicao.create({
       data: {
-        url: requisicao.url,
-        tipo: requisicao.tipo,
-        jsonEnvio: requisicao.jsonEnvio,
-        nome: requisicao.nome,
+        ...requisicao,
       },
     });
-    if (requisicao.query_params)
-      CriaQueryParam(requisicao.query_params, registroCriado.id);
-    if (requisicao.headers) CriaHeader(requisicao.headers, registroCriado.id);
-    if (requisicao.autenticacao && requisicao.autenticacao.tipo !== 'none')
-      CriaAutenticacao(requisicao.autenticacao, registroCriado.id);
     return { sucesso: true, idCriado: registroCriado.id };
   } catch (erro) {
     return { sucesso: false, erro: trataMensagemErro(erro) };
@@ -34,7 +23,7 @@ export const CriaRequisicao = async (
 };
 
 export const AtualizaRequisicao = async (
-  requisicao: RequisicaoDTO
+  requisicao: Requisicao
 ): Promise<CrudResult> => {
   try {
     const registroExistente = await prisma.requisicao.findUnique({
@@ -43,28 +32,18 @@ export const AtualizaRequisicao = async (
       },
     });
     if (registroExistente) {
+      ExcluiAutenticacaoRequisicao(registroExistente.id);
+      ExcluiHeadersDaRequisicao(registroExistente.id);
+      ExcluiQueryParamsDaRequisicao(registroExistente.id);
+      ExcluiRespostaRequisicao(registroExistente.id);
       await prisma.requisicao.update({
         where: {
           id: requisicao.id,
         },
         data: {
-          url: requisicao.url,
-          tipo: requisicao.tipo,
-          jsonEnvio: requisicao.jsonEnvio,
-          nome: requisicao.nome,
+          ...requisicao,
         },
       });
-      await ExcluiResposta(registroExistente.id);
-      await ExcluiQueryParamsDaRequisicao(registroExistente.id);
-      if (requisicao.query_params)
-        await CriaQueryParam(requisicao.query_params, registroExistente.id);
-      await ExcluiHeadersDaRequisicao(registroExistente.id);
-      if (requisicao.headers)
-        await CriaHeader(requisicao.headers, registroExistente.id);
-      await ExcluiAutenticacaoDaRequisicao(registroExistente.id);
-      if (requisicao.autenticacao && requisicao.autenticacao.tipo !== 'none')
-        await CriaAutenticacao(requisicao.autenticacao, registroExistente.id);
-
       return { sucesso: true, idCriado: registroExistente.id };
     } else {
       return { sucesso: false, erro: 'Requisição não encontrada.' };
@@ -74,7 +53,7 @@ export const AtualizaRequisicao = async (
   }
 };
 
-export const BuscaUltimasRequisicoes = async (): Promise<RequisicaoDTO[]> => {
+export const BuscaUltimasRequisicoes = async (): Promise<Requisicao[]> => {
   return await prisma.requisicao.findMany({
     take: 10,
     orderBy: {
@@ -96,7 +75,7 @@ export const BuscaUltimasRequisicoes = async (): Promise<RequisicaoDTO[]> => {
 
 export const BuscaRequisicaoPorId = async (
   id: string
-): Promise<RequisicaoDTO | null> => {
+): Promise<Requisicao | null> => {
   const requisicao = await prisma.requisicao.findUnique({
     where: {
       id: id,

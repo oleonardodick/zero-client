@@ -48,7 +48,7 @@ const Colecao = ({ colecao }: ColeacaoProps) => {
 
   const handleExportaColecao = () => {
     const colecaoExportar = mapColecaoDTOParaExportaColecaoDTO(colecao);
-    window.electron.salvarJson(colecaoExportar, colecaoExportar.nome);
+    window.electron.exportarJson(colecaoExportar, colecao.nome);
   };
 
   const handleDuplicarColecao = async () => {

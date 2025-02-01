@@ -1,10 +1,10 @@
 import { CrudResult } from '@shared/types.js';
-import { RespostaDTO } from '../../dtos/resposta.dto.js';
 import { trataMensagemErro } from '../util.js';
 import { prisma } from './prisma.js';
+import { Resposta } from '@prisma/client';
 
 export const CriaResposta = async (
-  resposta: RespostaDTO,
+  resposta: Resposta,
   requisicao_id: string
 ): Promise<CrudResult> => {
   try {
@@ -25,7 +25,7 @@ export const CriaResposta = async (
 };
 
 export const AtualizaResposta = async (
-  resposta: RespostaDTO,
+  resposta: Resposta,
   requisicao_id: string
 ): Promise<CrudResult> => {
   try {
@@ -54,7 +54,7 @@ export const AtualizaResposta = async (
   }
 };
 
-export const ExcluiResposta = async (requisicao_id: string) => {
+export const ExcluiRespostaRequisicao = async (requisicao_id: string) => {
   try {
     await prisma.resposta.deleteMany({
       where: { requisicao_id: requisicao_id },

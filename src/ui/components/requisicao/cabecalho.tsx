@@ -36,26 +36,36 @@ const CabecalhoRequisicao = () => {
     const queryParams = useRequisicaoStore.getState().queryParams;
     const headers = useRequisicaoStore.getState().headers;
     const autenticacao = useRequisicaoStore.getState().autenticacao;
-    const requisicaoEnviar = new RequisicaoDTO(
-      requisicao.url,
-      requisicao.tipo,
-      requisicao.jsonEnvio,
-      requisicao.nome || requisicao.url,
-      undefined,
-      queryParams,
-      headers,
-      autenticacao,
-      requisicao.id
-    );
+
+    const requisicaoEnviar: RequisicaoDTO = {
+      url: requisicao.url,
+      tipo: requisicao.tipo,
+      jsonEnvio: requisicao.jsonEnvio,
+      nome: requisicao.nome || requisicao.url,
+      autenticacao: autenticacao,
+      headers: headers,
+      query_params: queryParams,
+    };
+
     const resposta = await enviarRequisicao(requisicaoEnviar);
     try {
       let resultado: CrudResult;
 
       if (requisicao) {
         resultado = requisicao.id
-          ? await window.electron.atualizaRequisicao(requisicaoEnviar)
-          : await window.electron.criaRequisicao(requisicaoEnviar);
+          ? await window.electron.atualizaRequisicao(requisicao)
+          : await window.electron.criaRequisicao(requisicao);
         if (resultado.sucesso && resultado.idCriado) {
+          await window.electron.criaQueryParam(queryParams);
+          await window.electron.criaHeader(headers);
+          window.electron.criaAutenticacao(autenticacao);
+          if (autenticacao.tipo === 'basic') {
+            if (autenticacao.basic)
+              window.electron.criaAutenticacaoBasic(autenticacao.basic);
+          } else {
+            if (autenticacao.bearer)
+              window.electron.criaAutenticacaoBearer(autenticacao.bearer);
+          }
           const result = await window.electron.criaResposta(
             resposta,
             resultado.idCriado

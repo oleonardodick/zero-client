@@ -3,7 +3,3 @@ export interface PastaColecaoDTO {
   nome: string;
   colecao_id: string;
 }
-
-export interface ExportPastaColecaoDTO {
-  nome: string;
-}

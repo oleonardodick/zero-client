@@ -1,14 +1,24 @@
-import { Colecao, PastaColecao } from '@prisma/client';
-import { RequisicaoDTO } from '../dtos/requisicao.dto';
-import { RespostaDTO } from '../dtos/resposta.dto';
+import {
+  Autenticacao,
+  Basic,
+  Bearer,
+  Colecao,
+  Header,
+  PastaColecao,
+  QueryParam,
+  Requisicao,
+  Resposta,
+} from '@prisma/client';
 
 const electron = require('electron');
 
 electron.contextBridge.exposeInMainWorld('electron', {
-  salvarJson: (dadosJson: object, nomeArquivo: string) =>
-    electron.ipcRenderer.invoke('salvarJson', dadosJson, nomeArquivo),
+  //Métodos para importar e exportar json
+  exportarJson: (dadosJson: Colecao, nomeArquivo: string) =>
+    electron.ipcRenderer.invoke('exportarJson', dadosJson, nomeArquivo),
   importarJson: () => electron.ipcRenderer.invoke('importarJson'),
 
+  //Métodos para controle de variáveis de ambiente
   buscaTodasVariaveisAmbiente: () =>
     electron.ipcRenderer.invoke('buscaTodasVariaveisAmbiente'),
   criaVariavelAmbiente: (nome: string, valor: string) =>
@@ -18,9 +28,10 @@ electron.contextBridge.exposeInMainWorld('electron', {
   excluiVariavelAmbiente: (nome: string) =>
     electron.ipcRenderer.invoke('excluiVariavelAmbiente', nome),
 
-  criaRequisicao: (requisicao: RequisicaoDTO) =>
+  //Métodos para controle de requisição
+  criaRequisicao: (requisicao: Requisicao) =>
     electron.ipcRenderer.invoke('criaRequisicao', requisicao),
-  atualizaRequisicao: (requisicao: RequisicaoDTO) =>
+  atualizaRequisicao: (requisicao: Requisicao) =>
     electron.ipcRenderer.invoke('atualizaRequisicao', requisicao),
   buscaUltimasRequisicoes: () =>
     electron.ipcRenderer.invoke('buscaUltimasRequisicoes'),
@@ -29,11 +40,29 @@ electron.contextBridge.exposeInMainWorld('electron', {
   excluiRequisicao: (id: string) =>
     electron.ipcRenderer.invoke('excluiRequisicao', id),
 
-  criaResposta: (resposta: RespostaDTO, requisicao_id: string) =>
-    electron.ipcRenderer.invoke('criaResposta', resposta, requisicao_id),
-  atualizaResposta: (resposta: RespostaDTO, requisicao_id: string) =>
-    electron.ipcRenderer.invoke('atualizaResposta', resposta, requisicao_id),
+  //Métodos para controle da autenticação
+  criaAutenticacao: (autenticacao: Autenticacao) =>
+    electron.ipcRenderer.invoke('criaAutenticacao', autenticacao),
+  criaAutenticacaoBasic: (basic: Basic) =>
+    electron.ipcRenderer.invoke('criaAutenticacaoBasic', basic),
+  criaAutenticacaoBearer: (bearer: Bearer) =>
+    electron.ipcRenderer.invoke('criaAutenticacaoBearer', bearer),
 
+  //Métodos para controle dos headers
+  criaHeader: (headers: Header[]) =>
+    electron.ipcRenderer.invoke('criaHeader', headers),
+
+  //Métodos para controle do query param
+  criaQueryParam: (params: QueryParam[]) =>
+    electron.ipcRenderer.invoke('criaQueryParam', params),
+
+  //Métodos para controle de resposta
+  criaResposta: (resposta: Resposta) =>
+    electron.ipcRenderer.invoke('criaResposta', resposta),
+  atualizaResposta: (resposta: Resposta) =>
+    electron.ipcRenderer.invoke('atualizaResposta', resposta),
+
+  //Métodos para controle de coleções
   buscaColecoes: () => electron.ipcRenderer.invoke('buscaColecoes'),
   criaColecao: (colecao: Colecao) =>
     electron.ipcRenderer.invoke('criaColecao', colecao),
@@ -42,6 +71,7 @@ electron.contextBridge.exposeInMainWorld('electron', {
   excluiColecao: (id: string) =>
     electron.ipcRenderer.invoke('excluiColecao', id),
 
+  //Métodos para controle de pastas de coleções
   buscaPastasColecao: (colecao_id: string) =>
     electron.ipcRenderer.invoke('buscaPastasColecao', colecao_id),
   criaPastaColecao: (pasta: PastaColecao) =>

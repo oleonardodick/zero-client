@@ -30,6 +30,8 @@ model Requisicao {
   resposta     Resposta?
   colecao_id   String?
   colecao      Colecao?      @relation(fields: [colecao_id], references: [id], onDelete: Cascade)
+  pasta_id     String?
+  pasta        PastaColecao? @relation(fields: [pasta_id], references: [id], onDelete: Cascade)
 
   @@map("requisicoes")
 }
@@ -110,10 +112,11 @@ model Colecao {
 }
 
 model PastaColecao {
-  id         String  @id @default(uuid())
-  nome       String
-  colecao_id String
-  colecao    Colecao @relation(fields: [colecao_id], references: [id], onDelete: Cascade)
+  id          String       @id @default(uuid())
+  nome        String
+  colecao_id  String
+  colecao     Colecao      @relation(fields: [colecao_id], references: [id], onDelete: Cascade)
+  requisicoes Requisicao[]
 
   @@map("pastas_colecao")
 }

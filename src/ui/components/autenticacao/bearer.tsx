@@ -9,24 +9,22 @@ export const BearerAuthentication = () => {
   const inputTokenRef = useRef<HTMLTextAreaElement | null>(null);
   const inputTokenPrefixRef = useRef<HTMLInputElement | null>(null);
 
-  const autenticacao = useRequisicaoStore((state) => state.autenticacao);
-
   const bearer = useRequisicaoStore((state) => state.autenticacao.bearer);
 
   const setAutenticacao = useRequisicaoStore((state) => state.setAutenticacao);
 
   const handleUpdateValues = useCallback(() => {
-    const bearer = new Bearer(
-      inputTokenPrefixRef.current?.value || '',
-      inputTokenRef.current?.value || ''
-    );
-    const autenticacaoDto = new AutenticacaoDTO(
-      'bearer',
-      bearer,
-      autenticacao.basic || undefined
-    );
-    setAutenticacao(autenticacaoDto);
-  }, [setAutenticacao, autenticacao]);
+    const bearer: Bearer = {
+      prefix: inputTokenPrefixRef.current?.value || '',
+      token: inputTokenRef.current?.value || '',
+    };
+
+    const autenticacaoDTO: AutenticacaoDTO = {
+      tipo: 'bearer',
+      bearer: bearer,
+    };
+    setAutenticacao(autenticacaoDTO);
+  }, [setAutenticacao]);
 
   return (
     <div className="grid gap-3">

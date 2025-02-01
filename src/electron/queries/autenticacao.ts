@@ -1,48 +1,64 @@
 import { prisma } from './prisma.js';
 import { trataMensagemErro } from '../util.js';
-import { AutenticacaoDTO } from '../../dtos/autenticacao.dto.js';
+import { Autenticacao, Basic, Bearer } from '@prisma/client';
+import { CrudResult } from '@shared/types.js';
 
 export const CriaAutenticacao = async (
-  autenticacao: AutenticacaoDTO,
-  requisicao_id: string
-) => {
+  autenticacao: Autenticacao
+): Promise<CrudResult> => {
   try {
     const registroCriado = await prisma.autenticacao.create({
       data: {
-        tipo: autenticacao.tipo,
-        requisicao_id: requisicao_id,
+        ...autenticacao,
       },
     });
-    if (autenticacao.basic) {
-      await prisma.basic.create({
-        data: {
-          autenticacao_id: registroCriado.id,
-          senha: autenticacao.basic.senha || '',
-          usuario: autenticacao.basic.usuario || '',
-        },
-      });
-    } else {
-      await prisma.bearer.create({
-        data: {
-          autenticacao_id: registroCriado.id,
-          prefix: autenticacao.bearer?.prefix || '',
-          token: autenticacao.bearer?.token || '',
-        },
-      });
-    }
+    return { sucesso: true, idCriado: registroCriado.id };
   } catch (erro) {
-    throw new Error(trataMensagemErro(erro));
+    return { sucesso: false, erro: trataMensagemErro(erro) };
   }
 };
 
-export const ExcluiAutenticacaoDaRequisicao = async (requisicao_id: string) => {
+export const CriaAutenticacaoBasic = async (
+  basic: Basic
+): Promise<CrudResult> => {
   try {
-    await prisma.autenticacao.deleteMany({
+    const registroCriado = await prisma.basic.create({
+      data: {
+        ...basic,
+      },
+    });
+    return { sucesso: true, idCriado: registroCriado.id };
+  } catch (erro) {
+    return { sucesso: false, erro: trataMensagemErro(erro) };
+  }
+};
+
+export const CriaAutenticacaoBearer = async (
+  bearer: Bearer
+): Promise<CrudResult> => {
+  try {
+    const registroCriado = await prisma.bearer.create({
+      data: {
+        ...bearer,
+      },
+    });
+    return { sucesso: true, idCriado: registroCriado.id };
+  } catch (erro) {
+    return { sucesso: false, erro: trataMensagemErro(erro) };
+  }
+};
+
+export const ExcluiAutenticacaoRequisicao = async (
+  requisicao_id: string
+): Promise<CrudResult> => {
+  try {
+    await prisma.autenticacao.delete({
       where: {
         requisicao_id: requisicao_id,
       },
     });
+    return { sucesso: true };
   } catch (erro) {
-    throw new Error(trataMensagemErro(erro));
+    return { sucesso: false, erro: trataMensagemErro(erro) };
   }
 };

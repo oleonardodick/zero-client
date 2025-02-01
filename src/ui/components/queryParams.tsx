@@ -19,7 +19,12 @@ const QueryParams = () => {
   const setUrl = useRequisicaoStore((state) => state.setUrl);
 
   const handleNovoQueryParam = useCallback(() => {
-    const novoQueryParam = new QueryParamDTO(uuidv4(), '', '', false);
+    const novoQueryParam: QueryParamDTO = {
+      id: uuidv4(),
+      query: '',
+      selecionado: false,
+      valor: '',
+    };
 
     addQueryParam(novoQueryParam);
   }, [addQueryParam]);

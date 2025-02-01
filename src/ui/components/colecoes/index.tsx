@@ -35,10 +35,10 @@ const Colecoes = () => {
 
   const handleImportarColecao = async () => {
     const resultado = await window.electron.importarJson();
-    if (resultado.success) {
+    if (resultado.sucesso) {
       queryClient.invalidateQueries({ queryKey: ['listaColecoes'] });
     } else {
-      alert(resultado.error);
+      alert(resultado.erro);
     }
   };
 

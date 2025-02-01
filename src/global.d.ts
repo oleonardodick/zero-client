@@ -1,27 +1,21 @@
+import { AutenticacaoDTO, Basic, Bearer } from './dtos/autenticacao.dto.ts';
 import { ColecaoDTO } from './dtos/colecao.dto.ts';
+import { HeaderDTO } from './dtos/header.dto.ts';
 import { PastaColecaoDTO } from './dtos/pastaColecao.dto.ts';
+import { QueryParamDTO } from './dtos/queryParam.dto.ts';
 import { RequisicaoDTO } from './dtos/requisicao.dto.ts';
 import { RespostaDTO } from './dtos/resposta.dto.ts';
 import { VariavelAmbienteDTO } from './dtos/variavelAmbiente.dto.ts';
-import { CrudResult } from './shared/types';
+import { CrudResult, ResultExportImport } from './shared/types';
 
 declare global {
   interface Window {
     electron: {
-      salvarJson: (
+      exportarJson: (
         dadosJSON: object,
         nomeArquivo: string
-      ) => {
-        success: boolean;
-        error?: string;
-        filePath?: string;
-      };
-      importarJson: () => {
-        success: boolean;
-        json?: ColecaoDTO[] | PastaColecaoDTO;
-        error?: string;
-        filePath?: string;
-      };
+      ) => Promise<ResultExportImport>;
+      importarJson: () => Promise<ResultExportImport>;
 
       buscaTodasVariaveisAmbiente: () => Promise<VariavelAmbienteDTO[]>;
       criaVariavelAmbiente: (
@@ -39,6 +33,14 @@ declare global {
       buscaUltimasRequisicoes: () => Promise<RequisicaoDTO[]>;
       buscaRequisicaoPorId: (id: string) => Promise<RequisicaoDTO | null>;
       excluiRequisicao: (id: string) => Promise<CrudResult>;
+
+      criaAutenticacao: (autenticacao: AutenticacaoDTO) => Promise<CrudResult>;
+      criaAutenticacaoBasic: (basic: Basic) => Promise<CrudResult>;
+      criaAutenticacaoBearer: (bearer: Bearer) => Promise<CrudResult>;
+
+      criaHeader: (headers: HeaderDTO[]) => Promise<CrudResult>;
+
+      criaQueryParam: (params: QueryParamDTO[]) => Promise<CrudResult>;
 
       criaResposta: (
         resposta: RespostaDTO,

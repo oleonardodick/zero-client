@@ -1,7 +1,6 @@
-import { app, BrowserWindow, dialog, ipcMain } from 'electron';
-import fs from 'fs';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
-import { isDev, trataMensagemErro } from './util.js';
+import { isDev } from './util.js';
 import { getPreloadPath } from './pathResolver.js';
 import {
   atualizaValorVariavelAmbiente,
@@ -29,7 +28,14 @@ import {
   CriaPastaColecao,
   ExcluiPastaColecao,
 } from './queries/pasta.js';
-import { Colecao, PastaColecao } from '@prisma/client';
+import {
+  CriaAutenticacao,
+  CriaAutenticacaoBasic,
+  CriaAutenticacaoBearer,
+} from './queries/autenticacao.js';
+import { CriaHeader } from './queries/header.js';
+import { CriaQueryParam } from './queries/queryParam.js';
+import { ExportarJson, ImportarJSON } from './utils/ExportImportJson.js';
 
 let mainWindow: BrowserWindow;
 
@@ -49,76 +55,12 @@ app.on('ready', () => {
   }
 });
 
-ipcMain.handle(
-  'salvarJson',
-  async (_, dadosJSON: object, nomeArquivo: string) => {
-    const window = BrowserWindow.getFocusedWindow();
-    if (window) {
-      const { canceled, filePath } = await dialog.showSaveDialog(window, {
-        title: 'Salvar arquivo',
-        filters: [{ name: 'JSON Files', extensions: ['json'] }],
-        defaultPath: `${nomeArquivo}.json`,
-      });
-
-      if (canceled || !filePath) return { success: false };
-      try {
-        fs.writeFileSync(filePath, JSON.stringify(dadosJSON, null, 2));
-        return { success: true, filePath };
-      } catch (error) {
-        console.error('Erro ao salvar o arquivo: ', error);
-        return { success: false, error: trataMensagemErro(error) };
-      }
-    }
-  }
-);
+ipcMain.handle('exportarJson', async (_, dadosJSON, nomeArquivo) => {
+  return ExportarJson(dadosJSON, nomeArquivo);
+});
 
 ipcMain.handle('importarJson', async () => {
-  const window = BrowserWindow.getFocusedWindow();
-  if (window) {
-    const { canceled, filePaths } = await dialog.showOpenDialog(window, {
-      title: 'Buscar arquivo',
-      properties: ['openFile'],
-      filters: [{ name: 'JSON Files', extensions: ['json'] }],
-    });
-
-    if (canceled || filePaths.length === 0) return { success: false };
-
-    try {
-      const filePath = filePaths[0];
-      const content = fs.readFileSync(filePath, 'utf-8');
-      const json = JSON.parse(content);
-
-      if (
-        typeof json === 'object' &&
-        typeof json.nome === 'string' &&
-        json.client === 'Zero Client'
-      ) {
-        const colecao: Colecao = {
-          id: '',
-          nome: json.nome,
-        };
-        const result = await CriaColecao(colecao);
-
-        if (Array.isArray(json.pastas)) {
-          const pastas: PastaColecao[] = json.pastas
-            .filter((pasta: PastaColecao) => typeof pasta.nome === 'string')
-            .map((pasta: PastaColecao) => ({
-              nome: pasta.nome,
-              colecao_id: result.idCriado,
-            }));
-          pastas.forEach((pasta) => {
-            CriaPastaColecao(pasta);
-          });
-        }
-        return { success: true };
-      } else {
-        return { success: false, error: 'Arquivo não suportado.' };
-      }
-    } catch (error) {
-      console.error('Erro lendo o arquivo: ', error);
-      return { success: false, error: trataMensagemErro(error) };
-    }
-  }
+  return ImportarJSON();
 });
 
 ipcMain.handle('buscaTodasVariaveisAmbiente', () => {
@@ -155,6 +97,26 @@ ipcMain.handle('buscaRequisicaoPorId', (_, id) => {
 
 ipcMain.handle('excluiRequisicao', (_, id) => {
   return ExcluiRequisicao(id);
+});
+
+ipcMain.handle('criaAutenticacao', (_, autenticacao) => {
+  return CriaAutenticacao(autenticacao);
+});
+
+ipcMain.handle('criaAutenticacaoBasic', (_, basic) => {
+  return CriaAutenticacaoBasic(basic);
+});
+
+ipcMain.handle('criaAutenticacaoBearer', (_, bearer) => {
+  return CriaAutenticacaoBearer(bearer);
+});
+
+ipcMain.handle('criaHeader', (_, header) => {
+  return CriaHeader(header);
+});
+
+ipcMain.handle('criaQueryParam', (_, param) => {
+  return CriaQueryParam(param);
 });
 
 ipcMain.handle('criaResposta', (_, resposta, requisicao_id) => {

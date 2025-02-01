@@ -1,19 +1,13 @@
 import { prisma } from './prisma.js';
 import { trataMensagemErro } from '../util.js';
-import { QueryParamDTO } from '../../dtos/queryParam.dto.js';
+import { QueryParam } from '@prisma/client';
 
-export const CriaQueryParam = async (
-  queryParams: QueryParamDTO[],
-  requisicao_id: string
-) => {
+export const CriaQueryParam = async (queryParams: QueryParam[]) => {
   try {
     queryParams.forEach(async (param) => {
       await prisma.queryParam.create({
         data: {
-          query: param.query,
-          valor: param.valor,
-          selecionado: param.selecionado,
-          requisicao_id: requisicao_id,
+          ...param,
         },
       });
     });

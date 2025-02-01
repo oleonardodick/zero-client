@@ -1,19 +1,13 @@
 import { prisma } from './prisma.js';
 import { trataMensagemErro } from '../util.js';
-import { HeaderDTO } from '../../dtos/header.dto.js';
+import { Header } from '@prisma/client';
 
-export const CriaHeader = async (
-  headers: HeaderDTO[],
-  requisicao_id: string
-) => {
+export const CriaHeader = async (headers: Header[]) => {
   try {
     headers.forEach(async (header) => {
       await prisma.header.create({
         data: {
-          header: header.header,
-          valor: header.valor,
-          selecionado: header.selecionado,
-          requisicao_id: requisicao_id,
+          ...header,
         },
       });
     });
