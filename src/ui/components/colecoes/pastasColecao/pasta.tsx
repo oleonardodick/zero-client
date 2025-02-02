@@ -5,7 +5,6 @@ import {
   CollapsibleTrigger,
 } from '../../ui/collapsible';
 import { EllipsisIcon, FolderClosedIcon, FolderOpenIcon } from 'lucide-react';
-import EndpointsColecao from '../endpointsColecao';
 import { useState } from 'react';
 import {
   DropdownMenu,
@@ -14,12 +13,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../../ui/dropdown-menu';
+import { RequisicaoDialog } from '../requisicaoDialog';
+import { RequisicaoPasta } from './requisicaoPasta';
 
 interface PastaProps {
   pasta: PastaColecaoDTO;
 }
 export const Pasta = ({ pasta }: PastaProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [openCadastraColecaoPasta, setOpenCadastraColecaoPasta] =
+    useState(false);
   return (
     <>
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
@@ -38,7 +41,11 @@ export const Pasta = ({ pasta }: PastaProps) => {
             <DropdownMenuContent>
               <DropdownMenuItem>Configurações</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Nova Requisição</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setOpenCadastraColecaoPasta(true)}
+              >
+                Nova Requisição
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Renomear</DropdownMenuItem>
               <DropdownMenuItem>Duplicar</DropdownMenuItem>
@@ -47,9 +54,16 @@ export const Pasta = ({ pasta }: PastaProps) => {
           </DropdownMenu>
         </CollapsibleTrigger>
         <CollapsibleContent className="ml-4">
-          <EndpointsColecao />
+          <RequisicaoPasta colecao_id={pasta.colecao_id} pasta_id={pasta.id} />
         </CollapsibleContent>
       </Collapsible>
+      <RequisicaoDialog
+        colecao_id={pasta.colecao_id}
+        formId="requisicaoPastaForm"
+        open={openCadastraColecaoPasta}
+        setOpen={setOpenCadastraColecaoPasta}
+        pasta_id={pasta.id}
+      />
     </>
   );
 };

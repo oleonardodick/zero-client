@@ -4,15 +4,16 @@ import { QueryParamDTO } from './queryParam.dto';
 import { RespostaDTO } from './resposta.dto';
 
 export interface RequisicaoDTO {
-  id?: string;
+  id: string;
   url: string;
   tipo: string;
   jsonEnvio: string;
   nome: string;
-  data?: Date;
+  data: Date;
   query_params?: QueryParamDTO[];
   headers?: HeaderDTO[];
   autenticacao?: AutenticacaoDTO | null;
   resposta?: RespostaDTO | null;
   colecao_id?: string;
+  pasta_id: string;
 }

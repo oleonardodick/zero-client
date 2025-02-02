@@ -12,6 +12,17 @@ export const BuscaRequisicoesColecao = async (
   }
 };
 
+export const BuscaRequisicoesPasta = async (
+  pasta_id: string
+): Promise<RequisicaoDTO[]> => {
+  try {
+    return await window.electron.buscaRequisicoesPasta(pasta_id);
+  } catch (erro) {
+    console.log(erro);
+    throw new Error('Não foi possível buscar as requisições da coleção');
+  }
+};
+
 export const CriaRequisicao = async (
   requisicao: RequisicaoDTO
 ): Promise<CrudResult> => {

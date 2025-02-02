@@ -12,6 +12,7 @@ import {
   AtualizaRequisicao,
   BuscaRequisicaoPorId,
   BuscaRequisicoesColecao,
+  BuscaRequisicoesPasta,
   BuscaUltimasRequisicoes,
   CriaRequisicao,
   ExcluiRequisicao,
@@ -98,6 +99,10 @@ ipcMain.handle('buscaRequisicaoPorId', (_, id) => {
 
 ipcMain.handle('buscaRequisicoesColecao', (_, colecao_id) => {
   return BuscaRequisicoesColecao(colecao_id);
+});
+
+ipcMain.handle('buscaRequisicoesPasta', (_, pasta_id) => {
+  return BuscaRequisicoesPasta(pasta_id);
 });
 
 ipcMain.handle('excluiRequisicao', (_, id) => {

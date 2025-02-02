@@ -21,8 +21,8 @@ import { ColecaoDTO } from '@/dtos/colecao.dto';
 import { mapColecaoDTOParaExportaColecaoDTO } from '@/ui/mappers/colecao.mapper';
 import { PastaColecaoDialog } from './pastasColecao/pastaColecaoDialog';
 import { CriaPastasColecao } from '@/ui/services/pastasColecao.service';
+import { RequisicaoDialog } from './requisicaoDialog';
 import { RequisicaoColecao } from './requisicaoColecao';
-import { RequisicaoColecaoDialog } from './requisicaoColecao/requisicaoColecaoDialog';
 
 interface ColeacaoProps {
   colecao: ColecaoDTO;
@@ -50,8 +50,8 @@ const Colecao = ({ colecao }: ColeacaoProps) => {
     }
   };
 
-  const handleExportaColecao = () => {
-    const colecaoExportar = mapColecaoDTOParaExportaColecaoDTO(colecao);
+  const handleExportaColecao = async () => {
+    const colecaoExportar = await mapColecaoDTOParaExportaColecaoDTO(colecao);
     window.electron.exportarJson(colecaoExportar, colecao.nome);
   };
 
@@ -139,7 +139,7 @@ const Colecao = ({ colecao }: ColeacaoProps) => {
         setOpen={setOpenCadastraPastaColecao}
         colecao_id={colecao.id}
       />
-      <RequisicaoColecaoDialog
+      <RequisicaoDialog
         formId="formRequisicaoColecao"
         open={openCadastraRequisicaoColecao}
         setOpen={setOpenCadastraRequisicaoColecao}

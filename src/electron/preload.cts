@@ -39,6 +39,8 @@ electron.contextBridge.exposeInMainWorld('electron', {
     electron.ipcRenderer.invoke('buscaRequisicaoPorId', id),
   buscaRequisicoesColecao: (colecao_id: string) =>
     electron.ipcRenderer.invoke('buscaRequisicoesColecao', colecao_id),
+  buscaRequisicoesPasta: (pasta_id: string) =>
+    electron.ipcRenderer.invoke('buscaRequisicoesPasta', pasta_id),
   excluiRequisicao: (id: string) =>
     electron.ipcRenderer.invoke('excluiRequisicao', id),
 

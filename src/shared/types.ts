@@ -1,3 +1,4 @@
+import { RequisicaoDTO } from '../dtos/requisicao.dto';
 import { PastaColecaoDTO } from '../dtos/pastaColecao.dto';
 
 export type CrudResult = {
@@ -25,4 +26,5 @@ export type JsonColecao = {
   id: string;
   client: string;
   pastas?: PastaColecaoDTO[];
+  requisicoes?: RequisicaoDTO[];
 };

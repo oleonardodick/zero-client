@@ -1,6 +1,6 @@
 import { BuscaRequisicoesColecao } from '@/ui/services/requisicao.service';
 import { useQuery } from '@tanstack/react-query';
-import Endpoint from '../../endpoint';
+import Endpoint from '../endpoint';
 
 interface RequisicaoColecaoProp {
   colecao_id: string;

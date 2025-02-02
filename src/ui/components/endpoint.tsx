@@ -20,9 +20,14 @@ import { enviarRequisicao } from '../communication/requisicao';
 interface EndpointProps {
   requisicao: RequisicaoDTO;
   endpointColecao?: boolean;
+  endpointPasta?: boolean;
 }
 
-const Endpoint = ({ requisicao, endpointColecao }: EndpointProps) => {
+const Endpoint = ({
+  requisicao,
+  endpointColecao,
+  endpointPasta,
+}: EndpointProps) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -36,6 +41,10 @@ const Endpoint = ({ requisicao, endpointColecao }: EndpointProps) => {
         if (endpointColecao) {
           queryClient.invalidateQueries({
             queryKey: [`requisicoesColecao${requisicao.colecao_id}`],
+          });
+        } else if (endpointPasta) {
+          queryClient.invalidateQueries({
+            queryKey: [`requisicoesPasta${requisicao.pasta_id}`],
           });
         } else {
           queryClient.invalidateQueries({ queryKey: ['ultimasRequisicoes'] });
@@ -52,7 +61,17 @@ const Endpoint = ({ requisicao, endpointColecao }: EndpointProps) => {
     novaRequisicao.nome = novoNome;
     const retorno = await window.electron.atualizaRequisicao(novaRequisicao);
     if (retorno.sucesso) {
-      queryClient.invalidateQueries({ queryKey: ['ultimasRequisicoes'] });
+      if (endpointColecao) {
+        queryClient.invalidateQueries({
+          queryKey: [`requisicoesColecao${requisicao.colecao_id}`],
+        });
+      } else if (endpointPasta) {
+        queryClient.invalidateQueries({
+          queryKey: [`requisicoesPasta${requisicao.pasta_id}`],
+        });
+      } else {
+        queryClient.invalidateQueries({ queryKey: ['ultimasRequisicoes'] });
+      }
     }
   };
 
@@ -79,7 +98,8 @@ const Endpoint = ({ requisicao, endpointColecao }: EndpointProps) => {
                 className="rounded-lg px-2
                          data-[method=GET]:bg-blue-600 
                          data-[method=POST]:bg-green-600 
-                         data-[method=PUT]:bg-cyan-600 
+                         data-[method=PUT]:bg-violet-600
+                         data-[method=PATCH]:bg-amber-600
                          data-[method=DELETE]:bg-red-600"
               >
                 <span className="text-xs font-bold">

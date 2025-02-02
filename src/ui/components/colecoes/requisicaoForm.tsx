@@ -1,12 +1,10 @@
 import { RequisicaoDTO } from '@/dtos/requisicao.dto';
-import {
-  AtualizaRequisicao,
-  CriaRequisicao,
-} from '@/ui/services/requisicao.service';
+import { TipoRequisicao } from '@/ui/enums/tipoRequisicao.enum';
+import { CriaRequisicao } from '@/ui/services/requisicao.service';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Label } from '../../ui/label';
-import { Input } from '../../ui/input';
+import { Label } from '../ui/label';
+import { Input } from '../ui/input';
 import {
   Select,
   SelectContent,
@@ -14,26 +12,25 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../ui/select';
-import { TipoRequisicao } from '@/ui/enums/tipoRequisicao.enum';
+} from '../ui/select';
 
-interface RequisicaoColecaoFormProps {
+interface RequisicaoFormProps {
   formId: string;
-  requisicao?: RequisicaoDTO;
   colecao_id: string;
+  pasta_id?: string;
 }
 
-export const RequisicaoColecaoForm = ({
+export const RequisicaoForm = ({
   formId,
-  requisicao,
   colecao_id,
-}: RequisicaoColecaoFormProps) => {
+  pasta_id,
+}: RequisicaoFormProps) => {
   const { control, register, handleSubmit } = useForm<RequisicaoDTO>({
     defaultValues: {
       nome: '',
       tipo: TipoRequisicao.GET,
       colecao_id: colecao_id,
-      ...requisicao,
+      pasta_id: pasta_id,
     },
   });
 
@@ -42,27 +39,20 @@ export const RequisicaoColecaoForm = ({
   const createMutation = useMutation({
     mutationFn: CriaRequisicao,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [`requisicoesColecao${colecao_id}`],
-      });
-    },
-  });
-
-  const updateMutation = useMutation({
-    mutationFn: AtualizaRequisicao,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [`requisicoesColecao${colecao_id}`],
-      });
+      if (pasta_id) {
+        queryClient.invalidateQueries({
+          queryKey: [`requisicoesPasta${pasta_id}`],
+        });
+      } else {
+        queryClient.invalidateQueries({
+          queryKey: [`requisicoesColecao${colecao_id}`],
+        });
+      }
     },
   });
 
   const onSubmit: SubmitHandler<RequisicaoDTO> = (data) => {
-    if (requisicao) {
-      updateMutation.mutate(data);
-    } else {
-      createMutation.mutate(data);
-    }
+    createMutation.mutate(data);
   };
 
   return (

@@ -10,6 +10,9 @@ export const BuscaPastasColecao = async (
     where: {
       colecao_id: colecao_id,
     },
+    include: {
+      requisicoes: true,
+    },
   });
 };
 

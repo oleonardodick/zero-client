@@ -1,4 +1,4 @@
-import { RequisicaoDTO } from '@/dtos/requisicao.dto';
+import { Button } from '../ui/button';
 import {
   Dialog,
   DialogClose,
@@ -7,38 +7,37 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '../../ui/dialog';
-import { Button } from '../../ui/button';
-import { RequisicaoColecaoForm } from './requisicaoColecaoForm';
+} from '../ui/dialog';
+import { RequisicaoForm } from './requisicaoForm';
 
-interface RequisicaoColecaoDialogProps {
+interface RequisicaoDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  requisicao?: RequisicaoDTO;
   colecao_id: string;
+  pasta_id?: string;
   formId: string;
 }
 
-export const RequisicaoColecaoDialog = ({
+export const RequisicaoDialog = ({
   open,
   setOpen,
-  requisicao,
   colecao_id,
+  pasta_id,
   formId,
-}: RequisicaoColecaoDialogProps) => {
+}: RequisicaoDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Requisicao</DialogTitle>
+          <DialogTitle>Requisição</DialogTitle>
           <DialogDescription>
             Informe um nome para a requisição
           </DialogDescription>
         </DialogHeader>
-        <RequisicaoColecaoForm
-          requisicao={requisicao}
+        <RequisicaoForm
           formId={formId}
           colecao_id={colecao_id}
+          pasta_id={pasta_id}
         />
         <DialogFooter>
           <DialogClose asChild>

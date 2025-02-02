@@ -52,7 +52,7 @@ export const ExcluiAutenticacaoRequisicao = async (
   requisicao_id: string
 ): Promise<CrudResult> => {
   try {
-    await prisma.autenticacao.delete({
+    await prisma.autenticacao.deleteMany({
       where: {
         requisicao_id: requisicao_id,
       },

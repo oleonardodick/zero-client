@@ -26,10 +26,13 @@ type RequisicaoStore = {
 
 const useRequisicaoStore = create<RequisicaoStore>((set) => ({
   requisicao: {
+    id: '',
     url: '',
     tipo: TipoRequisicao.GET,
     jsonEnvio: '',
     nome: '',
+    data: new Date(),
+    pasta_id: '',
   },
   queryParams: [],
   headers: [],

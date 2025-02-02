@@ -4,11 +4,7 @@ import { trataMensagemErro } from '../util.js';
 import { Colecao } from '@prisma/client';
 
 export const BuscaColecoes = async (): Promise<Colecao[]> => {
-  return await prisma.colecao.findMany({
-    include: {
-      pastas: true,
-    },
-  });
+  return await prisma.colecao.findMany();
 };
 
 export const BuscaColecaoPorId = async (

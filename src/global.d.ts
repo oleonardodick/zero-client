@@ -33,6 +33,7 @@ declare global {
       buscaUltimasRequisicoes: () => Promise<RequisicaoDTO[]>;
       buscaRequisicaoPorId: (id: string) => Promise<RequisicaoDTO | null>;
       buscaRequisicoesColecao: (colecao_id: string) => Promise<RequisicaoDTO[]>;
+      buscaRequisicoesPasta: (pasta_id: string) => Promise<RequisicaoDTO[]>;
       excluiRequisicao: (id: string) => Promise<CrudResult>;
 
       criaAutenticacao: (autenticacao: AutenticacaoDTO) => Promise<CrudResult>;

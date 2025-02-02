@@ -2,9 +2,10 @@ import { JsonColecao, ResultExportImport } from '@shared/types';
 import { BrowserWindow, dialog } from 'electron';
 import { trataMensagemErro } from '../util.js';
 import fs from 'fs';
-import { Colecao, PastaColecao } from '@prisma/client';
+import { Colecao, PastaColecao, Requisicao } from '@prisma/client';
 import { CriaColecao } from '../queries/colecao.js';
 import { CriaPastaColecao } from '../queries/pasta.js';
+import { CriaRequisicao } from '../queries/requisicao.js';
 
 export const ExportarJson = async (
   json: JsonColecao,
@@ -52,14 +53,24 @@ export const ImportarJSON = async (): Promise<ResultExportImport> => {
     if (json.client === 'Zero Client') {
       const colecao: Colecao = json;
       const result = await CriaColecao(colecao);
-      if (result.sucesso) {
-        if (json.pastas && result.idCriado) {
-          const idColecao = result.idCriado;
+      if (result.sucesso && result.idCriado) {
+        const idColecao = result.idCriado;
+        if (json.pastas) {
           const pastas: PastaColecao[] = json.pastas.map((pasta) => ({
             ...pasta,
             colecao_id: idColecao,
           }));
           pastas.forEach((pasta) => CriaPastaColecao(pasta));
+        }
+        if (json.requisicoes) {
+          console.log(json.requisicoes);
+          const requisicoes: Requisicao[] = json.requisicoes.map(
+            (requisicao) => ({
+              ...requisicao,
+              colecao_id: idColecao,
+            })
+          );
+          requisicoes.forEach((requisicao) => CriaRequisicao(requisicao));
         }
         return { sucesso: true };
       } else {

@@ -6,14 +6,18 @@ import { ExcluiAutenticacaoRequisicao } from './autenticacao.js';
 import { ExcluiHeadersDaRequisicao } from './header.js';
 import { ExcluiQueryParamsDaRequisicao } from './queryParam.js';
 import { ExcluiRespostaRequisicao } from './resposta.js';
+import pkg from 'lodash';
+
+const { omit } = pkg;
 
 export const CriaRequisicao = async (
   requisicao: Requisicao
 ): Promise<CrudResult> => {
   try {
+    const dadosSalvar = omit(requisicao, ['id']);
     const registroCriado = await prisma.requisicao.create({
       data: {
-        ...requisicao,
+        ...dadosSalvar,
       },
     });
     return { sucesso: true, idCriado: registroCriado.id };
@@ -101,18 +105,17 @@ export const BuscaRequisicoesColecao = async (
   const requisicoes = await prisma.requisicao.findMany({
     where: {
       colecao_id: colecao_id,
+      pasta_id: null,
     },
-    include: {
-      query_params: true,
-      headers: true,
-      autenticacao: {
-        include: {
-          bearer: true,
-          Basic: true,
-        },
-      },
-      resposta: true,
-    },
+  });
+  return requisicoes;
+};
+
+export const BuscaRequisicoesPasta = async (
+  pasta_id: string
+): Promise<Requisicao[]> => {
+  const requisicoes = await prisma.requisicao.findMany({
+    where: { pasta_id: pasta_id },
   });
   return requisicoes;
 };
