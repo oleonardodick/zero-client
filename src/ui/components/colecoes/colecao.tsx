@@ -21,6 +21,8 @@ import { ColecaoDTO } from '@/dtos/colecao.dto';
 import { mapColecaoDTOParaExportaColecaoDTO } from '@/ui/mappers/colecao.mapper';
 import { PastaColecaoDialog } from './pastasColecao/pastaColecaoDialog';
 import { CriaPastasColecao } from '@/ui/services/pastasColecao.service';
+import { RequisicaoColecao } from './requisicaoColecao';
+import { RequisicaoColecaoDialog } from './requisicaoColecao/requisicaoColecaoDialog';
 
 interface ColeacaoProps {
   colecao: ColecaoDTO;
@@ -31,6 +33,8 @@ const Colecao = ({ colecao }: ColeacaoProps) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [openCadastraPastaColecao, setOpenCadastraPastaColecao] =
+    useState(false);
+  const [openCadastraRequisicaoColecao, setOpenCadastraRequisicaoColecao] =
     useState(false);
   const queryClient = useQueryClient();
 
@@ -85,7 +89,11 @@ const Colecao = ({ colecao }: ColeacaoProps) => {
               <EllipsisIcon className="invisible group-hover:visible absolute right-3" />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem>Nova Requisição</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setOpenCadastraRequisicaoColecao(true)}
+              >
+                Nova Requisição
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => setOpenCadastraPastaColecao(true)}
               >
@@ -110,6 +118,7 @@ const Colecao = ({ colecao }: ColeacaoProps) => {
         </CollapsibleTrigger>
         <CollapsibleContent className="ml-4">
           <PastasColecao colecao_id={colecao.id} />
+          <RequisicaoColecao colecao_id={colecao.id} />
         </CollapsibleContent>
       </Collapsible>
       <ColecaoDialog
@@ -128,6 +137,12 @@ const Colecao = ({ colecao }: ColeacaoProps) => {
         formId="formPastaColecao"
         open={openCadastraPastaColecao}
         setOpen={setOpenCadastraPastaColecao}
+        colecao_id={colecao.id}
+      />
+      <RequisicaoColecaoDialog
+        formId="formRequisicaoColecao"
+        open={openCadastraRequisicaoColecao}
+        setOpen={setOpenCadastraRequisicaoColecao}
         colecao_id={colecao.id}
       />
     </>

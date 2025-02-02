@@ -19,9 +19,10 @@ import { enviarRequisicao } from '../communication/requisicao';
 
 interface EndpointProps {
   requisicao: RequisicaoDTO;
+  endpointColecao?: boolean;
 }
 
-const Endpoint = ({ requisicao }: EndpointProps) => {
+const Endpoint = ({ requisicao, endpointColecao }: EndpointProps) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -32,7 +33,14 @@ const Endpoint = ({ requisicao }: EndpointProps) => {
     if (requisicao.id) {
       const retorno = await window.electron.excluiRequisicao(requisicao.id);
       if (retorno.sucesso) {
-        queryClient.invalidateQueries({ queryKey: ['ultimasRequisicoes'] });
+        if (endpointColecao) {
+          queryClient.invalidateQueries({
+            queryKey: [`requisicoesColecao${requisicao.colecao_id}`],
+          });
+        } else {
+          queryClient.invalidateQueries({ queryKey: ['ultimasRequisicoes'] });
+        }
+
         if (requisicaoAberta.id === requisicao.id)
           navigate('/requisicao/cadastrar');
       }
@@ -66,16 +74,18 @@ const Endpoint = ({ requisicao }: EndpointProps) => {
         <div className="hover:bg-stone-400/40 cursor-pointer p-2 rounded-md group/endpoint relative dark:hover:bg-stone-800/30">
           <Link to={`/requisicao/modificar/${requisicao.id}`}>
             <div className="flex flex-col lg:flex-row gap-2 mb-2">
-              <span
+              <div
                 data-method={requisicao.tipo.toUpperCase()}
-                className="rounded-lg px-2 font-bold 
-                           data-[method=GET]:bg-blue-500 
-                           data-[method=POST]:bg-green-500 
-                           data-[method=PUT]:bg-cyan-500 
-                           data-[method=DELETE]:bg-red-500"
+                className="rounded-lg px-2
+                         data-[method=GET]:bg-blue-600 
+                         data-[method=POST]:bg-green-600 
+                         data-[method=PUT]:bg-cyan-600 
+                         data-[method=DELETE]:bg-red-600"
               >
-                {requisicao.tipo.toUpperCase()}
-              </span>
+                <span className="text-xs font-bold">
+                  {requisicao.tipo.toUpperCase()}
+                </span>
+              </div>
               <span className="overflow-hidden text-ellipsis whitespace-nowrap">
                 {requisicao.nome}
               </span>
@@ -122,9 +132,11 @@ const Endpoint = ({ requisicao }: EndpointProps) => {
           />
         </div>
       </TooltipTrigger>
-      <TooltipContent>
-        <p>{requisicao.url}</p>
-      </TooltipContent>
+      {requisicao.url && (
+        <TooltipContent>
+          <p>{requisicao.url}</p>
+        </TooltipContent>
+      )}
     </Tooltip>
   );
 };

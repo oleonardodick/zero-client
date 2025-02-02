@@ -95,6 +95,28 @@ export const BuscaRequisicaoPorId = async (
   return requisicao;
 };
 
+export const BuscaRequisicoesColecao = async (
+  colecao_id: string
+): Promise<Requisicao[]> => {
+  const requisicoes = await prisma.requisicao.findMany({
+    where: {
+      colecao_id: colecao_id,
+    },
+    include: {
+      query_params: true,
+      headers: true,
+      autenticacao: {
+        include: {
+          bearer: true,
+          Basic: true,
+        },
+      },
+      resposta: true,
+    },
+  });
+  return requisicoes;
+};
+
 export const ExcluiRequisicao = async (id: string): Promise<CrudResult> => {
   try {
     await prisma.requisicao.delete({

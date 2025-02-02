@@ -11,6 +11,7 @@ import {
 import {
   AtualizaRequisicao,
   BuscaRequisicaoPorId,
+  BuscaRequisicoesColecao,
   BuscaUltimasRequisicoes,
   CriaRequisicao,
   ExcluiRequisicao,
@@ -93,6 +94,10 @@ ipcMain.handle('buscaUltimasRequisicoes', () => {
 
 ipcMain.handle('buscaRequisicaoPorId', (_, id) => {
   return BuscaRequisicaoPorId(id);
+});
+
+ipcMain.handle('buscaRequisicoesColecao', (_, colecao_id) => {
+  return BuscaRequisicoesColecao(colecao_id);
 });
 
 ipcMain.handle('excluiRequisicao', (_, id) => {

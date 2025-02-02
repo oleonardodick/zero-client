@@ -3,6 +3,7 @@ import { HeaderDTO } from '@/dtos/header.dto';
 import { QueryParamDTO } from '@/dtos/queryParam.dto';
 import { RequisicaoDTO } from '@/dtos/requisicao.dto';
 import { create } from 'zustand';
+import { TipoRequisicao } from '../enums/tipoRequisicao.enum';
 
 type RequisicaoStore = {
   requisicao: RequisicaoDTO;
@@ -26,7 +27,7 @@ type RequisicaoStore = {
 const useRequisicaoStore = create<RequisicaoStore>((set) => ({
   requisicao: {
     url: '',
-    tipo: 'get',
+    tipo: TipoRequisicao.GET,
     jsonEnvio: '',
     nome: '',
   },

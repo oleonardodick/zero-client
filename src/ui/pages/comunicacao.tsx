@@ -6,6 +6,7 @@ import { useEffect, useMemo } from 'react';
 import { RequisicaoDTO } from '@/dtos/requisicao.dto';
 import useRequisicaoStore from '../store/requisicaoStore';
 import useRespostaStore from '../store/respostaStore';
+import { TipoRequisicao } from '../enums/tipoRequisicao.enum';
 
 export const Comunicacao = () => {
   const { id } = useParams();
@@ -19,7 +20,7 @@ export const Comunicacao = () => {
   const requisicaoBranca: RequisicaoDTO = useMemo(
     () => ({
       url: '',
-      tipo: 'get',
+      tipo: TipoRequisicao.GET,
       jsonEnvio: '',
       nome: '',
     }),
@@ -38,6 +39,7 @@ export const Comunicacao = () => {
         const requisicaoBuscada = await window.electron.buscaRequisicaoPorId(
           id
         );
+        console.log(requisicaoBuscada);
         inicializaRequisicao(requisicaoBuscada || requisicaoBranca);
         if (requisicaoBuscada?.resposta)
           inicializaResposta(requisicaoBuscada?.resposta);

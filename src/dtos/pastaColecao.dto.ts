@@ -1,5 +1,5 @@
 export interface PastaColecaoDTO {
-  id?: string;
+  id: string;
   nome: string;
   colecao_id: string;
 }

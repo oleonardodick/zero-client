@@ -1,3 +1,5 @@
+import { PastaColecaoDTO } from '../dtos/pastaColecao.dto';
+
 export type CrudResult = {
   sucesso: boolean;
   erro?: string;
@@ -22,10 +24,5 @@ export type JsonColecao = {
   nome: string;
   id: string;
   client: string;
-  pastas?: JsonPastas[];
-};
-
-export type JsonPastas = {
-  id: string;
-  nome: string;
+  pastas?: PastaColecaoDTO[];
 };

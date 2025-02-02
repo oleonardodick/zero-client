@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { enviarRequisicao } from '@/ui/communication/requisicao';
 import useRespostaStore from '@/ui/store/respostaStore';
 import { useQueryClient } from '@tanstack/react-query';
+import { TipoRequisicao } from '@/ui/enums/tipoRequisicao.enum';
 
 const CabecalhoRequisicao = () => {
   const queryClient = useQueryClient();
@@ -83,17 +84,17 @@ const CabecalhoRequisicao = () => {
 
   return (
     <div className="flex py-4 px-2">
-      <Select defaultValue={tipo} onValueChange={setTipo}>
+      <Select value={tipo} onValueChange={setTipo}>
         <SelectTrigger className="w-32 rounded-none">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value="get">GET</SelectItem>
-            <SelectItem value="post">POST</SelectItem>
-            <SelectItem value="put">PUT</SelectItem>
-            <SelectItem value="patch">PATCH</SelectItem>
-            <SelectItem value="delete">DELETE</SelectItem>
+            <SelectItem value={TipoRequisicao.GET}>GET</SelectItem>
+            <SelectItem value={TipoRequisicao.POST}>POST</SelectItem>
+            <SelectItem value={TipoRequisicao.PUT}>PUT</SelectItem>
+            <SelectItem value={TipoRequisicao.PATCH}>PATCH</SelectItem>
+            <SelectItem value={TipoRequisicao.DELETE}>DELETE</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>

@@ -19,9 +19,9 @@ model VariavelAmbiente {
 
 model Requisicao {
   id           String        @id @default(uuid())
-  url          String
+  url          String        @default("")
   tipo         String
-  jsonEnvio    String
+  jsonEnvio    String        @default("")
   data         DateTime      @default(now())
   query_params QueryParam[]
   headers      Header[]

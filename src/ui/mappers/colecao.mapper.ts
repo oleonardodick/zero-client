@@ -1,5 +1,4 @@
 import { ColecaoDTO } from '@/dtos/colecao.dto';
-import { mapPastasColecaoDTOparaExportaPastasColecaoDTO } from './pastaColecao.mapper';
 import { JsonColecao } from '@/shared/types';
 
 export const mapColecaoDTOParaExportaColecaoDTO = (
@@ -9,6 +8,6 @@ export const mapColecaoDTOParaExportaColecaoDTO = (
     client: 'Zero Client',
     id: colecao.id || '',
     nome: colecao.nome,
-    pastas: mapPastasColecaoDTOparaExportaPastasColecaoDTO(colecao.pastas),
+    pastas: colecao.pastas,
   };
 };
