@@ -33,6 +33,7 @@ const useRequisicaoStore = create<RequisicaoStore>((set) => ({
     nome: '',
     data: new Date(),
     pasta_id: '',
+    colecao_id: '',
   },
   queryParams: [],
   headers: [],

@@ -6,9 +6,7 @@ import { ExcluiAutenticacaoRequisicao } from './autenticacao.js';
 import { ExcluiHeadersDaRequisicao } from './header.js';
 import { ExcluiQueryParamsDaRequisicao } from './queryParam.js';
 import { ExcluiRespostaRequisicao } from './resposta.js';
-import pkg from 'lodash';
-
-const { omit } = pkg;
+import omit from 'lodash/omit.js';
 
 export const CriaRequisicao = async (
   requisicao: Requisicao

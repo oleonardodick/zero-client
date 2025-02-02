@@ -14,6 +14,6 @@ export interface RequisicaoDTO {
   headers?: HeaderDTO[];
   autenticacao?: AutenticacaoDTO | null;
   resposta?: RespostaDTO | null;
-  colecao_id?: string;
+  colecao_id: string;
   pasta_id: string;
 }

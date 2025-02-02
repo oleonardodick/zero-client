@@ -53,17 +53,29 @@ export const ImportarJSON = async (): Promise<ResultExportImport> => {
     if (json.client === 'Zero Client') {
       const colecao: Colecao = json;
       const result = await CriaColecao(colecao);
-      if (result.sucesso && result.idCriado) {
+      if (result.idCriado) {
         const idColecao = result.idCriado;
         if (json.pastas) {
-          const pastas: PastaColecao[] = json.pastas.map((pasta) => ({
-            ...pasta,
-            colecao_id: idColecao,
-          }));
-          pastas.forEach((pasta) => CriaPastaColecao(pasta));
+          json.pastas.forEach(async (pasta) => {
+            const pastaCriar: PastaColecao = {
+              ...pasta,
+              colecao_id: idColecao,
+            };
+            const resultPasta = await CriaPastaColecao(pastaCriar);
+            if (resultPasta.idCriado) {
+              const idPasta = resultPasta.idCriado;
+              pasta.requisicoes?.forEach((requisicao) => {
+                const requisicaoCriar: Requisicao = {
+                  ...requisicao,
+                  pasta_id: idPasta,
+                  colecao_id: idColecao,
+                };
+                CriaRequisicao(requisicaoCriar);
+              });
+            }
+          });
         }
         if (json.requisicoes) {
-          console.log(json.requisicoes);
           const requisicoes: Requisicao[] = json.requisicoes.map(
             (requisicao) => ({
               ...requisicao,
