@@ -17,4 +17,5 @@ export interface HeaderDTO {
   header: string;
   valor: string;
   selecionado: boolean;
+  requisicao_id: string;
 }

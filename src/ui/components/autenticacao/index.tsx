@@ -10,20 +10,26 @@ import {
 import { BearerAuthentication } from './bearer';
 import { BasicAuthentication } from './basic';
 import useRequisicaoStore from '@/ui/store/requisicaoStore';
+import { useAutenticacaoStore } from '@/ui/store/autenticacaoStore';
+import { useEffect } from 'react';
 
 export const Autenticacao = () => {
-  const tipoAutenticacao = useRequisicaoStore(
-    (state) => state.autenticacao.tipo
+  const autenticacao = useAutenticacaoStore((state) => state.autenticacao);
+  const setTipo = useAutenticacaoStore((state) => state.setTipo);
+  const fetchAutenticacao = useAutenticacaoStore(
+    (state) => state.fetchAutenticacao
   );
-  const setTipoAutenticacao = useRequisicaoStore(
-    (state) => state.setTipoAutenticacao
-  );
+  const requisicao = useRequisicaoStore((state) => state.requisicao);
+
+  useEffect(() => {
+    fetchAutenticacao(requisicao.id);
+  }, [fetchAutenticacao, requisicao]);
 
   return (
     <div className="grid gap-5 p-4">
       <div className="flex items-center gap-4">
         <Label>Tipo</Label>
-        <Select value={tipoAutenticacao} onValueChange={setTipoAutenticacao}>
+        <Select value={autenticacao.tipo} onValueChange={setTipo}>
           <SelectTrigger className="w-28">
             <SelectValue />
           </SelectTrigger>
@@ -37,11 +43,11 @@ export const Autenticacao = () => {
         </Select>
       </div>
       <div>
-        {tipoAutenticacao === 'none' && (
+        {autenticacao.tipo === 'none' && (
           <h1>Nenhuma autenticação selecionada</h1>
         )}
-        {tipoAutenticacao === 'basic' && <BasicAuthentication />}
-        {tipoAutenticacao === 'bearer' && <BearerAuthentication />}
+        {autenticacao.tipo === 'basic' && <BasicAuthentication />}
+        {autenticacao.tipo === 'bearer' && <BearerAuthentication />}
       </div>
     </div>
   );

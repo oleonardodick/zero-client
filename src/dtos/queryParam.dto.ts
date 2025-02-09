@@ -17,4 +17,5 @@ export interface QueryParamDTO {
   query: string;
   valor: string;
   selecionado: boolean;
+  requisicao_id: string;
 }

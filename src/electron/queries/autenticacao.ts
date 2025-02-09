@@ -3,13 +3,34 @@ import { trataMensagemErro } from '../util.js';
 import { Autenticacao, Basic, Bearer } from '@prisma/client';
 import { CrudResult } from '@shared/types.js';
 
+export const BuscaAutenticacaoDaRequisicao = async (
+  requisicao_id: string
+): Promise<Autenticacao | null> => {
+  try {
+    return await prisma.autenticacao.findFirst({
+      where: {
+        requisicao_id: requisicao_id,
+      },
+      include: {
+        bearer: true,
+        basic: true,
+      },
+    });
+  } catch (erro) {
+    throw new Error(trataMensagemErro(erro));
+  }
+};
+
 export const CriaAutenticacao = async (
   autenticacao: Autenticacao
 ): Promise<CrudResult> => {
   try {
     const registroCriado = await prisma.autenticacao.create({
       data: {
-        ...autenticacao,
+        tipo: autenticacao.tipo,
+        requisicao: {
+          connect: { id: autenticacao.requisicao_id },
+        },
       },
     });
     return { sucesso: true, idCriado: registroCriado.id };
@@ -24,7 +45,11 @@ export const CriaAutenticacaoBasic = async (
   try {
     const registroCriado = await prisma.basic.create({
       data: {
-        ...basic,
+        senha: basic.senha,
+        usuario: basic.usuario,
+        autenticacao: {
+          connect: { id: basic.autenticacao_id },
+        },
       },
     });
     return { sucesso: true, idCriado: registroCriado.id };
@@ -39,7 +64,11 @@ export const CriaAutenticacaoBearer = async (
   try {
     const registroCriado = await prisma.bearer.create({
       data: {
-        ...bearer,
+        prefix: bearer.prefix,
+        token: bearer.token,
+        autenticacao: {
+          connect: { id: bearer.autenticacao_id },
+        },
       },
     });
     return { sucesso: true, idCriado: registroCriado.id };

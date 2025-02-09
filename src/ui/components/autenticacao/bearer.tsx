@@ -1,30 +1,24 @@
-import useRequisicaoStore from '@/ui/store/requisicaoStore';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
-import { useCallback, useRef } from 'react';
-import { AutenticacaoDTO, Bearer } from '@/dtos/autenticacao.dto';
+import { useRef } from 'react';
+import { Bearer } from '@/dtos/autenticacao.dto';
+import { useAutenticacaoStore } from '@/ui/store/autenticacaoStore';
 
 export const BearerAuthentication = () => {
   const inputTokenRef = useRef<HTMLTextAreaElement | null>(null);
   const inputTokenPrefixRef = useRef<HTMLInputElement | null>(null);
+  const autenticacao = useAutenticacaoStore((state) => state.autenticacao);
+  const setBearer = useAutenticacaoStore((state) => state.setBearer);
 
-  const bearer = useRequisicaoStore((state) => state.autenticacao.bearer);
-
-  const setAutenticacao = useRequisicaoStore((state) => state.setAutenticacao);
-
-  const handleUpdateValues = useCallback(() => {
+  const handleUpdateValues = () => {
     const bearer: Bearer = {
       prefix: inputTokenPrefixRef.current?.value || '',
       token: inputTokenRef.current?.value || '',
+      autenticacao_id: autenticacao.id,
     };
-
-    const autenticacaoDTO: AutenticacaoDTO = {
-      tipo: 'bearer',
-      bearer: bearer,
-    };
-    setAutenticacao(autenticacaoDTO);
-  }, [setAutenticacao]);
+    setBearer(bearer);
+  };
 
   return (
     <div className="grid gap-3">
@@ -32,7 +26,7 @@ export const BearerAuthentication = () => {
       <Textarea
         rows={5}
         className="resize-none"
-        defaultValue={bearer?.token}
+        defaultValue={autenticacao.bearer?.token}
         id="bearerToken"
         ref={inputTokenRef}
         onBlur={handleUpdateValues}
@@ -41,7 +35,7 @@ export const BearerAuthentication = () => {
         <Label htmlFor="tokenPrefix">Token Prefix</Label>
         <Input
           id="tokenPrefix"
-          defaultValue={bearer?.prefix || 'bearer'}
+          defaultValue={autenticacao.bearer?.prefix || 'bearer'}
           className="flex-1"
           ref={inputTokenPrefixRef}
           onBlur={handleUpdateValues}

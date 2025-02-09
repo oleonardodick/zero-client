@@ -29,10 +29,10 @@ electron.contextBridge.exposeInMainWorld('electron', {
     electron.ipcRenderer.invoke('excluiVariavelAmbiente', nome),
 
   //Métodos para controle de requisição
-  criaRequisicao: (requisicao: Requisicao) =>
+  criaRequisicao: (requisicao: Partial<Requisicao>) =>
     electron.ipcRenderer.invoke('criaRequisicao', requisicao),
-  atualizaRequisicao: (requisicao: Requisicao) =>
-    electron.ipcRenderer.invoke('atualizaRequisicao', requisicao),
+  atualizaRequisicao: (requisicao: Partial<Requisicao>, id: string) =>
+    electron.ipcRenderer.invoke('atualizaRequisicao', requisicao, id),
   buscaUltimasRequisicoes: () =>
     electron.ipcRenderer.invoke('buscaUltimasRequisicoes'),
   buscaRequisicaoPorId: (id: string) =>
@@ -45,6 +45,8 @@ electron.contextBridge.exposeInMainWorld('electron', {
     electron.ipcRenderer.invoke('excluiRequisicao', id),
 
   //Métodos para controle da autenticação
+  buscaAutenticacaoDaRequisicao: (requisicao_id: string) =>
+    electron.ipcRenderer.invoke('buscaAutenticacaoDaRequisicao', requisicao_id),
   criaAutenticacao: (autenticacao: Autenticacao) =>
     electron.ipcRenderer.invoke('criaAutenticacao', autenticacao),
   criaAutenticacaoBasic: (basic: Basic) =>
@@ -53,16 +55,22 @@ electron.contextBridge.exposeInMainWorld('electron', {
     electron.ipcRenderer.invoke('criaAutenticacaoBearer', bearer),
 
   //Métodos para controle dos headers
+  buscaHeadersDaRequisicao: (requisicao_id: string) =>
+    electron.ipcRenderer.invoke('buscaHeadersDaRequisicao', requisicao_id),
   criaHeader: (headers: Header[]) =>
     electron.ipcRenderer.invoke('criaHeader', headers),
 
   //Métodos para controle do query param
+  buscaQueryParamsDaRequisicao: (requisicao_id: string) =>
+    electron.ipcRenderer.invoke('buscaQueryParamsDaRequisicao', requisicao_id),
   criaQueryParam: (params: QueryParam[]) =>
     electron.ipcRenderer.invoke('criaQueryParam', params),
 
   //Métodos para controle de resposta
-  criaResposta: (resposta: Resposta) =>
-    electron.ipcRenderer.invoke('criaResposta', resposta),
+  buscaRespostaDaRequisicao: (requisicao_id: string) =>
+    electron.ipcRenderer.invoke('buscaRespostaDaRequisicao', requisicao_id),
+  criaResposta: (resposta: Resposta, requisicao_id: string) =>
+    electron.ipcRenderer.invoke('criaResposta', resposta, requisicao_id),
   atualizaResposta: (resposta: Resposta) =>
     electron.ipcRenderer.invoke('atualizaResposta', resposta),
 

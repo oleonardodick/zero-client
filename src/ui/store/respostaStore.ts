@@ -1,13 +1,16 @@
 import { RespostaDTO } from '@/dtos/resposta.dto';
 import { create } from 'zustand';
+import { BuscaRespostaDaRequisicao } from '../services/resposta.service';
 
 type RespostaStore = {
   resposta: RespostaDTO;
-  inicializaResposta: (novaResposta: RespostaDTO) => void;
-  limpaReposta: () => void;
+  setReposta: (resposta: RespostaDTO) => void;
+  isLoading: boolean;
+  requisicaoPosicionada: string;
+  fetchResposta: (id_requisicao: string) => Promise<void>;
 };
 
-const useRespostaStore = create<RespostaStore>((set) => ({
+const useRespostaStore = create<RespostaStore>((set, get) => ({
   resposta: {
     json_retorno: '',
     status: 0,
@@ -15,19 +18,22 @@ const useRespostaStore = create<RespostaStore>((set) => ({
     size: 0,
     time: 0,
   },
-  inicializaResposta: (novaResposta: RespostaDTO) =>
-    set(() => ({
-      resposta: novaResposta,
-    })),
-  limpaReposta: () =>
-    set(() => ({
-      resposta: {
-        json_retorno: '',
-        status: 0,
-        status_text: '',
-        size: 0,
-        time: 0,
-      },
+  isLoading: false,
+  requisicaoPosicionada: '',
+  fetchResposta: async (id_requisicao: string) => {
+    if (get().requisicaoPosicionada === id_requisicao) return;
+    set({ isLoading: true, requisicaoPosicionada: id_requisicao });
+    const respostaBuscada = await BuscaRespostaDaRequisicao(id_requisicao);
+    set({
+      resposta: respostaBuscada
+        ? respostaBuscada
+        : { json_retorno: '', status: 0, status_text: '', size: 0, time: 0 },
+      isLoading: false,
+    });
+  },
+  setReposta: (resposta) =>
+    set((state) => ({
+      resposta: { ...state.resposta, resposta },
     })),
 }));
 

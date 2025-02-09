@@ -1,7 +1,7 @@
-import { AutenticacaoDTO } from './autenticacao.dto';
-import { HeaderDTO } from './header.dto';
-import { QueryParamDTO } from './queryParam.dto';
-import { RespostaDTO } from './resposta.dto';
+// import { AutenticacaoDTO } from './autenticacao.dto';
+// import { HeaderDTO } from './header.dto';
+// import { QueryParamDTO } from './queryParam.dto';
+// import { RespostaDTO } from './resposta.dto';
 
 export interface RequisicaoDTO {
   id: string;
@@ -10,10 +10,19 @@ export interface RequisicaoDTO {
   jsonEnvio: string;
   nome: string;
   data: Date;
-  query_params?: QueryParamDTO[];
-  headers?: HeaderDTO[];
-  autenticacao?: AutenticacaoDTO | null;
-  resposta?: RespostaDTO | null;
+  // query_params?: QueryParamDTO[];
+  // headers?: HeaderDTO[];
+  // autenticacao?: AutenticacaoDTO | null;
+  // resposta?: RespostaDTO | null;
   colecao_id: string;
   pasta_id: string;
+}
+
+export interface CriaRequisicaoDTO {
+  url: string;
+  tipo: string;
+  jsonEnvio: string;
+  nome: string;
+  colecao_id?: string;
+  pasta_id?: string;
 }

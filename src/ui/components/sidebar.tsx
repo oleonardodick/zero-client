@@ -9,7 +9,7 @@ import { SeletorTema } from './seletorTema';
 
 const Sidebar = () => {
   return (
-    <div className="flex flex-col w-1/6 p-3 border-r h-screen bg-stone-200 border-bg-stone-300 dark:bg-stone-700 dark:border-stone-500 ">
+    <div className="flex flex-col w-1/6 p-3 border-r h-screen bg-stone-300 border-bg-stone-300 dark:bg-stone-700 dark:border-stone-500 ">
       <div className="flex flex-col gap-9 xl:gap-3 flex-1">
         <Link to="/requisicao/cadastrar">
           <Button

@@ -1,32 +1,21 @@
-import { AutenticacaoDTO } from '@/dtos/autenticacao.dto';
-import { HeaderDTO } from '@/dtos/header.dto';
-import { QueryParamDTO } from '@/dtos/queryParam.dto';
 import { RequisicaoDTO } from '@/dtos/requisicao.dto';
 import { create } from 'zustand';
 import { TipoRequisicao } from '../enums/tipoRequisicao.enum';
+import { BuscaRequisicaoPorId } from '../services/requisicao.service';
+import { v4 as uuidv4 } from 'uuid';
 
 type RequisicaoStore = {
   requisicao: RequisicaoDTO;
-  inicializaRequisicao: (novaRequisicao: RequisicaoDTO) => void;
   setUrl: (url: string) => void;
   setTipo: (tipo: string) => void;
   setJsonEnvio: (json: string) => void;
-  queryParams: QueryParamDTO[];
-  addQueryParam: (queryParam: QueryParamDTO) => void;
-  updateQueryParam: (id: string, updatedValues: QueryParamDTO) => void;
-  deleteQueryParam: (id: string) => void;
-  headers: HeaderDTO[];
-  addHeader: (header: HeaderDTO) => void;
-  updateHeader: (id: string, updatedValues: HeaderDTO) => void;
-  deleteHeader: (id: string) => void;
-  autenticacao: AutenticacaoDTO;
-  setTipoAutenticacao: (tipo: 'none' | 'bearer' | 'basic') => void;
-  setAutenticacao: (dados: AutenticacaoDTO) => void;
+  isLoading: boolean;
+  fetchRequisicao: (id: string) => Promise<void>;
 };
 
-const useRequisicaoStore = create<RequisicaoStore>((set) => ({
+const useRequisicaoStore = create<RequisicaoStore>((set, get) => ({
   requisicao: {
-    id: '',
+    id: uuidv4(),
     url: '',
     tipo: TipoRequisicao.GET,
     jsonEnvio: '',
@@ -35,16 +24,20 @@ const useRequisicaoStore = create<RequisicaoStore>((set) => ({
     pasta_id: '',
     colecao_id: '',
   },
-  queryParams: [],
-  headers: [],
-  autenticacao: { tipo: 'none' },
-  inicializaRequisicao: (novaRequisicao: RequisicaoDTO) =>
-    set(() => ({
-      requisicao: novaRequisicao,
-      queryParams: novaRequisicao.query_params || [],
-      headers: novaRequisicao.headers || [],
-      autenticacao: novaRequisicao.autenticacao || { tipo: 'none' },
-    })),
+  isLoading: false,
+  fetchRequisicao: async (id: string) => {
+    if (get().requisicao.id === id) return;
+    set({ isLoading: true });
+
+    try {
+      const requisicaoBuscada = await BuscaRequisicaoPorId(id);
+      if (requisicaoBuscada)
+        set({ requisicao: requisicaoBuscada, isLoading: false });
+    } catch (error) {
+      console.log('Erro na busca: ', error);
+      set({ isLoading: false });
+    }
+  },
   setUrl: (url: string) =>
     set((state) => ({
       requisicao: {
@@ -64,45 +57,6 @@ const useRequisicaoStore = create<RequisicaoStore>((set) => ({
       requisicao: {
         ...state.requisicao,
         jsonEnvio: json,
-      },
-    })),
-  addQueryParam: (queryParam: QueryParamDTO) =>
-    set((state) => ({
-      queryParams: [...state.queryParams, queryParam],
-    })),
-  updateQueryParam: (id, updatedValues: QueryParamDTO) =>
-    set((state) => ({
-      queryParams: state.queryParams.map((param) =>
-        param.id === id ? updatedValues : param
-      ),
-    })),
-  deleteQueryParam: (id: string) =>
-    set((state) => ({
-      queryParams: state.queryParams.filter((param) => param.id !== id),
-    })),
-  addHeader: (header: HeaderDTO) =>
-    set((state) => ({
-      headers: [...state.headers, header],
-    })),
-  updateHeader: (id, updatedValues: HeaderDTO) =>
-    set((state) => ({
-      headers: state.headers.map((header) =>
-        header.id === id ? { ...header, ...updatedValues } : header
-      ),
-    })),
-  deleteHeader: (id: string) =>
-    set((state) => ({
-      headers: state.headers.filter((header) => header.id !== id),
-    })),
-  setTipoAutenticacao: (tipo) =>
-    set((state) => ({
-      autenticacao: { ...state.autenticacao, tipo },
-    })),
-  setAutenticacao: (dados: AutenticacaoDTO) =>
-    set((state) => ({
-      autenticacao: {
-        ...state.autenticacao,
-        ...dados,
       },
     })),
 }));

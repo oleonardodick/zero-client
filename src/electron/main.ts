@@ -17,7 +17,11 @@ import {
   CriaRequisicao,
   ExcluiRequisicao,
 } from './queries/requisicao.js';
-import { AtualizaResposta, CriaResposta } from './queries/resposta.js';
+import {
+  AtualizaResposta,
+  BuscaRespostaDaRequisicao,
+  CriaResposta,
+} from './queries/resposta.js';
 import {
   AtualizaColecao,
   BuscaColecoes,
@@ -31,12 +35,16 @@ import {
   ExcluiPastaColecao,
 } from './queries/pasta.js';
 import {
+  BuscaAutenticacaoDaRequisicao,
   CriaAutenticacao,
   CriaAutenticacaoBasic,
   CriaAutenticacaoBearer,
 } from './queries/autenticacao.js';
-import { CriaHeader } from './queries/header.js';
-import { CriaQueryParam } from './queries/queryParam.js';
+import { BuscaHeadersDaRequisicao, CriaHeader } from './queries/header.js';
+import {
+  BuscaQueryParamsDaRequisicao,
+  CriaQueryParam,
+} from './queries/queryParam.js';
 import { ExportarJson, ImportarJSON } from './utils/ExportImportJson.js';
 
 let mainWindow: BrowserWindow;
@@ -85,8 +93,8 @@ ipcMain.handle('criaRequisicao', (_, requisicao) => {
   return CriaRequisicao(requisicao);
 });
 
-ipcMain.handle('atualizaRequisicao', (_, requisicao) => {
-  return AtualizaRequisicao(requisicao);
+ipcMain.handle('atualizaRequisicao', (_, requisicao, id) => {
+  return AtualizaRequisicao(requisicao, id);
 });
 
 ipcMain.handle('buscaUltimasRequisicoes', () => {
@@ -109,6 +117,10 @@ ipcMain.handle('excluiRequisicao', (_, id) => {
   return ExcluiRequisicao(id);
 });
 
+ipcMain.handle('buscaAutenticacaoDaRequisicao', (_, requisicao_id) => {
+  return BuscaAutenticacaoDaRequisicao(requisicao_id);
+});
+
 ipcMain.handle('criaAutenticacao', (_, autenticacao) => {
   return CriaAutenticacao(autenticacao);
 });
@@ -121,12 +133,24 @@ ipcMain.handle('criaAutenticacaoBearer', (_, bearer) => {
   return CriaAutenticacaoBearer(bearer);
 });
 
+ipcMain.handle('buscaHeadersDaRequisicao', (_, requisicao_id) => {
+  return BuscaHeadersDaRequisicao(requisicao_id);
+});
+
 ipcMain.handle('criaHeader', (_, header) => {
   return CriaHeader(header);
 });
 
+ipcMain.handle('buscaQueryParamsDaRequisicao', (_, id_requisicao) => {
+  return BuscaQueryParamsDaRequisicao(id_requisicao);
+});
+
 ipcMain.handle('criaQueryParam', (_, param) => {
   return CriaQueryParam(param);
+});
+
+ipcMain.handle('buscaRespostaDaRequisicao', (_, requisicao_id) => {
+  return BuscaRespostaDaRequisicao(requisicao_id);
 });
 
 ipcMain.handle('criaResposta', (_, resposta, requisicao_id) => {

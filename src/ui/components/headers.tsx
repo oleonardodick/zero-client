@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableRow } from './ui/table';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -6,12 +6,19 @@ import { Trash2Icon } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 import useRequisicaoStore from '../store/requisicaoStore';
 import { HeaderDTO } from '@/dtos/header.dto';
+import { useHeaderStore } from '../store/headerStore';
 
 const Headers = () => {
-  const headers = useRequisicaoStore((state) => state.headers);
-  const addHeader = useRequisicaoStore((state) => state.addHeader);
-  const updateHeader = useRequisicaoStore((state) => state.updateHeader);
-  const deleteHeader = useRequisicaoStore((state) => state.deleteHeader);
+  const headers = useHeaderStore((state) => state.headers);
+  const addHeader = useHeaderStore((state) => state.addHeader);
+  const updateHeader = useHeaderStore((state) => state.updateHeader);
+  const deleteHeader = useHeaderStore((state) => state.deleteHeader);
+  const fetchHeaders = useHeaderStore((state) => state.fetchHeaders);
+  const requisicao = useRequisicaoStore((state) => state.requisicao);
+
+  useEffect(() => {
+    fetchHeaders(requisicao.id);
+  }, [fetchHeaders, requisicao]);
 
   const handleNovoHeader = useCallback(() => {
     const novoHeader: HeaderDTO = {
@@ -19,9 +26,10 @@ const Headers = () => {
       header: '',
       selecionado: false,
       valor: '',
+      requisicao_id: requisicao.id,
     };
     addHeader(novoHeader);
-  }, [addHeader]);
+  }, [addHeader, requisicao]);
 
   const handleUpdateHeader = useCallback(
     (headerId: string, field: keyof HeaderDTO, value: string | boolean) => {

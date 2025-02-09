@@ -9,13 +9,18 @@ import {
 } from '../ui/select';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { RequisicaoDTO } from '@/dtos/requisicao.dto';
-import { CrudResult } from '@/shared/types';
+import { CriaRequisicaoDTO } from '@/dtos/requisicao.dto';
 import { useNavigate } from 'react-router-dom';
 import { enviarRequisicao } from '@/ui/communication/requisicao';
 import useRespostaStore from '@/ui/store/respostaStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { TipoRequisicao } from '@/ui/enums/tipoRequisicao.enum';
+import { CriaQueryParamsRequisicao } from '@/ui/services/queryParams.service';
+import { CriaHeadersRequisicao } from '@/ui/services/headers.service';
+import { CriaAutenticacaoRequisicao } from '@/ui/services/autenticacao.service';
+import { useQueryParamStore } from '@/ui/store/queryParamsStore';
+import { useHeaderStore } from '@/ui/store/headerStore';
+import { useAutenticacaoStore } from '@/ui/store/autenticacaoStore';
 
 const CabecalhoRequisicao = () => {
   const queryClient = useQueryClient();
@@ -34,48 +39,37 @@ const CabecalhoRequisicao = () => {
 
   const handleEnviar = async () => {
     const requisicao = useRequisicaoStore.getState().requisicao;
-    const queryParams = useRequisicaoStore.getState().queryParams;
-    const headers = useRequisicaoStore.getState().headers;
-    const autenticacao = useRequisicaoStore.getState().autenticacao;
+    const queryParams = useQueryParamStore.getState().queryParams;
+    const headers = useHeaderStore.getState().headers;
+    const autenticacao = useAutenticacaoStore.getState().autenticacao;
 
-    const requisicaoEnviar: RequisicaoDTO = {
+    const requisicaoEnviar: CriaRequisicaoDTO = {
       url: requisicao.url,
       tipo: requisicao.tipo,
       jsonEnvio: requisicao.jsonEnvio,
       nome: requisicao.nome || requisicao.url,
-      autenticacao: autenticacao,
-      headers: headers,
-      query_params: queryParams,
     };
 
     const resposta = await enviarRequisicao(requisicaoEnviar);
     try {
-      let resultado: CrudResult;
+      const resultado = requisicao.id
+        ? await window.electron.atualizaRequisicao(
+            requisicaoEnviar,
+            requisicao.id
+          )
+        : await window.electron.criaRequisicao(requisicaoEnviar);
 
-      if (requisicao) {
-        resultado = requisicao.id
-          ? await window.electron.atualizaRequisicao(requisicao)
-          : await window.electron.criaRequisicao(requisicao);
-        if (resultado.sucesso && resultado.idCriado) {
-          await window.electron.criaQueryParam(queryParams);
-          await window.electron.criaHeader(headers);
-          window.electron.criaAutenticacao(autenticacao);
-          if (autenticacao.tipo === 'basic') {
-            if (autenticacao.basic)
-              window.electron.criaAutenticacaoBasic(autenticacao.basic);
-          } else {
-            if (autenticacao.bearer)
-              window.electron.criaAutenticacaoBearer(autenticacao.bearer);
-          }
-          const result = await window.electron.criaResposta(
-            resposta,
-            resultado.idCriado
-          );
-          console.log(resposta, resultado, result);
-          inicializaResposta(resposta);
-          queryClient.invalidateQueries({ queryKey: ['ultimasRequisicoes'] });
-          navigate(`/requisicao/modificar/${resultado.idCriado}`);
-        }
+      if (resultado.sucesso && resultado.idCriado) {
+        const requisicaoId = resultado.idCriado;
+        await CriaQueryParamsRequisicao(queryParams, requisicaoId);
+        await CriaHeadersRequisicao(headers, requisicaoId);
+        if (autenticacao.tipo !== 'none')
+          await CriaAutenticacaoRequisicao(autenticacao, requisicaoId);
+
+        await window.electron.criaResposta(resposta, resultado.idCriado);
+        inicializaResposta(resposta);
+        queryClient.invalidateQueries({ queryKey: ['ultimasRequisicoes'] });
+        navigate(`/requisicao/modificar/${resultado.idCriado}`);
       }
     } catch (erro) {
       console.log(erro);

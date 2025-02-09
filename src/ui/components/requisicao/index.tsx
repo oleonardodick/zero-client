@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Autenticacao } from '../autenticacao';
-import EditorJson from '../editorJson';
+import { EditorCode } from '../codeMirror/editorCode';
 import Headers from '../headers';
 import QueryParams from '../queryParams';
+import { Button } from '../ui/button';
 import { Tabs, TabsList, TabsContent, TabsTrigger } from '../ui/tabs';
 import CabecalhoRequisicao from './cabecalho';
 import useRequisicaoStore from '@/ui/store/requisicaoStore';
@@ -41,7 +43,37 @@ const Requisicao = () => {
 const JsonEnvio = () => {
   const setJsonEnvio = useRequisicaoStore((state) => state.setJsonEnvio);
   const jsonEnvio = useRequisicaoStore((state) => state.requisicao.jsonEnvio);
-  return <EditorJson setJson={setJsonEnvio} json={jsonEnvio} />;
+  const [erro, setErro] = useState('');
+
+  const handleChange = (newValue: string) => {
+    setJsonEnvio(newValue);
+  };
+
+  const handleFormatar = () => {
+    if (jsonEnvio) {
+      try {
+        const parsedValue = JSON.parse(jsonEnvio);
+        setJsonEnvio(JSON.stringify(parsedValue, null, 2));
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (erro) {
+        setErro('Erro ao formatar o JSON: JSON inválido!');
+      }
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-1 px-2 w-full h-full relative">
+      <div className="flex justify-between absolute right-5 top-2 z-10">
+        <span className="text-red-500">{erro}</span>
+        <div className="flex">
+          <Button variant="link" onClick={handleFormatar}>
+            Formatar
+          </Button>
+        </div>
+      </div>
+      <EditorCode jsonText={jsonEnvio} onChange={handleChange} />
+    </div>
+  );
 };
 
 export default Requisicao;

@@ -7,18 +7,18 @@ import { RequisicaoDTO } from '@/dtos/requisicao.dto';
 import useRequisicaoStore from '../store/requisicaoStore';
 import useRespostaStore from '../store/respostaStore';
 import { TipoRequisicao } from '../enums/tipoRequisicao.enum';
+import { v4 as uuidv4 } from 'uuid';
 
 export const Comunicacao = () => {
   const { id } = useParams();
-  const inicializaRequisicao = useRequisicaoStore(
-    (state) => state.inicializaRequisicao
-  );
+  const fetchRequisicao = useRequisicaoStore((state) => state.fetchRequisicao);
   const inicializaResposta = useRespostaStore(
     (state) => state.inicializaResposta
   );
   const limpaResposta = useRespostaStore((state) => state.limpaReposta);
   const requisicaoBranca: RequisicaoDTO = useMemo(
     () => ({
+      id: uuidv4(),
       url: '',
       tipo: TipoRequisicao.GET,
       jsonEnvio: '',
@@ -28,31 +28,34 @@ export const Comunicacao = () => {
   );
 
   useEffect(() => {
-    limpaResposta();
-    if (!id) {
-      inicializaRequisicao(requisicaoBranca);
-      return;
-    }
+    if (id) fetchRequisicao(id);
+  }, [id, fetchRequisicao]);
 
-    const buscaRequisicao = async () => {
-      if (id) {
-        const requisicaoBuscada = await window.electron.buscaRequisicaoPorId(
-          id
-        );
-        console.log(requisicaoBuscada);
-        inicializaRequisicao(requisicaoBuscada || requisicaoBranca);
-        if (requisicaoBuscada?.resposta)
-          inicializaResposta(requisicaoBuscada?.resposta);
-      }
-    };
-    buscaRequisicao();
-  }, [
-    id,
-    inicializaRequisicao,
-    inicializaResposta,
-    limpaResposta,
-    requisicaoBranca,
-  ]);
+  // useEffect(() => {
+  //   limpaResposta();
+  //   if (!id) {
+  //     inicializaRequisicao(requisicaoBranca);
+  //     return;
+  //   }
+
+  //   const buscaRequisicao = async () => {
+  //     if (id) {
+  //       const requisicaoBuscada = await window.electron.buscaRequisicaoPorId(
+  //         id
+  //       );
+  //       inicializaRequisicao(requisicaoBuscada || requisicaoBranca);
+  //       if (requisicaoBuscada?.resposta)
+  //         inicializaResposta(requisicaoBuscada?.resposta);
+  //     }
+  //   };
+  //   buscaRequisicao();
+  // }, [
+  //   id,
+  //   inicializaRequisicao,
+  //   inicializaResposta,
+  //   limpaResposta,
+  //   requisicaoBranca,
+  // ]);
   return (
     <div className="h-screen flex xl:flex-col gap-3">
       <div className="flex-1 overflow-hidden">

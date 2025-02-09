@@ -3,19 +3,20 @@ import { prisma } from './prisma.js';
 import { trataMensagemErro } from '../util.js';
 import { Requisicao } from '@prisma/client';
 import { ExcluiAutenticacaoRequisicao } from './autenticacao.js';
-import { ExcluiHeadersDaRequisicao } from './header.js';
-import { ExcluiQueryParamsDaRequisicao } from './queryParam.js';
+// import { ExcluiHeadersDaRequisicao } from './header.js';
+// import { ExcluiQueryParamsDaRequisicao } from './queryParam.js';
 import { ExcluiRespostaRequisicao } from './resposta.js';
-import omit from 'lodash/omit.js';
 
 export const CriaRequisicao = async (
-  requisicao: Requisicao
+  requisicao: Partial<Requisicao>
 ): Promise<CrudResult> => {
   try {
-    const dadosSalvar = omit(requisicao, ['id']);
     const registroCriado = await prisma.requisicao.create({
       data: {
-        ...dadosSalvar,
+        url: requisicao.url,
+        nome: requisicao.nome,
+        jsonEnvio: requisicao.jsonEnvio,
+        tipo: requisicao.tipo,
       },
     });
     return { sucesso: true, idCriado: registroCriado.id };
@@ -25,28 +26,34 @@ export const CriaRequisicao = async (
 };
 
 export const AtualizaRequisicao = async (
-  requisicao: Requisicao
+  requisicao: Partial<Requisicao>,
+  id: string
 ): Promise<CrudResult> => {
   try {
     const registroExistente = await prisma.requisicao.findUnique({
       where: {
-        id: requisicao.id,
+        id: id,
       },
     });
     if (registroExistente) {
-      ExcluiAutenticacaoRequisicao(registroExistente.id);
-      ExcluiHeadersDaRequisicao(registroExistente.id);
-      ExcluiQueryParamsDaRequisicao(registroExistente.id);
-      ExcluiRespostaRequisicao(registroExistente.id);
+      ExcluiAutenticacaoRequisicao(id);
+      // ExcluiHeadersDaRequisicao(registroExistente.id);
+      // ExcluiQueryParamsDaRequisicao(registroExistente.id);
+      ExcluiRespostaRequisicao(id);
       await prisma.requisicao.update({
         where: {
-          id: requisicao.id,
+          id: id,
         },
         data: {
-          ...requisicao,
+          url: requisicao.url,
+          nome: requisicao.nome,
+          jsonEnvio: requisicao.jsonEnvio,
+          tipo: requisicao.tipo,
+          query_params: { deleteMany: {} },
+          headers: { deleteMany: {} },
         },
       });
-      return { sucesso: true, idCriado: registroExistente.id };
+      return { sucesso: true, idCriado: id };
     } else {
       return { sucesso: false, erro: 'Requisição não encontrada.' };
     }
@@ -61,17 +68,6 @@ export const BuscaUltimasRequisicoes = async (): Promise<Requisicao[]> => {
     orderBy: {
       data: 'desc',
     },
-    include: {
-      query_params: true,
-      headers: true,
-      autenticacao: {
-        include: {
-          bearer: true,
-          Basic: true,
-        },
-      },
-      resposta: true,
-    },
   });
 };
 
@@ -81,17 +77,6 @@ export const BuscaRequisicaoPorId = async (
   const requisicao = await prisma.requisicao.findUnique({
     where: {
       id: id,
-    },
-    include: {
-      query_params: true,
-      headers: true,
-      autenticacao: {
-        include: {
-          bearer: true,
-          Basic: true,
-        },
-      },
-      resposta: true,
     },
   });
   return requisicao;

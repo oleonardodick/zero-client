@@ -20,13 +20,13 @@ model VariavelAmbiente {
 model Requisicao {
   id           String        @id @default(uuid())
   url          String        @default("")
-  tipo         String
+  tipo         String        @default("")
   jsonEnvio    String        @default("")
   data         DateTime      @default(now())
   query_params QueryParam[]
   headers      Header[]
   autenticacao Autenticacao?
-  nome         String
+  nome         String        @default("")
   resposta     Resposta?
   colecao_id   String?
   colecao      Colecao?      @relation(fields: [colecao_id], references: [id], onDelete: Cascade)
@@ -62,7 +62,7 @@ model Autenticacao {
   id            String     @id @default(uuid())
   tipo          String     @default("NENHUM")
   bearer        Bearer?
-  Basic         Basic?
+  basic         Basic?
   requisicao_id String     @unique
   requisicao    Requisicao @relation(fields: [requisicao_id], references: [id], onDelete: Cascade)
 

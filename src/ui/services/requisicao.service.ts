@@ -1,6 +1,17 @@
 import { RequisicaoDTO } from '@/dtos/requisicao.dto';
 import { CrudResult } from '@/shared/types';
 
+export const BuscaRequisicaoPorId = async (
+  id: string
+): Promise<RequisicaoDTO | null> => {
+  try {
+    return await window.electron.buscaRequisicaoPorId(id);
+  } catch (erro) {
+    console.log(erro);
+    throw new Error('Não foi possível buscar as requisições da coleção');
+  }
+};
+
 export const BuscaRequisicoesColecao = async (
   colecao_id: string
 ): Promise<RequisicaoDTO[]> => {
@@ -35,10 +46,11 @@ export const CriaRequisicao = async (
 };
 
 export const AtualizaRequisicao = async (
-  requisicao: RequisicaoDTO
+  requisicao: RequisicaoDTO,
+  id: string
 ): Promise<CrudResult> => {
   try {
-    return await window.electron.atualizaRequisicao(requisicao);
+    return await window.electron.atualizaRequisicao(requisicao, id);
   } catch (erro) {
     console.log(erro);
     throw new Error('Não foi possível atualizar a requisição');

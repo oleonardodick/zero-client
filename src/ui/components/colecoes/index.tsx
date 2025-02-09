@@ -67,6 +67,8 @@ const Colecoes = () => {
                   <DropdownMenuItem onClick={handleImportarColecao}>
                     Importar coleção
                   </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Configurações</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </TooltipTrigger>

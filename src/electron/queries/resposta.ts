@@ -3,6 +3,20 @@ import { trataMensagemErro } from '../util.js';
 import { prisma } from './prisma.js';
 import { Resposta } from '@prisma/client';
 
+export const BuscaRespostaDaRequisicao = async (
+  requisicao_id: string
+): Promise<Resposta | null> => {
+  try {
+    return await prisma.resposta.findFirst({
+      where: {
+        requisicao_id: requisicao_id,
+      },
+    });
+  } catch (erro) {
+    throw new Error(trataMensagemErro(erro));
+  }
+};
+
 export const CriaResposta = async (
   resposta: Resposta,
   requisicao_id: string
@@ -15,7 +29,9 @@ export const CriaResposta = async (
         status_text: resposta.status_text,
         size: resposta.size,
         time: resposta.time,
-        requisicao_id: requisicao_id,
+        requisicao: {
+          connect: { id: requisicao_id },
+        },
       },
     });
     return { sucesso: true, idCriado: registroCriado.id };

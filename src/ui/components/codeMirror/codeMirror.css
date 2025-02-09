@@ -1,0 +1,35 @@
+.cm-editor {
+  @apply bg-transparent rounded-lg border border-stone-500 overflow-auto;
+}
+
+.cm-scroller {
+  @apply p-2;
+}
+
+.cm-gutters {
+  @apply bg-transparent text-stone-950 dark:text-stone-100 border-none !important;
+}
+
+.cm-gutterElement {
+  @apply bg-transparent !important;
+}
+
+.cm-activeLine {
+  @apply bg-transparent !important;
+}
+
+.cm-line {
+  @apply md:text-lg !important;
+}
+
+.cm-selectionBackground {
+  @apply bg-blue-800 !important;
+}
+
+.cm-cursor {
+  @apply border-l-2 border-stone-200 !important;
+}
+/* 
+.ͼe {
+  @apply text-cyan-600 !important;
+} */

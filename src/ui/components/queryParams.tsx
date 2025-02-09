@@ -4,19 +4,28 @@ import { Input } from './ui/input';
 import { Trash2Icon } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 import useRequisicaoStore from '../store/requisicaoStore';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { QueryParamDTO } from '@/dtos/queryParam.dto';
+import { useQueryParamStore } from '../store/queryParamsStore';
 
 const QueryParams = () => {
-  const queryParams = useRequisicaoStore((state) => state.queryParams);
-  const addQueryParam = useRequisicaoStore((state) => state.addQueryParam);
-  const updateQueryParam = useRequisicaoStore(
+  const queryParams = useQueryParamStore((state) => state.queryParams);
+  const requisicao = useRequisicaoStore((state) => state.requisicao);
+  const fetchQueryParams = useQueryParamStore(
+    (state) => state.fetchQueryParams
+  );
+  const addQueryParam = useQueryParamStore((state) => state.addQueryParam);
+  const updateQueryParam = useQueryParamStore(
     (state) => state.updateQueryParam
   );
-  const deleteQueryParam = useRequisicaoStore(
+  const deleteQueryParam = useQueryParamStore(
     (state) => state.deleteQueryParam
   );
   const setUrl = useRequisicaoStore((state) => state.setUrl);
+
+  useEffect(() => {
+    fetchQueryParams(requisicao.id);
+  }, [fetchQueryParams, requisicao]);
 
   const handleNovoQueryParam = useCallback(() => {
     const novoQueryParam: QueryParamDTO = {
@@ -24,16 +33,17 @@ const QueryParams = () => {
       query: '',
       selecionado: false,
       valor: '',
+      requisicao_id: requisicao.id,
     };
 
     addQueryParam(novoQueryParam);
-  }, [addQueryParam]);
+  }, [addQueryParam, requisicao]);
 
   const atualizaUrl = useCallback(() => {
     const url = useRequisicaoStore.getState().requisicao.url;
     let novaUrl = url;
     const inicioParams = url.indexOf('?');
-    const queryParamsAtualizados = useRequisicaoStore.getState().queryParams;
+    const queryParamsAtualizados = useQueryParamStore.getState().queryParams;
     const selectedParams = queryParamsAtualizados.filter(
       (param) => param.selecionado
     );

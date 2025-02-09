@@ -1,30 +1,26 @@
-import { useCallback, useRef } from 'react';
+import { useRef } from 'react';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import useRequisicaoStore from '@/ui/store/requisicaoStore';
-import { AutenticacaoDTO, Basic } from '@/dtos/autenticacao.dto';
+import { Basic } from '@/dtos/autenticacao.dto';
+import { useAutenticacaoStore } from '@/ui/store/autenticacaoStore';
 
 export const BasicAuthentication = () => {
   const inputUsuarioRef = useRef<HTMLInputElement | null>(null);
   const inputSenhaRef = useRef<HTMLInputElement | null>(null);
 
-  const basic = useRequisicaoStore((state) => state.autenticacao.basic);
+  const autenticacao = useAutenticacaoStore((state) => state.autenticacao);
 
-  const setAutenticacao = useRequisicaoStore((state) => state.setAutenticacao);
+  const setBasic = useAutenticacaoStore((state) => state.setBasic);
 
-  const handleUpdateValues = useCallback(() => {
+  const handleUpdateValues = () => {
     const basic: Basic = {
       usuario: inputUsuarioRef.current?.value || '',
       senha: inputSenhaRef.current?.value || '',
+      autenticacao_id: autenticacao.id,
     };
 
-    const autenticacaoDTO: AutenticacaoDTO = {
-      tipo: 'basic',
-      basic: basic,
-    };
-
-    setAutenticacao(autenticacaoDTO);
-  }, [setAutenticacao]);
+    setBasic(basic);
+  };
   return (
     <div className="grid gap-3">
       <h1>Basic Authentication</h1>
@@ -37,7 +33,7 @@ export const BasicAuthentication = () => {
             id="username"
             ref={inputUsuarioRef}
             onBlur={handleUpdateValues}
-            defaultValue={basic?.usuario}
+            defaultValue={autenticacao.basic?.usuario}
           />
         </div>
         <div className="flex gap-2 items-center">
@@ -49,7 +45,7 @@ export const BasicAuthentication = () => {
             type="password"
             ref={inputSenhaRef}
             onBlur={handleUpdateValues}
-            defaultValue={basic?.senha}
+            defaultValue={autenticacao.basic?.senha}
           />
         </div>
       </div>

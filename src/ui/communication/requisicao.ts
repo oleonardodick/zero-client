@@ -1,9 +1,9 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { RequisicaoDTO } from '@/dtos/requisicao.dto';
+import { CriaRequisicaoDTO } from '@/dtos/requisicao.dto';
 import { RespostaDTO } from '@/dtos/resposta.dto';
 
 export const enviarRequisicao = async (
-  requisicao: RequisicaoDTO
+  requisicao: CriaRequisicaoDTO
 ): Promise<RespostaDTO> => {
   const inicio: number = Date.now();
 
