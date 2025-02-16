@@ -9,11 +9,8 @@ import { HeaderDTO } from '@/dtos/header.dto';
 import { useHeaderStore } from '../store/headerStore';
 
 const Headers = () => {
-  const headers = useHeaderStore((state) => state.headers);
-  const addHeader = useHeaderStore((state) => state.addHeader);
-  const updateHeader = useHeaderStore((state) => state.updateHeader);
-  const deleteHeader = useHeaderStore((state) => state.deleteHeader);
-  const fetchHeaders = useHeaderStore((state) => state.fetchHeaders);
+  const { headers, addHeader, updateHeader, deleteHeader, fetchHeaders } =
+    useHeaderStore();
   const { requisicao } = useRequisicaoStore();
 
   useEffect(() => {

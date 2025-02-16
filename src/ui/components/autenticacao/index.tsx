@@ -14,8 +14,7 @@ import { useAutenticacaoStore } from '@/ui/store/autenticacaoStore';
 import { useEffect } from 'react';
 
 export const Autenticacao = () => {
-  const autenticacao = useAutenticacaoStore((state) => state.autenticacao);
-  const setTipo = useAutenticacaoStore((state) => state.setTipo);
+  const { autenticacao, setAutenticacao } = useAutenticacaoStore();
   const fetchAutenticacao = useAutenticacaoStore(
     (state) => state.fetchAutenticacao
   );
@@ -26,11 +25,15 @@ export const Autenticacao = () => {
     fetchAutenticacao(requisicao.id);
   }, [fetchAutenticacao, requisicao]);
 
+  const alteraTipo = (tipo: typeof autenticacao.tipo) => {
+    setAutenticacao({ tipo: tipo });
+  };
+
   return (
     <div className="grid gap-5 p-4">
       <div className="flex items-center gap-4">
         <Label>Tipo</Label>
-        <Select value={autenticacao.tipo} onValueChange={setTipo}>
+        <Select value={autenticacao.tipo} onValueChange={alteraTipo}>
           <SelectTrigger className="w-28">
             <SelectValue />
           </SelectTrigger>

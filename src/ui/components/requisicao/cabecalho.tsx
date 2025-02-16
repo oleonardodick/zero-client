@@ -25,8 +25,7 @@ import useRespostaStore from '@/ui/store/respostaStore';
 const CabecalhoRequisicao = () => {
   const queryClient = useQueryClient();
   const { requisicao, setRequisicao } = useRequisicaoStore();
-  const setResposta = useRespostaStore((state) => state.setReposta);
-  const respostaStore = useRespostaStore((state) => state.resposta);
+  const { resposta, setResposta } = useRespostaStore();
   const navigate = useNavigate();
 
   const handleEnviar = async () => {
@@ -34,7 +33,7 @@ const CabecalhoRequisicao = () => {
     const headers = useHeaderStore.getState().headers;
     const autenticacao = useAutenticacaoStore.getState().autenticacao;
 
-    const resposta = await enviarRequisicao(requisicao);
+    const response = await enviarRequisicao(requisicao);
     try {
       const resultado = requisicao.id
         ? await window.electron.atualizaRequisicao(requisicao, requisicao.id)
@@ -47,12 +46,12 @@ const CabecalhoRequisicao = () => {
         if (autenticacao.tipo !== 'none')
           await CriaAutenticacaoRequisicao(autenticacao, requisicaoId);
 
-        if (respostaStore.requisicao_id !== '') {
-          await AtualizaResposta(resposta, requisicaoId);
+        if (resposta.requisicao_id !== '') {
+          await AtualizaResposta(response, requisicaoId);
         } else {
-          await CriaReposta(resposta, requisicaoId);
+          await CriaReposta(response, requisicaoId);
         }
-        setResposta(resposta);
+        setResposta(response);
         queryClient.invalidateQueries({ queryKey: ['ultimasRequisicoes'] });
         if (!requisicao.id)
           navigate(`/requisicao/modificar/${resultado.idCriado}`);
@@ -62,7 +61,7 @@ const CabecalhoRequisicao = () => {
     }
   };
 
-  const alteraTipo = (tipo: string) => {
+  const alteraTipo = (tipo: TipoRequisicao) => {
     setRequisicao({ tipo: tipo });
   };
 

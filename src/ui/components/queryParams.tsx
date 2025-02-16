@@ -2,25 +2,21 @@ import { Table, TableBody, TableCell, TableRow } from './ui/table';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Trash2Icon } from 'lucide-react';
-import { v4 as uuidv4 } from 'uuid';
 import useRequisicaoStore from '../store/requisicaoStore';
 import { useCallback, useEffect } from 'react';
 import { QueryParamDTO } from '@/dtos/queryParam.dto';
 import { useQueryParamStore } from '../store/queryParamsStore';
+import { v4 as uuidv4 } from 'uuid';
 
 const QueryParams = () => {
-  const queryParams = useQueryParamStore((state) => state.queryParams);
+  const {
+    queryParams,
+    fetchQueryParams,
+    addQueryParam,
+    updateQueryParam,
+    deleteQueryParam,
+  } = useQueryParamStore();
   const { requisicao, setRequisicao } = useRequisicaoStore();
-  const fetchQueryParams = useQueryParamStore(
-    (state) => state.fetchQueryParams
-  );
-  const addQueryParam = useQueryParamStore((state) => state.addQueryParam);
-  const updateQueryParam = useQueryParamStore(
-    (state) => state.updateQueryParam
-  );
-  const deleteQueryParam = useQueryParamStore(
-    (state) => state.deleteQueryParam
-  );
 
   useEffect(() => {
     fetchQueryParams(requisicao.id);

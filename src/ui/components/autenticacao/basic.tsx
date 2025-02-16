@@ -8,9 +8,9 @@ export const BasicAuthentication = () => {
   const inputUsuarioRef = useRef<HTMLInputElement | null>(null);
   const inputSenhaRef = useRef<HTMLInputElement | null>(null);
 
-  const autenticacao = useAutenticacaoStore((state) => state.autenticacao);
+  const { autenticacao, setAutenticacao } = useAutenticacaoStore();
 
-  const setBasic = useAutenticacaoStore((state) => state.setBasic);
+  // const setBasic = useAutenticacaoStore((state) => state.setBasic);
 
   const handleUpdateValues = () => {
     const basic: Basic = {
@@ -19,7 +19,7 @@ export const BasicAuthentication = () => {
       autenticacao_id: autenticacao.id,
     };
 
-    setBasic(basic);
+    setAutenticacao({ basic: basic });
   };
   return (
     <div className="grid gap-3">

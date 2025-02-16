@@ -1,6 +1,6 @@
 export interface AutenticacaoDTO {
   id: string;
-  tipo: string;
+  tipo: 'none' | 'basic' | 'bearer';
   bearer?: Bearer | null;
   basic?: Basic | null;
   requisicao_id: string;

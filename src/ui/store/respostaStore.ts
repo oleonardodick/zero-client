@@ -4,21 +4,23 @@ import { BuscaRespostaDaRequisicao } from '../services/resposta.service';
 
 type RespostaStore = {
   resposta: RespostaDTO;
-  setReposta: (resposta: RespostaDTO) => void;
+  setResposta: (resposta: RespostaDTO) => void;
   isLoading: boolean;
   requisicaoPosicionada: string;
   fetchResposta: (id_requisicao: string) => Promise<void>;
 };
 
+const initialValues: RespostaDTO = {
+  json_retorno: '',
+  status: 0,
+  status_text: '',
+  size: 0,
+  time: 0,
+  requisicao_id: '',
+};
+
 const useRespostaStore = create<RespostaStore>((set, get) => ({
-  resposta: {
-    json_retorno: '',
-    status: 0,
-    status_text: '',
-    size: 0,
-    time: 0,
-    requisicao_id: '',
-  },
+  resposta: initialValues,
   isLoading: false,
   requisicaoPosicionada: '',
   fetchResposta: async (id_requisicao: string) => {
@@ -26,20 +28,11 @@ const useRespostaStore = create<RespostaStore>((set, get) => ({
     set({ isLoading: true, requisicaoPosicionada: id_requisicao });
     const respostaBuscada = await BuscaRespostaDaRequisicao(id_requisicao);
     set({
-      resposta: respostaBuscada
-        ? respostaBuscada
-        : {
-            json_retorno: '',
-            status: 0,
-            status_text: '',
-            size: 0,
-            time: 0,
-            requisicao_id: '',
-          },
+      resposta: respostaBuscada ? respostaBuscada : initialValues,
       isLoading: false,
     });
   },
-  setReposta: (resposta) =>
+  setResposta: (resposta) =>
     set((state) => ({
       resposta: { ...state.resposta, ...resposta },
     })),

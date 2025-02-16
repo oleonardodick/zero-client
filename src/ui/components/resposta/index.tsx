@@ -6,12 +6,12 @@ import { useEffect, useState } from 'react';
 import useRequisicaoStore from '@/ui/store/requisicaoStore';
 
 const Resposta = () => {
-  const fetchResposta = useRespostaStore((state) => state.fetchResposta);
-  const requisicaoId = useRequisicaoStore((state) => state.requisicao.id);
+  const { fetchResposta } = useRespostaStore();
+  const { requisicao } = useRequisicaoStore();
 
   useEffect(() => {
-    fetchResposta(requisicaoId);
-  }, [fetchResposta, requisicaoId]);
+    fetchResposta(requisicao.id);
+  }, [fetchResposta, requisicao.id]);
 
   return (
     <div className="grid grid-rows-[auto_1fr] gap-2 h-full">
@@ -26,11 +26,11 @@ const Resposta = () => {
 };
 
 const JsonResposta = () => {
-  const jsonRetorno = useRespostaStore((state) => state.resposta.json_retorno);
+  const { resposta } = useRespostaStore();
   const [textoCopiado, setTextoCopiado] = useState(false);
 
   const handleCopiar = () => {
-    navigator.clipboard.writeText(jsonRetorno || '');
+    navigator.clipboard.writeText(resposta.json_retorno || '');
     setTextoCopiado(true);
     setTimeout(() => {
       setTextoCopiado(false);
@@ -46,7 +46,7 @@ const JsonResposta = () => {
           </Button>
         </div>
       </div>
-      <EditorCode jsonText={jsonRetorno} editable={false} />
+      <EditorCode jsonText={resposta.json_retorno} editable={false} />
     </div>
   );
 };

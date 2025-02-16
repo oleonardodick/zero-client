@@ -1,7 +1,7 @@
 import useRespostaStore from '@/ui/store/respostaStore';
 
 const CabecalhoResposta = () => {
-  const resposta = useRespostaStore((state) => state.resposta);
+  const { resposta } = useRespostaStore();
   return (
     <div className="flex justify-between px-2 items-center">
       <span>Resposta</span>

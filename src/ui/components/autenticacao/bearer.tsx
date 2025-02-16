@@ -8,8 +8,7 @@ import { useAutenticacaoStore } from '@/ui/store/autenticacaoStore';
 export const BearerAuthentication = () => {
   const inputTokenRef = useRef<HTMLTextAreaElement | null>(null);
   const inputTokenPrefixRef = useRef<HTMLInputElement | null>(null);
-  const autenticacao = useAutenticacaoStore((state) => state.autenticacao);
-  const setBearer = useAutenticacaoStore((state) => state.setBearer);
+  const { autenticacao, setAutenticacao } = useAutenticacaoStore();
 
   const handleUpdateValues = () => {
     const bearer: Bearer = {
@@ -17,7 +16,7 @@ export const BearerAuthentication = () => {
       token: inputTokenRef.current?.value || '',
       autenticacao_id: autenticacao.id,
     };
-    setBearer(bearer);
+    setAutenticacao({ bearer: bearer });
   };
 
   return (

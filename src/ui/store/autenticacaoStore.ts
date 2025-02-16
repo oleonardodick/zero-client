@@ -1,13 +1,11 @@
-import { AutenticacaoDTO, Basic, Bearer } from '@/dtos/autenticacao.dto';
+import { AutenticacaoDTO } from '@/dtos/autenticacao.dto';
 import { create } from 'zustand';
 import { BuscaAutenticacaoDaRequisicao } from '../services/autenticacao.service';
 import { v4 as uuidv4 } from 'uuid';
 
 type AutenticacaoStore = {
   autenticacao: AutenticacaoDTO;
-  setTipo: (tipo: string) => void;
-  setBasic: (basic: Basic) => void;
-  setBearer: (bearer: Bearer) => void;
+  setAutenticacao: (autenticacao: Partial<AutenticacaoDTO>) => void;
   isLoading: boolean;
   requisicaoPosicionada: string;
   fetchAutenticacao: (requisicao_id: string) => Promise<void>;
@@ -40,29 +38,35 @@ export const useAutenticacaoStore = create<AutenticacaoStore>((set, get) => ({
       set({ isLoading: false });
     }
   },
-  setTipo: (tipo: string) =>
+  setAutenticacao: (autenticacao) => {
     set((state) => ({
-      autenticacao: {
-        ...state.autenticacao,
-        tipo: tipo,
-        bearer: tipo === 'bearer' ? state.autenticacao.bearer : null,
-        basic: tipo === 'basic' ? state.autenticacao.basic : null,
-      },
-    })),
-  setBasic: (basic: Basic) =>
-    set((state) => ({
-      autenticacao: {
-        ...state.autenticacao,
-        basic: basic,
-        bearer: null,
-      },
-    })),
-  setBearer: (bearer: Bearer) =>
-    set((state) => ({
-      autenticacao: {
-        ...state.autenticacao,
-        basic: null,
-        bearer: bearer,
-      },
-    })),
+      autenticacao: { ...state.autenticacao, ...autenticacao },
+    }));
+  },
+
+  // setTipo: (tipo: string) =>
+  //   set((state) => ({
+  //     autenticacao: {
+  //       ...state.autenticacao,
+  //       tipo: tipo,
+  //       bearer: tipo === 'bearer' ? state.autenticacao.bearer : null,
+  //       basic: tipo === 'basic' ? state.autenticacao.basic : null,
+  //     },
+  //   })),
+  // setBasic: (basic: Basic) =>
+  //   set((state) => ({
+  //     autenticacao: {
+  //       ...state.autenticacao,
+  //       basic: basic,
+  //       bearer: null,
+  //     },
+  //   })),
+  // setBearer: (bearer: Bearer) =>
+  //   set((state) => ({
+  //     autenticacao: {
+  //       ...state.autenticacao,
+  //       basic: null,
+  //       bearer: bearer,
+  //     },
+  //   })),
 }));
