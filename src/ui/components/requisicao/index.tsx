@@ -41,19 +41,22 @@ const Requisicao = () => {
 };
 
 const JsonEnvio = () => {
-  const setJsonEnvio = useRequisicaoStore((state) => state.setJsonEnvio);
-  const jsonEnvio = useRequisicaoStore((state) => state.requisicao.jsonEnvio);
+  const { requisicao, setRequisicao } = useRequisicaoStore();
   const [erro, setErro] = useState('');
 
+  const atualizaJsonEnvio = (json: string) => {
+    setRequisicao({ jsonEnvio: json });
+  };
+
   const handleChange = (newValue: string) => {
-    setJsonEnvio(newValue);
+    atualizaJsonEnvio(newValue);
   };
 
   const handleFormatar = () => {
-    if (jsonEnvio) {
+    if (requisicao.jsonEnvio) {
       try {
-        const parsedValue = JSON.parse(jsonEnvio);
-        setJsonEnvio(JSON.stringify(parsedValue, null, 2));
+        const parsedValue = JSON.parse(requisicao.jsonEnvio);
+        atualizaJsonEnvio(JSON.stringify(parsedValue, null, 2));
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (erro) {
         setErro('Erro ao formatar o JSON: JSON inválido!');
@@ -71,7 +74,7 @@ const JsonEnvio = () => {
           </Button>
         </div>
       </div>
-      <EditorCode jsonText={jsonEnvio} onChange={handleChange} />
+      <EditorCode jsonText={requisicao.jsonEnvio} onChange={handleChange} />
     </div>
   );
 };

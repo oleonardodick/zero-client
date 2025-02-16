@@ -2,29 +2,35 @@ import { RequisicaoDTO } from '@/dtos/requisicao.dto';
 import { create } from 'zustand';
 import { TipoRequisicao } from '../enums/tipoRequisicao.enum';
 import { BuscaRequisicaoPorId } from '../services/requisicao.service';
-import { v4 as uuidv4 } from 'uuid';
 
 type RequisicaoStore = {
   requisicao: RequisicaoDTO;
-  setUrl: (url: string) => void;
-  setTipo: (tipo: string) => void;
-  setJsonEnvio: (json: string) => void;
+  novaRequisicao: (colecao_id?: string, pasta_id?: string) => void;
+  setRequisicao: (requisicao: Partial<RequisicaoDTO>) => void;
   isLoading: boolean;
   fetchRequisicao: (id: string) => Promise<void>;
 };
 
+const initialState: RequisicaoDTO = {
+  id: '',
+  url: '',
+  tipo: TipoRequisicao.GET,
+  jsonEnvio: '',
+  nome: '',
+};
+
 const useRequisicaoStore = create<RequisicaoStore>((set, get) => ({
-  requisicao: {
-    id: uuidv4(),
-    url: '',
-    tipo: TipoRequisicao.GET,
-    jsonEnvio: '',
-    nome: '',
-    data: new Date(),
-    pasta_id: '',
-    colecao_id: '',
-  },
+  requisicao: initialState,
   isLoading: false,
+  novaRequisicao: (colecao_id, pasta_id) => {
+    set(() => ({
+      requisicao: {
+        ...initialState,
+        pasta_id: pasta_id ? pasta_id : '',
+        colecao_id: colecao_id ? colecao_id : '',
+      },
+    }));
+  },
   fetchRequisicao: async (id: string) => {
     if (get().requisicao.id === id) return;
     set({ isLoading: true });
@@ -38,26 +44,9 @@ const useRequisicaoStore = create<RequisicaoStore>((set, get) => ({
       set({ isLoading: false });
     }
   },
-  setUrl: (url: string) =>
+  setRequisicao: (requisicao) =>
     set((state) => ({
-      requisicao: {
-        ...state.requisicao,
-        url: url,
-      },
-    })),
-  setTipo: (tipo: string) =>
-    set((state) => ({
-      requisicao: {
-        ...state.requisicao,
-        tipo: tipo,
-      },
-    })),
-  setJsonEnvio: (json: string) =>
-    set((state) => ({
-      requisicao: {
-        ...state.requisicao,
-        jsonEnvio: json,
-      },
+      requisicao: { ...state.requisicao, ...requisicao },
     })),
 }));
 

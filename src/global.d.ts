@@ -3,7 +3,7 @@ import { ColecaoDTO } from './dtos/colecao.dto.ts';
 import { HeaderDTO } from './dtos/header.dto.ts';
 import { PastaColecaoDTO } from './dtos/pastaColecao.dto.ts';
 import { QueryParamDTO } from './dtos/queryParam.dto.ts';
-import { CriaRequisicaoDTO, RequisicaoDTO } from './dtos/requisicao.dto.ts';
+import { RequisicaoDTO } from './dtos/requisicao.dto.ts';
 import { RespostaDTO } from './dtos/resposta.dto.ts';
 import { VariavelAmbienteDTO } from './dtos/variavelAmbiente.dto.ts';
 import { CrudResult, ResultExportImport } from './shared/types';
@@ -28,15 +28,17 @@ declare global {
       ) => Promise<CrudResult>;
       excluiVariavelAmbiente: (nome: string) => Promise<CrudResult>;
 
-      criaRequisicao: (requisicao: CriaRequisicaoDTO) => Promise<CrudResult>;
-      atualizaRequisicao: (
-        requisicao: CriaRequisicaoDTO,
-        id: string
-      ) => Promise<CrudResult>;
-      buscaUltimasRequisicoes: () => Promise<RequisicaoDTO[]>;
       buscaRequisicaoPorId: (id: string) => Promise<RequisicaoDTO | null>;
       buscaRequisicoesColecao: (colecao_id: string) => Promise<RequisicaoDTO[]>;
       buscaRequisicoesPasta: (pasta_id: string) => Promise<RequisicaoDTO[]>;
+      buscaUltimasRequisicoes: () => Promise<RequisicaoDTO[]>;
+      criaRequisicao: (
+        requisicao: Partial<RequisicaoDTO>
+      ) => Promise<CrudResult>;
+      atualizaRequisicao: (
+        requisicao: Partial<RequisicaoDTO>,
+        id: string
+      ) => Promise<CrudResult>;
       excluiRequisicao: (id: string) => Promise<CrudResult>;
 
       buscaAutenticacaoDaRequisicao: (

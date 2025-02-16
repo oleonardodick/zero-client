@@ -9,10 +9,8 @@ import {
 } from '../ui/select';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { CriaRequisicaoDTO } from '@/dtos/requisicao.dto';
 import { useNavigate } from 'react-router-dom';
 import { enviarRequisicao } from '@/ui/communication/requisicao';
-import useRespostaStore from '@/ui/store/respostaStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { TipoRequisicao } from '@/ui/enums/tipoRequisicao.enum';
 import { CriaQueryParamsRequisicao } from '@/ui/services/queryParams.service';
@@ -21,43 +19,26 @@ import { CriaAutenticacaoRequisicao } from '@/ui/services/autenticacao.service';
 import { useQueryParamStore } from '@/ui/store/queryParamsStore';
 import { useHeaderStore } from '@/ui/store/headerStore';
 import { useAutenticacaoStore } from '@/ui/store/autenticacaoStore';
+import { AtualizaResposta, CriaReposta } from '@/ui/services/resposta.service';
+import useRespostaStore from '@/ui/store/respostaStore';
 
 const CabecalhoRequisicao = () => {
   const queryClient = useQueryClient();
-  const url = useRequisicaoStore((state) => state.requisicao.url);
-  const tipo = useRequisicaoStore((state) => state.requisicao.tipo);
-  const setUrl = useRequisicaoStore((state) => state.setUrl);
-  const setTipo = useRequisicaoStore((state) => state.setTipo);
-  const inicializaResposta = useRespostaStore(
-    (state) => state.inicializaResposta
-  );
+  const { requisicao, setRequisicao } = useRequisicaoStore();
+  const setResposta = useRespostaStore((state) => state.setReposta);
+  const respostaStore = useRespostaStore((state) => state.resposta);
   const navigate = useNavigate();
 
-  const handleAtualizaUrl = (url: string) => {
-    setUrl(url);
-  };
-
   const handleEnviar = async () => {
-    const requisicao = useRequisicaoStore.getState().requisicao;
     const queryParams = useQueryParamStore.getState().queryParams;
     const headers = useHeaderStore.getState().headers;
     const autenticacao = useAutenticacaoStore.getState().autenticacao;
 
-    const requisicaoEnviar: CriaRequisicaoDTO = {
-      url: requisicao.url,
-      tipo: requisicao.tipo,
-      jsonEnvio: requisicao.jsonEnvio,
-      nome: requisicao.nome || requisicao.url,
-    };
-
-    const resposta = await enviarRequisicao(requisicaoEnviar);
+    const resposta = await enviarRequisicao(requisicao);
     try {
       const resultado = requisicao.id
-        ? await window.electron.atualizaRequisicao(
-            requisicaoEnviar,
-            requisicao.id
-          )
-        : await window.electron.criaRequisicao(requisicaoEnviar);
+        ? await window.electron.atualizaRequisicao(requisicao, requisicao.id)
+        : await window.electron.criaRequisicao(requisicao);
 
       if (resultado.sucesso && resultado.idCriado) {
         const requisicaoId = resultado.idCriado;
@@ -66,19 +47,28 @@ const CabecalhoRequisicao = () => {
         if (autenticacao.tipo !== 'none')
           await CriaAutenticacaoRequisicao(autenticacao, requisicaoId);
 
-        await window.electron.criaResposta(resposta, resultado.idCriado);
-        inicializaResposta(resposta);
+        if (respostaStore.requisicao_id !== '') {
+          await AtualizaResposta(resposta, requisicaoId);
+        } else {
+          await CriaReposta(resposta, requisicaoId);
+        }
+        setResposta(resposta);
         queryClient.invalidateQueries({ queryKey: ['ultimasRequisicoes'] });
-        navigate(`/requisicao/modificar/${resultado.idCriado}`);
+        if (!requisicao.id)
+          navigate(`/requisicao/modificar/${resultado.idCriado}`);
       }
     } catch (erro) {
       console.log(erro);
     }
   };
 
+  const alteraTipo = (tipo: string) => {
+    setRequisicao({ tipo: tipo });
+  };
+
   return (
     <div className="flex py-4 px-2">
-      <Select value={tipo} onValueChange={setTipo}>
+      <Select value={requisicao.tipo} onValueChange={alteraTipo}>
         <SelectTrigger className="w-32 rounded-none">
           <SelectValue />
         </SelectTrigger>
@@ -94,8 +84,8 @@ const CabecalhoRequisicao = () => {
       </Select>
       <Input
         placeholder="URL"
-        onChange={(e) => handleAtualizaUrl(e.target.value)}
-        value={url}
+        onChange={(e) => setRequisicao({ url: e.target.value })}
+        value={requisicao.url}
         id="urlInput"
         className="rounded-none"
       />

@@ -39,32 +39,35 @@ const Endpoint = ({
   const navigate = useNavigate();
 
   const handleExcluirRequisicao = async () => {
+    //busca a requisição que está aberta atualmente
     const requisicaoAberta = useRequisicaoStore.getState().requisicao;
-    if (requisicao.id) {
-      const retorno = await window.electron.excluiRequisicao(requisicao.id);
-      if (retorno.sucesso) {
-        if (endpointColecao) {
-          queryClient.invalidateQueries({
-            queryKey: [`requisicoesColecao${requisicao.colecao_id}`],
-          });
-        } else if (endpointPasta) {
-          queryClient.invalidateQueries({
-            queryKey: [`requisicoesPasta${requisicao.pasta_id}`],
-          });
-        } else {
-          queryClient.invalidateQueries({ queryKey: ['ultimasRequisicoes'] });
-        }
-
-        if (requisicaoAberta.id === requisicao.id)
-          navigate('/requisicao/cadastrar');
+    if (!requisicao.id) return;
+    const retorno = await window.electron.excluiRequisicao(requisicao.id);
+    if (retorno.sucesso) {
+      if (endpointColecao) {
+        queryClient.invalidateQueries({
+          queryKey: [`requisicoesColecao${requisicao.colecao_id}`],
+        });
+      } else if (endpointPasta) {
+        queryClient.invalidateQueries({
+          queryKey: [`requisicoesPasta${requisicao.pasta_id}`],
+        });
+      } else {
+        queryClient.invalidateQueries({ queryKey: ['ultimasRequisicoes'] });
       }
+
+      //caso a requisição a ser excluída seja a mesma que está aberta, redireciona para o cadastro
+      if (requisicaoAberta.id === requisicao.id)
+        navigate('/requisicao/cadastrar');
     }
   };
 
   const handleRenomear = async (novoNome: string) => {
-    const novaRequisicao = requisicao;
-    novaRequisicao.nome = novoNome;
-    const retorno = await window.electron.atualizaRequisicao(novaRequisicao);
+    if (!requisicao.id) return;
+    const retorno = await window.electron.atualizaRequisicao(
+      { ...requisicao, nome: novoNome },
+      requisicao.id
+    );
     if (retorno.sucesso) {
       if (endpointColecao) {
         queryClient.invalidateQueries({

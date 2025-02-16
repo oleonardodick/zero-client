@@ -17,6 +17,7 @@ const useRespostaStore = create<RespostaStore>((set, get) => ({
     status_text: '',
     size: 0,
     time: 0,
+    requisicao_id: '',
   },
   isLoading: false,
   requisicaoPosicionada: '',
@@ -27,13 +28,20 @@ const useRespostaStore = create<RespostaStore>((set, get) => ({
     set({
       resposta: respostaBuscada
         ? respostaBuscada
-        : { json_retorno: '', status: 0, status_text: '', size: 0, time: 0 },
+        : {
+            json_retorno: '',
+            status: 0,
+            status_text: '',
+            size: 0,
+            time: 0,
+            requisicao_id: '',
+          },
       isLoading: false,
     });
   },
   setReposta: (resposta) =>
     set((state) => ({
-      resposta: { ...state.resposta, resposta },
+      resposta: { ...state.resposta, ...resposta },
     })),
 }));
 

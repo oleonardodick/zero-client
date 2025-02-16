@@ -34,6 +34,15 @@ export const BuscaRequisicoesPasta = async (
   }
 };
 
+export const BuscaUltimasRequisicoes = async (): Promise<RequisicaoDTO[]> => {
+  try {
+    return await window.electron.buscaUltimasRequisicoes();
+  } catch (erro) {
+    console.log(erro);
+    throw new Error('Não foi possível buscar as última requisições');
+  }
+};
+
 export const CriaRequisicao = async (
   requisicao: RequisicaoDTO
 ): Promise<CrudResult> => {

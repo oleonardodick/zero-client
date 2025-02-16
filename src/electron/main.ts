@@ -89,18 +89,6 @@ ipcMain.handle('excluiVariavelAmbiente', (_, nome) => {
   return excluiVariavelAmbiente(nome);
 });
 
-ipcMain.handle('criaRequisicao', (_, requisicao) => {
-  return CriaRequisicao(requisicao);
-});
-
-ipcMain.handle('atualizaRequisicao', (_, requisicao, id) => {
-  return AtualizaRequisicao(requisicao, id);
-});
-
-ipcMain.handle('buscaUltimasRequisicoes', () => {
-  return BuscaUltimasRequisicoes();
-});
-
 ipcMain.handle('buscaRequisicaoPorId', (_, id) => {
   return BuscaRequisicaoPorId(id);
 });
@@ -111,6 +99,18 @@ ipcMain.handle('buscaRequisicoesColecao', (_, colecao_id) => {
 
 ipcMain.handle('buscaRequisicoesPasta', (_, pasta_id) => {
   return BuscaRequisicoesPasta(pasta_id);
+});
+
+ipcMain.handle('buscaUltimasRequisicoes', () => {
+  return BuscaUltimasRequisicoes();
+});
+
+ipcMain.handle('criaRequisicao', (_, requisicao) => {
+  return CriaRequisicao(requisicao);
+});
+
+ipcMain.handle('atualizaRequisicao', (_, requisicao, id) => {
+  return AtualizaRequisicao(requisicao, id);
 });
 
 ipcMain.handle('excluiRequisicao', (_, id) => {

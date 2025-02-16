@@ -7,11 +7,11 @@ import useRequisicaoStore from '@/ui/store/requisicaoStore';
 
 const Resposta = () => {
   const fetchResposta = useRespostaStore((state) => state.fetchResposta);
-  const requisicao = useRequisicaoStore((state) => state.requisicao);
+  const requisicaoId = useRequisicaoStore((state) => state.requisicao.id);
 
   useEffect(() => {
-    fetchResposta(requisicao.id);
-  }, [fetchResposta, requisicao]);
+    fetchResposta(requisicaoId);
+  }, [fetchResposta, requisicaoId]);
 
   return (
     <div className="grid grid-rows-[auto_1fr] gap-2 h-full">

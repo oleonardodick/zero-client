@@ -19,7 +19,8 @@ export const Autenticacao = () => {
   const fetchAutenticacao = useAutenticacaoStore(
     (state) => state.fetchAutenticacao
   );
-  const requisicao = useRequisicaoStore((state) => state.requisicao);
+
+  const { requisicao } = useRequisicaoStore();
 
   useEffect(() => {
     fetchAutenticacao(requisicao.id);

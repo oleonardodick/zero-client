@@ -65,7 +65,7 @@ export const ImportarJSON = async (): Promise<ResultExportImport> => {
             if (resultPasta.idCriado) {
               const idPasta = resultPasta.idCriado;
               pasta.requisicoes?.forEach((requisicao) => {
-                const requisicaoCriar: Requisicao = {
+                const requisicaoCriar: Partial<Requisicao> = {
                   ...requisicao,
                   pasta_id: idPasta,
                   colecao_id: idColecao,
@@ -76,7 +76,7 @@ export const ImportarJSON = async (): Promise<ResultExportImport> => {
           });
         }
         if (json.requisicoes) {
-          const requisicoes: Requisicao[] = json.requisicoes.map(
+          const requisicoes: Partial<Requisicao>[] = json.requisicoes.map(
             (requisicao) => ({
               ...requisicao,
               colecao_id: idColecao,

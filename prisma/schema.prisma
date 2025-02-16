@@ -22,11 +22,11 @@ model Requisicao {
   url          String        @default("")
   tipo         String        @default("")
   jsonEnvio    String        @default("")
-  data         DateTime      @default(now())
   query_params QueryParam[]
   headers      Header[]
   autenticacao Autenticacao?
   nome         String        @default("")
+  data         DateTime      @default(now())
   resposta     Resposta?
   colecao_id   String?
   colecao      Colecao?      @relation(fields: [colecao_id], references: [id], onDelete: Cascade)

@@ -1,16 +1,14 @@
 import Endpoint from './endpoint';
-import { RequisicaoDTO } from '@/dtos/requisicao.dto';
 import { useQuery } from '@tanstack/react-query';
 import { Input } from './ui/input';
 import { useState } from 'react';
+import { BuscaUltimasRequisicoes } from '../services/requisicao.service';
 const Atividade = () => {
   const [filtro, setFiltro] = useState('');
-  const buscaRequisicoes = async (): Promise<RequisicaoDTO[]> => {
-    return await window.electron.buscaUltimasRequisicoes();
-  };
+
   const requisicoes = useQuery({
     queryKey: ['ultimasRequisicoes'],
-    queryFn: buscaRequisicoes,
+    queryFn: BuscaUltimasRequisicoes,
   });
   const listaFiltrada = requisicoes.data?.filter(
     (r) =>

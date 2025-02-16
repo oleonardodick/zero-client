@@ -1,7 +1,6 @@
 import CodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
 import './codemirror.css';
-// import { Button } from '../ui/button';
 import { useTheme } from '@/ui/contexts/theme-context';
 
 interface EditorCodeProps {

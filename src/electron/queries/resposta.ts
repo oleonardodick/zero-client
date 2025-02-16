@@ -22,6 +22,7 @@ export const CriaResposta = async (
   requisicao_id: string
 ): Promise<CrudResult> => {
   try {
+    console.log('***DADOS PASSADOS***', resposta, requisicao_id);
     const registroCriado = await prisma.resposta.create({
       data: {
         json_retorno: resposta.json_retorno,

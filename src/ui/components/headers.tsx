@@ -14,7 +14,7 @@ const Headers = () => {
   const updateHeader = useHeaderStore((state) => state.updateHeader);
   const deleteHeader = useHeaderStore((state) => state.deleteHeader);
   const fetchHeaders = useHeaderStore((state) => state.fetchHeaders);
-  const requisicao = useRequisicaoStore((state) => state.requisicao);
+  const { requisicao } = useRequisicaoStore();
 
   useEffect(() => {
     fetchHeaders(requisicao.id);

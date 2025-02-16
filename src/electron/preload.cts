@@ -29,18 +29,18 @@ electron.contextBridge.exposeInMainWorld('electron', {
     electron.ipcRenderer.invoke('excluiVariavelAmbiente', nome),
 
   //Métodos para controle de requisição
-  criaRequisicao: (requisicao: Partial<Requisicao>) =>
-    electron.ipcRenderer.invoke('criaRequisicao', requisicao),
-  atualizaRequisicao: (requisicao: Partial<Requisicao>, id: string) =>
-    electron.ipcRenderer.invoke('atualizaRequisicao', requisicao, id),
-  buscaUltimasRequisicoes: () =>
-    electron.ipcRenderer.invoke('buscaUltimasRequisicoes'),
   buscaRequisicaoPorId: (id: string) =>
     electron.ipcRenderer.invoke('buscaRequisicaoPorId', id),
   buscaRequisicoesColecao: (colecao_id: string) =>
     electron.ipcRenderer.invoke('buscaRequisicoesColecao', colecao_id),
   buscaRequisicoesPasta: (pasta_id: string) =>
     electron.ipcRenderer.invoke('buscaRequisicoesPasta', pasta_id),
+  buscaUltimasRequisicoes: () =>
+    electron.ipcRenderer.invoke('buscaUltimasRequisicoes'),
+  criaRequisicao: (requisicao: Partial<Requisicao>) =>
+    electron.ipcRenderer.invoke('criaRequisicao', requisicao),
+  atualizaRequisicao: (requisicao: Partial<Requisicao>, id: string) =>
+    electron.ipcRenderer.invoke('atualizaRequisicao', requisicao, id),
   excluiRequisicao: (id: string) =>
     electron.ipcRenderer.invoke('excluiRequisicao', id),
 
@@ -71,8 +71,8 @@ electron.contextBridge.exposeInMainWorld('electron', {
     electron.ipcRenderer.invoke('buscaRespostaDaRequisicao', requisicao_id),
   criaResposta: (resposta: Resposta, requisicao_id: string) =>
     electron.ipcRenderer.invoke('criaResposta', resposta, requisicao_id),
-  atualizaResposta: (resposta: Resposta) =>
-    electron.ipcRenderer.invoke('atualizaResposta', resposta),
+  atualizaResposta: (resposta: Resposta, requisicao_id: string) =>
+    electron.ipcRenderer.invoke('atualizaResposta', resposta, requisicao_id),
 
   //Métodos para controle de coleções
   buscaColecoes: () => electron.ipcRenderer.invoke('buscaColecoes'),

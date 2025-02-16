@@ -10,7 +10,7 @@ import { useQueryParamStore } from '../store/queryParamsStore';
 
 const QueryParams = () => {
   const queryParams = useQueryParamStore((state) => state.queryParams);
-  const requisicao = useRequisicaoStore((state) => state.requisicao);
+  const { requisicao, setRequisicao } = useRequisicaoStore();
   const fetchQueryParams = useQueryParamStore(
     (state) => state.fetchQueryParams
   );
@@ -21,7 +21,6 @@ const QueryParams = () => {
   const deleteQueryParam = useQueryParamStore(
     (state) => state.deleteQueryParam
   );
-  const setUrl = useRequisicaoStore((state) => state.setUrl);
 
   useEffect(() => {
     fetchQueryParams(requisicao.id);
@@ -39,7 +38,7 @@ const QueryParams = () => {
     addQueryParam(novoQueryParam);
   }, [addQueryParam, requisicao]);
 
-  const atualizaUrl = useCallback(() => {
+  const atualizaUrl = () => {
     const url = useRequisicaoStore.getState().requisicao.url;
     let novaUrl = url;
     const inicioParams = url.indexOf('?');
@@ -54,38 +53,32 @@ const QueryParams = () => {
           ? `&${param.query}=${param.valor}`
           : `?${param.query}=${param.valor}`;
       });
-      setUrl(novaUrl);
+      setRequisicao({ url: novaUrl });
     }
-  }, [setUrl]);
+  };
 
-  const handleUpdateQueryParam = useCallback(
-    (
-      queryParamId: string,
-      field: keyof QueryParamDTO,
-      value: string | boolean
-    ) => {
-      const queryParamOriginal = queryParams.find(
-        (param) => param.id === queryParamId
-      );
-      if (queryParamOriginal && queryParamOriginal[field] !== value) {
-        updateQueryParam(queryParamId, {
-          ...queryParamOriginal,
-          [field]: value,
-        });
+  const handleUpdateQueryParam = (
+    queryParamId: string,
+    field: keyof QueryParamDTO,
+    value: string | boolean
+  ) => {
+    const queryParamOriginal = queryParams.find(
+      (param) => param.id === queryParamId
+    );
+    if (queryParamOriginal && queryParamOriginal[field] !== value) {
+      updateQueryParam(queryParamId, {
+        ...queryParamOriginal,
+        [field]: value,
+      });
 
-        atualizaUrl();
-      }
-    },
-    [updateQueryParam, queryParams, atualizaUrl]
-  );
-
-  const handleDeleteQueryParam = useCallback(
-    (queryParamId: string) => {
-      deleteQueryParam(queryParamId);
       atualizaUrl();
-    },
-    [deleteQueryParam, atualizaUrl]
-  );
+    }
+  };
+
+  const handleDeleteQueryParam = (queryParamId: string) => {
+    deleteQueryParam(queryParamId);
+    atualizaUrl();
+  };
 
   return (
     <div className="flex flex-col h-full gap-5 p-4">
