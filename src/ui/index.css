@@ -7,19 +7,44 @@
   }
 }
 @layer utilities {
+  :root {
+    --scrollbar-width: 12px;
+    --scrollbar-height: 12px;
+    --scrollbar-radius: 10px;
+
+    --color-thumb-custom: #44403c;
+    --color-thumb-sidebar: #292524;
+    --color-track: transparent;
+    --scrollbar-margin: 2px;
+  }
   /* Estilos personalizados para o scrollbar */
   .scrollbar-custom::-webkit-scrollbar {
-    width: 12px; /* Largura do scrollbar */
-    height: 12px; /* Altura do scrollbar horizontal */
+    width: var(--scrollbar-width);
+    height: var(--scrollbar-height);
   }
 
   .scrollbar-custom::-webkit-scrollbar-thumb {
     background-color: #44403c; /* Cor do thumb */
-    border-radius: 10px; /*Cantos arredondados*/
+    border-radius: var(--scrollbar-radius);
   }
 
   .scrollbar-custom::-webkit-scrollbar-track {
-    background-color: transparent; /* Cor do track */
-    margin: 2px;
+    background-color: var(--color-track);
+    margin: var(--scrollbar-margin);
+  }
+
+  .scrollbar-sidebar::-webkit-scrollbar {
+    width: var(--scrollbar-width);
+    height: var(--scrollbar-height);
+  }
+
+  .scrollbar-sidebar::-webkit-scrollbar-thumb {
+    background-color: #292524; /* Cor do thumb */
+    border-radius: var(--scrollbar-radius);
+  }
+
+  .scrollbar-sidebar::-webkit-scrollbar-track {
+    width: var(--scrollbar-width);
+    height: var(--scrollbar-height);
   }
 }

@@ -17,8 +17,8 @@ const Atividade = () => {
   );
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-1">
+    <div className="flex flex-col gap-2 h-full">
+      <div className="h-9">
         <Input
           placeholder="Filtrar atividade"
           className="rounded-2xl"
@@ -26,13 +26,13 @@ const Atividade = () => {
           onChange={(e) => setFiltro(e.target.value)}
         />
       </div>
-      <ul>
+      <div className="h-[calc(100%-2.25rem)] w-full overflow-auto scrollbar-sidebar">
         {listaFiltrada?.map((requisicao) => (
-          <li key={requisicao.id}>
+          <div key={requisicao.id} className="text-sm">
             <Endpoint requisicao={requisicao} />
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

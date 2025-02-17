@@ -33,7 +33,7 @@ const CabecalhoRequisicao = () => {
     const headers = useHeaderStore.getState().headers;
     const autenticacao = useAutenticacaoStore.getState().autenticacao;
 
-    const response = await enviarRequisicao(requisicao);
+    const response = await enviarRequisicao(requisicao, headers, autenticacao);
     try {
       const resultado = requisicao.id
         ? await window.electron.atualizaRequisicao(requisicao, requisicao.id)

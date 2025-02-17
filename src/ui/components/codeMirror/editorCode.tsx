@@ -21,11 +21,9 @@ export const EditorCode = ({
       value={jsonText}
       extensions={[json()]}
       onChange={onChange}
-      className="flex-grow"
-      height="100%"
+      className="px-2 h-full"
       theme={theme}
       editable={editable}
-      maxHeight="400px"
     />
   );
 };

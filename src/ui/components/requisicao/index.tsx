@@ -10,32 +10,30 @@ import useRequisicaoStore from '@/ui/store/requisicaoStore';
 
 const Requisicao = () => {
   return (
-    <div className="flex flex-col h-full">
-      <header>
+    <div className="h-full xl:h-1/2 flex flex-col w-full pb-1">
+      <div className="h-16">
         <CabecalhoRequisicao />
-      </header>
-      <main className="flex-1 overflow-hidden">
-        <Tabs defaultValue="JSON" className="flex flex-col gap-3 h-full">
-          <TabsList className="bg-transparent flex flex-col lg:flex-row">
-            <TabsTrigger value="JSON">JSON</TabsTrigger>
-            <TabsTrigger value="Auth">Auth</TabsTrigger>
-            <TabsTrigger value="Params">Params</TabsTrigger>
-            <TabsTrigger value="Headers">Headers</TabsTrigger>
-          </TabsList>
-          <TabsContent value="JSON" className="h-full">
-            <JsonEnvio />
-          </TabsContent>
-          <TabsContent value="Auth">
-            <Autenticacao />
-          </TabsContent>
-          <TabsContent value="Params" className="overflow-hidden">
-            <QueryParams />
-          </TabsContent>
-          <TabsContent value="Headers" className="overflow-hidden">
-            <Headers />
-          </TabsContent>
-        </Tabs>
-      </main>
+      </div>
+      <Tabs defaultValue="JSON" className="flex flex-col h-[calc(100%-4rem)]">
+        <TabsList className="bg-transparent flex flex-row">
+          <TabsTrigger value="JSON">JSON</TabsTrigger>
+          <TabsTrigger value="Auth">Auth</TabsTrigger>
+          <TabsTrigger value="Params">Params</TabsTrigger>
+          <TabsTrigger value="Headers">Headers</TabsTrigger>
+        </TabsList>
+        <TabsContent value="JSON" className="h-[calc(100%-2.25rem)]">
+          <JsonEnvio />
+        </TabsContent>
+        <TabsContent value="Auth" className="h-[calc(100%-2.25rem)]">
+          <Autenticacao />
+        </TabsContent>
+        <TabsContent value="Params" className="h-[calc(100%-2.25rem)]">
+          <QueryParams />
+        </TabsContent>
+        <TabsContent value="Headers" className="h-[calc(100%-2.25rem)]">
+          <Headers />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
@@ -65,7 +63,7 @@ const JsonEnvio = () => {
   };
 
   return (
-    <div className="flex flex-col gap-1 px-2 w-full h-full relative">
+    <div className="h-full relative">
       <div className="flex justify-between absolute right-5 top-2 z-10">
         <span className="text-red-500">{erro}</span>
         <div className="flex">

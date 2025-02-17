@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableRow } from './ui/table';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { Trash2Icon } from 'lucide-react';
+import { PlusCircleIcon, Trash2Icon } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 import useRequisicaoStore from '../store/requisicaoStore';
 import { HeaderDTO } from '@/dtos/header.dto';
@@ -46,9 +46,14 @@ const Headers = () => {
   );
 
   return (
-    <div className="flex flex-col h-full gap-5 p-4">
-      <h1>Headers</h1>
-      <div className="flex-1 overflow-auto scrollbar-custom">
+    <div className="h-full">
+      <div className="flex justify-between px-9 h-8">
+        <h1>Headers</h1>
+        <Button variant="link" onClick={handleNovoHeader}>
+          <PlusCircleIcon /> Novo
+        </Button>
+      </div>
+      <div className="max-h-[calc(100%-5rem)] overflow-auto scrollbar-custom">
         <Table>
           <TableBody>
             {headers?.map((header) => (
@@ -100,11 +105,6 @@ const Headers = () => {
             ))}
           </TableBody>
         </Table>
-      </div>
-      <div className="flex justify-center">
-        <Button variant="secondary" onClick={handleNovoHeader}>
-          Novo
-        </Button>
       </div>
     </div>
   );

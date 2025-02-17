@@ -3,9 +3,9 @@ import useRespostaStore from '@/ui/store/respostaStore';
 const CabecalhoResposta = () => {
   const { resposta } = useRespostaStore();
   return (
-    <div className="flex justify-between px-2 items-center">
-      <span>Resposta</span>
-      <div className="flex gap-3">
+    <div className="flex justify-between px-2 py-4 items-center">
+      <span className="hidden lg:block">Resposta</span>
+      <div className="flex gap-3 text-sm xl:text-base">
         {resposta.status > 0 && (
           <span
             className={`${

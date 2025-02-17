@@ -14,13 +14,11 @@ const Resposta = () => {
   }, [fetchResposta, requisicao.id]);
 
   return (
-    <div className="grid grid-rows-[auto_1fr] gap-2 h-full">
-      <header>
+    <div className="h-full xl:h-1/2 flex flex-col w-full pb-1">
+      <div className="h-16">
         <CabecalhoResposta />
-      </header>
-      <main>
-        <JsonResposta />
-      </main>
+      </div>
+      <JsonResposta />
     </div>
   );
 };
@@ -38,7 +36,7 @@ const JsonResposta = () => {
   };
 
   return (
-    <div className="flex flex-col gap-1 px-2 w-full h-full relative">
+    <div className="flex-1 relative mt-11 xl:mt-0">
       <div className="flex justify-between absolute right-5 top-2 z-10">
         <div className="flex">
           <Button variant="link" onClick={handleCopiar}>
